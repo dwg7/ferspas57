@@ -6,10 +6,12 @@
 <script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
 <link href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/lz-string@1.5.0/libs/lz-string.min.js"></script>
+<script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
 <script src="story.js"></script>
 <script src="aez_legend.js"></script>
 <script src="aez57_legend.js"></script>
 <script src="score_probe.js"></script>
+<script src="map_intent.js"></script>
 <style>
   html, body { margin: 0; height: 100%; }
   #map { position: absolute; top: 0; bottom: 0; width: 100%; }
@@ -44,8 +46,11 @@
     padding: 4px 10px; cursor: pointer; font: inherit;
   }
   #story-step-indicator { font-size: 12px; color: #777; margin-left: auto; }
-  #story-share {
+  #top-right-toolbar {
     position: absolute; top: 8px; right: 46px; z-index: 10;
+    display: flex; gap: 6px;
+  }
+  #top-right-toolbar button {
     background: white; border: 1px solid #ccc; border-radius: 4px;
     padding: 5px 10px; cursor: pointer; font: 12px sans-serif;
   }
@@ -70,7 +75,9 @@
     <div id="group-final"></div>
   </div>
 </div>
-<button id="story-share" onclick="shareStory()">▶ このストーリーを再生</button>
+<div id="top-right-toolbar">
+  <button id="story-share" onclick="shareStory()">▶ このストーリーを再生</button>
+</div>
 <div id="story">
   <h3 id="story-title"></h3>
   <p id="story-caption"></p>
@@ -220,6 +227,7 @@ async function init() {
   initAezLegend(map);
   initAez57Legend(map);
   initScoreProbe(map);
+  initMapIntentUI();
 
   map.on("load", () => {
     const story = getStoryFromUrl();

@@ -6,6 +6,38 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D20 — Spec-compliant Map Intent support built and verified; D18's "identical scores" mystery partially resolved
+**Date**: 2026-09-03
+**Status**: `docs/map_intent.js` implemented per D19's reconciliation plan and confirmed working end-to-end against a real, hand-written, spec-compliant YAML intent.
+
+**Built**: a Map Intent (YAML) paste-box (`📄 Map Intent` button, top-right toolbar — consolidated with the story-share button into one `#top-right-toolbar` row, fixing a layout collision found in the process) plus an optional URL-fragment path (`#intent=...`, compressed the same way as `story.js`, kept as the spec's explicitly-optional enhancement, not the required baseline). Parsing is defensive against `required_layers`/`optional_layers` items being either `{source_id, label}` objects or plain ID strings (D19's noted disagreement between the two normative spec documents). `render_hints.initial_center`/`initial_zoom` (and the schema's `center`/`zoom` naming) both map onto a single `map.flyTo()` — deliberately not the multi-step `story.js` mechanism, keeping Map Intent and this repo's narrative extension as two distinct, non-conflated concepts per D19.
+
+**Verified against a real, hand-written sample intent** (cassava score + FAO's selected cassava site, DR Congo, `stars-martin` catalog context pointing at the real production `stars.optgeo.org`): parsed without error, correctly flew to `initial_center`/`initial_zoom`, correctly activated both `required_layers` entries (one raster, one vector — exercising both code paths), and displayed the `goal` field.
+
+**D18's open question, partially resolved**: this same test surfaced clearly *non-uniform* scores at a different DR Congo location (Maize 56, Livestock 44, others 36) — a real, varied spread, unlike the earlier "six commodities all identical" observation. This weakens hypothesis (b) from D18 (a color-matching artifact collapsing values into shared buckets) relative to hypothesis (a) (genuine regional flatness at the specific earlier probe points) — not proof either way, but a data point worth recording rather than re-deriving later.
+
+**Still to do from D19's plan**: 1–2 more sample intents covering different content shapes (a GAEZ-only interpretation query; a broader multi-layer comparison) before considering the "hand-built samples" step done; the actual ferspas57-specific Staff system prompt (following `staff-system-prompt.md`'s template, with our real 23-source catalog injected) hasn't been drafted yet; the narrative-extension ADR for `staccato-spec-19` is still pending on that.
+
+---
+
+### D19 — This session's `story.json` diverges from `staccato-spec`'s actual Map Intent format in two real ways; reconciliation plan
+**Date**: 2026-09-03
+**Status**: Found while starting the "Map Intent / Staff design" work item from D18's autonomous plan. Fetched the actual normative documents (`map-intent-vnext.md`, `staff-system-prompt.md`) directly from `UNopenGIS/staccato-spec` rather than continuing to build against an assumed shape.
+
+**What the real spec says, that this session's prototype doesn't match**:
+1. **Format: YAML, not JSON.** `map-intent-vnext.md` §2 normative requirement 1: "Map Intent MUST be serializable as YAML." This session's `story.json`/`SAMPLE_STORY` has been plain JS objects serialized as JSON throughout D15–D18.
+2. **Sharing: plain text is the REQUIRED baseline, URL is explicitly discouraged for "faceless" deployments.** §2 requirement 3: "Map Intent MUST be shareable as plain text independent of URL state." §6 validation rule 5: "`sharing_policy.url_share` SHOULD be `false` in faceless Cartographer deployments" — and D17 already independently concluded this Cartographer should trend "buttonless"/faceless. This session's entire D15 mechanism (compress into a URL fragment) is the sharing mode the spec calls *optional* (`sharing_policy.url_share`), not the one it makes mandatory. hfu's original instinct, voiced before D15's URL-compression design — "改めてJSON貼り付けか?" (is it back to pasting JSON?) — turns out to have been closer to the spec's actual intended baseline than the URL-fragment mechanism this session built instead of it.
+3. **`render_hints` is a single camera state, not a sequence.** The schema has one `center`/`zoom`/`bearing`/`pitch`, matching one map view — there is no `steps[]` array anywhere in the normative schema. A multi-step animated narrative (D15's whole premise) has no home in Map Intent v2 as currently specified. This is the concrete evidence for the spec gap `staccato-spec-19` already flagged in D12 as needing "a dedicated ADR once your narrating-Staff design has concrete shape" — it now has concrete shape, so that ADR is due, not deferred further.
+4. **Minor, worth noting**: the two spec documents disagree with each other on `required_layers`' item shape — `map-intent-vnext.md`'s schema shows objects (`{source_id, label}`), `staff-system-prompt.md`'s worked example shows plain ID strings. Not this session's inconsistency to fix, but worth defending against both shapes when parsing rather than assuming one.
+
+**Reconciliation plan**:
+- Implement actual spec-compliant Map Intent support in the Cartographer: accept YAML (a `js-yaml`-style parse, still zero backend), support both a **paste-box** (satisfying the REQUIRED plain-text-sharing rule, and — notably — this is exactly the "back to pasting JSON" option hfu floated and this session talked past in D15) and the existing URL-fragment path (kept as the spec's explicitly-*optional* enhancement, not replaced) — the paste-box was hasty to treat as a fallback-of-last-resort; the spec suggests otherwise.
+- Draft a real, ferspas57-specific Staff system prompt following `staff-system-prompt.md`'s template, with our actual 23-source catalog injected as startup config.
+- Build 2–3 hand-written, genuinely spec-compliant (single-camera-state, YAML) sample Map Intents first, and confirm the Cartographer renders them correctly, *before* touching the narrative/multi-step question.
+- Only then draft the narrative-extension ADR for `staccato-spec-19` (an optional, backward-compatible `narrative.steps[]`-shaped field, consistent with §7's "consumers that do not support new fields SHOULD ignore unknown keys" compatibility rule) — this is the concrete deliverable `staccato-spec-19` asked to be looped in on once there was real shape to review, and there now is.
+
+---
+
 ### D18 — GitHub Pages live; AEZ57's 57-class legend sourced and implemented; autonomous work plan for hfu's absence
 **Date**: 2026-09-03
 **Status**: Pages live and confirmed. AEZ57 legend working, with one documented inference (not full primary-source certainty, unlike AEZ33). Autonomous plan set, execution starting.
