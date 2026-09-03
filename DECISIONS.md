@@ -30,7 +30,7 @@ This is an internal working log, not a polished external communication — its w
 
 **A metadata mismatch to fix when these are wired in**: the merged archives' actual zoom range came out as **3-7**, not the 4-8 that `docs/index.html`'s existing `hih-fishfarm-*`/`hih-access-urban-weighted` entries hardcode (a natural consequence of the mosaic covering roughly 5x the geographic extent at the same per-pixel resolution). Update those `minzoom`/`maxzoom` values when this data actually goes live, or zoom-8 requests will 404 against the new archive.
 
-**Not yet done**: plain `hih-access-urban`/`hih-access-port` (non-weighted) exist for far fewer of the five countries (CAF has both; CIV/CMR/COG appear to have neither, per the D27 collection audit) — a much smaller, lower-priority merge, left for a follow-up rather than done here.
+**Update, same session**: the plain `hih-access-urban`/`hih-access-port` merge (D28's "not yet done" note) turned out to only ever involve DR Congo + CAF (CIV/CMR/COG confirmed to have neither collection, per the D27 audit) — done using the same method, no new bugs hit this time (both sources were already Float64, matching), `pmtiles verify`-clean, staged alongside everything else above.
 
 ---
 
