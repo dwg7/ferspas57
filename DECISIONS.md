@@ -6,6 +6,18 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D26 — `CONCEPT.md` added: one-page external-facing summary for FAO FERSPAS/DWG5 outreach
+**Date**: 2026-09-04
+**Status**: Built, committed at hfu's request for immediate work use (email to FAO's FERSPAS team and DWG5 Lead Zhongxin — as a one-page Word attachment or pasted email body).
+
+**What**: `CONCEPT.md` (repo root) — a compact, polished-English, non-technical-audience summary of this project's concept: why it exists (reciprocating FAO CSI's June 2026 DWG5 presentation), the core technical idea (STAC-asset-centric vs. martin-catalog-tile-centric interoperability), what's actually live today (the site, GAEZ+HIH DR Congo data, the narrative/probe features, the maize-siting "why" finding), why it matters to the wider UN Open GIS Initiative (first concrete cross-DWG technical collaboration, tied to the 2026-09-28 `UNopenGIS/7#994` talk), and a soft closing invitation for FAO feedback/continued conversation.
+
+**Deliberately different register from every other doc in this repo**: `DECISIONS.md`/`HANDOVER.md` are internal working logs (see `DECISIONS.md`'s own header disclaimer); `BACKGROUND.md`/`STAFF-PROMPT.md` are technical reference for an LLM and contributors. `CONCEPT.md` is the one document in this repo written for an external, senior, non-implementation reader — no internal jargon (`dwg7`, `martin catalog`, "Staccato" are each introduced with a plain-language gloss on first use), no decision-log texture, kept to roughly one page.
+
+**Not yet done**: no actual outreach has happened — this is groundwork for hfu to draft an email from, not a sent communication. If FAO's actual response or any resulting conversation happens, it should be recorded here or in a future decision entry, not left implicit.
+
+---
+
 ### D25 — `BACKGROUND.md` added: reference knowledge for the Staff, separate from its operational prompt
 **Date**: 2026-09-04
 **Status**: Built, referenced from `STAFF-PROMPT.md`, real (sourced, not invented) research.
