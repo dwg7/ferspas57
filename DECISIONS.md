@@ -6,6 +6,24 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D28 — Shared fishfarm/access archives rebuilt across all 5 target countries; two more real bugs caught in the process
+**Date**: 2026-09-04
+**Status**: `hih-fishfarm-{closed,open,extensive}` and `hih-access-urban-weighted` rebuilt to include CIV/CAF/CMR/COG geometry (CMR excluded from the access-weighted merge — it has no accessibility collections in HIH at all, confirmed directly, not just "unconfirmed" as D27 first flagged). All four `pmtiles verify`-clean, staged locally only — **not yet uploaded**, same ground-rule status as D27's per-country layers.
+
+**Method**: per-country source COGs resampled to a common 0.009°(~1002m) grid — chosen because three of the five countries (DR Congo, Côte d'Ivoire, Republic of Congo) already natively publish at ~0.009°, so this minimizes unnecessary resampling and matches what's already live. `gdalwarp -t_srs EPSG:4326 -ot Float32 -r near -tr 0.009 0.009 -tap -srcnodata <per-file value> -dstnodata nan`, then `gdalbuildvrt`+`gdal_translate` to mosaic, then the same (now NaN-safe, D27c) score pipeline. Nearest-neighbor chosen for the cross-country resample step too, for consistency with this pipeline's established resampling discipline throughout (D7 onward), even though Score is continuous data where bilinear would be the more conventional general-GIS default.
+
+**Two more real, non-obvious bugs caught before this reached production**:
+1. **`gdalbuildvrt` silently dropped Côte d'Ivoire's data on the first attempt**, for the `open` and `access-urban-weighted` mosaics specifically, with only a one-line warning (`does not support heterogeneous band data type: expected Float64, got Float32`) — every other country's HIH rasters happen to be Float64, but CIV's are natively Float32. Not a crash, not a build failure — the mosaic still "succeeded" and `pmtiles verify` still passed, just missing an entire country's geometry. Caught only by actually reading the command output line-by-line rather than trusting a clean exit code, and fixed by forcing `-ot Float32` uniformly across every resample step (redone for all four themes, including the two that hadn't warned, for consistency).
+2. **`CIV-SCORE-EXT-FISH` (Côte d'Ivoire's extensive fish-farming layer) is published in Web Mercator (EPSG:3857)**, not WGS84 like every other HIH raster checked in this entire project so far. Its "resolution" briefly appeared to be `~1000 metres` (a plausible-looking number) before checking the CRS explained why. Fixed by adding an explicit `-t_srs EPSG:4326` to the resample step (a harmless no-op for the WGS84 files, a real reprojection for this one) rather than assuming geographic CRS as this project had implicitly done in every prior batch.
+
+**Verified beyond `pmtiles verify`**: spot-checked real pixel values at Abidjan (CIV), Yaoundé (CMR), and a broad CAF-bounding-box valid-pixel-fraction check (63.6% valid, real 84-86 range values) directly against the merged raster — not just trusting the tile count — specifically because bug #1 above proved a clean `pmtiles verify` does not by itself prove every source actually made it into the mosaic.
+
+**A metadata mismatch to fix when these are wired in**: the merged archives' actual zoom range came out as **3-7**, not the 4-8 that `docs/index.html`'s existing `hih-fishfarm-*`/`hih-access-urban-weighted` entries hardcode (a natural consequence of the mosaic covering roughly 5x the geographic extent at the same per-pixel resolution). Update those `minzoom`/`maxzoom` values when this data actually goes live, or zoom-8 requests will 404 against the new archive.
+
+**Not yet done**: plain `hih-access-urban`/`hih-access-port` (non-weighted) exist for far fewer of the five countries (CAF has both; CIV/CMR/COG appear to have neither, per the D27 collection audit) — a much smaller, lower-priority merge, left for a follow-up rather than done here.
+
+---
+
 ### D27c — Real bug found and fixed: NaN-NoData sources were silently miscast to a real score value, not masked
 **Date**: 2026-09-04
 **Status**: Fixed in `scripts/convert-hih.sh`; the one already-affected staged file (`hih-caf-cassava-score`) re-converted and verified. No live production archive affected (checked directly, see below).
