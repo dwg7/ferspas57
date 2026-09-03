@@ -43,6 +43,7 @@ function applyMapIntent(intent) {
   document.querySelectorAll('#panel input[type=checkbox]').forEach((cb) => {
     const id = cb.dataset.layerId;
     cb.checked = activeRaster.has(id) || activeVector.has(id);
+    if (cb.checked) cb.closest("details")?.setAttribute("open", "");
   });
   refresh();
 

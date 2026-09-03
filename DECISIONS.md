@@ -6,6 +6,24 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D27b — Panel UI restructured into per-country accordions, ahead of new countries' data actually landing
+**Date**: 2026-09-04
+**Status**: Built and locally verified (DOM structure inspected directly; no console errors) — safe to ship ahead of D27's staged data since it's purely additive/backward-compatible.
+
+**Why now, before the new layers are actually live**: this is exactly the kind of change that's safe to do independently of the production-infrastructure ground rule — it only touches `docs/index.html`/`map_intent.js`, doesn't reference any new (not-yet-resolvable) tile/GeoJSON URLs, and de-risks D27's eventual "wire in the new layers" step by making sure the UI mechanism is already proven before that day comes.
+
+**What changed**: `group-score`/`group-final` (the two groups whose layers are per-country-coded, D9) now build a per-country `<details>`/`<summary>` accordion on demand from each layer spec's new `country` field, via a `groupContainer(spec)` helper — `gaez`/`access`/`fishfarm` stay flat, since those remain single shared archives regardless of country. This preserves the existing "checkboxes, not a country-switching dropdown" philosophy: `<details>` only visually hides its contents, so checkbox state, `refresh()`, and the existing checkbox-sync loops in `applyStoryStep`/`applyMapIntent` all keep working unchanged, and layers from different countries stay simultaneously combinable. Both sync loops gained one line each (`cb.closest("details")?.setAttribute("open","")`) so activating a layer via story playback or a Map Intent auto-expands its country's section instead of leaving a checked-but-invisible checkbox. All 7 existing DR Congo score/final entries gained `country: "cod"` so one code path covers old and new; a `COUNTRY_LABELS` map covers all 5 target countries up front, so adding CIV/CAF/CMR/COG's actual layer entries later (once D27's staged data is uploaded) needs no further HTML/JS changes — just data.
+
+**Verified**: DOM inspection confirmed the accordion renders exactly as designed (`<details open><summary>DR Congo (COD)</summary><div id="group-score-cod">...` with all 7 checkboxes correctly nested); no new console errors after the change. Map tile rendering itself was flaky in this pass's browser-automation environment (external CDN fetches not completing) — confirmed unrelated to this change (no JS errors, all non-map UI chrome rendered correctly, and this exact basemap has rendered fine repeatedly earlier in this project) rather than chased further.
+
+---
+
+### D27a — Progress comment posted to `UNopenGIS/7#997`
+**Date**: 2026-09-04
+Posted a short, simple status update to the founding issue (`UNopenGIS/7#997`), per hfu's request while away — the site being live, GAEZ+HIH DR Congo working end-to-end, the maize-siting narrative, and the CIV/CAF/CMR/COG expansion in progress. See [the comment](https://github.com/UNopenGIS/7/issues/997#issuecomment-5532623194).
+
+---
+
 ### D27 — Horizontal expansion, first real batch: CAF cassava + CIV's 5 commodities converted and verified; shared fishfarm/access archives found to need a resampling step before merging
 **Date**: 2026-09-04
 **Status**: 6 new crop-storage layers (score + final, so 12 files) built, `pmtiles verify`-clean, staged locally — **not yet uploaded to `stars.optgeo.org`/`depot.optgeo.org`, not yet wired into `docs/index.html`**, per this expansion's own plan (`.claude/plans/declarative-floating-wadler.md`) and the standing ground rule that new production changes are prepared, not applied, without hfu's review. The shared fishfarm/access archive rebuild (this same plan's step 5) is investigated but not yet executed — see below for why.

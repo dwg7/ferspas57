@@ -31,6 +31,15 @@
   label { display: flex; align-items: center; gap: 6px; padding: 2px 0; cursor: pointer; }
   label input { flex-shrink: 0; }
   .swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  /* Per-country accordion inside the score/final groups only — these are the
+     two groups whose layers are per-country-coded (D9); gaez/access/fishfarm
+     stay flat since those remain single shared archives across countries. */
+  details.country-group { margin: 2px 0; }
+  details.country-group > summary {
+    cursor: pointer; font-size: 12px; font-weight: 600; color: #444;
+    padding: 2px 0;
+  }
+  details.country-group > div { padding-left: 6px; }
   /* "Final" (FinalLocation) sites are rare — exactly one real place per commodity
      that FAO actually selected, out of a whole raster of candidates — so they get
      a small gold "beacon" glow instead of the plain fill everything else uses. */
@@ -117,13 +126,13 @@ const DEPOT_SERVER = "https://depot.optgeo.org";
 const rasterLayers = [
   { id: "gaez-aez33", group: "gaez", label: "AEZ33 classification", minzoom: 0, maxzoom: 7, color: "#c98", attribution: '© FAO / IIASA GAEZ v5 (CC BY 4.0)' },
   { id: "gaez-aez57", group: "gaez", label: "AEZ57 classification", minzoom: 0, maxzoom: 7, color: "#c98", attribution: '© FAO / IIASA GAEZ v5 (CC BY 4.0)' },
-  { id: "hih-cod-cassava-score", group: "score", label: "Cassava storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
-  { id: "hih-cod-cocoa-score", group: "score", label: "Cocoa storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
-  { id: "hih-cod-coffee-score", group: "score", label: "Coffee storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
-  { id: "hih-cod-maize-score", group: "score", label: "Maize storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
-  { id: "hih-cod-palmoil-score", group: "score", label: "Palm-oil processing score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
-  { id: "hih-cod-wheat-score", group: "score", label: "Wheat storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
-  { id: "hih-cod-livestock-score", group: "score", label: "Livestock/slaughter score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-cassava-score", group: "score", country: "cod", label: "Cassava storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-cocoa-score", group: "score", country: "cod", label: "Cocoa storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-coffee-score", group: "score", country: "cod", label: "Coffee storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-maize-score", group: "score", country: "cod", label: "Maize storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-palmoil-score", group: "score", country: "cod", label: "Palm-oil processing score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-wheat-score", group: "score", country: "cod", label: "Wheat storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-livestock-score", group: "score", country: "cod", label: "Livestock/slaughter score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
   { id: "hih-access-urban", group: "access", label: "Accessibility: urban areas", minzoom: 4, maxzoom: 8, color: "#4a90d9" },
   { id: "hih-access-urban-weighted", group: "access", label: "Accessibility: demand-weighted", minzoom: 4, maxzoom: 8, color: "#4a90d9" },
   { id: "hih-access-port", group: "access", label: "Accessibility: ports", minzoom: 4, maxzoom: 8, color: "#4a90d9" },
@@ -134,14 +143,25 @@ const rasterLayers = [
 ];
 
 const vectorLayers = [
-  { id: "hih-cod-cassava-final", group: "final", label: "Cassava final site(s)", file: `${DEPOT_SERVER}/hih-cod-cassava-final.geojson`, color: "#c0392b" },
-  { id: "hih-cod-cocoa-final", group: "final", label: "Cocoa final site(s)", file: `${DEPOT_SERVER}/hih-cod-cocoa-final.geojson`, color: "#c0392b" },
-  { id: "hih-cod-coffee-final", group: "final", label: "Coffee final site(s)", file: `${DEPOT_SERVER}/hih-cod-coffee-final.geojson`, color: "#c0392b" },
-  { id: "hih-cod-maize-final", group: "final", label: "Maize final site(s)", file: `${DEPOT_SERVER}/hih-cod-maize-final.geojson`, color: "#c0392b" },
-  { id: "hih-cod-palmoil-final", group: "final", label: "Palm-oil final site(s)", file: `${DEPOT_SERVER}/hih-cod-palmoil-final.geojson`, color: "#c0392b" },
-  { id: "hih-cod-wheat-final", group: "final", label: "Wheat final site(s)", file: `${DEPOT_SERVER}/hih-cod-wheat-final.geojson`, color: "#c0392b" },
-  { id: "hih-cod-livestock-final", group: "final", label: "Livestock final site(s)", file: `${DEPOT_SERVER}/hih-cod-livestock-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-cassava-final", group: "final", country: "cod", label: "Cassava final site(s)", file: `${DEPOT_SERVER}/hih-cod-cassava-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-cocoa-final", group: "final", country: "cod", label: "Cocoa final site(s)", file: `${DEPOT_SERVER}/hih-cod-cocoa-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-coffee-final", group: "final", country: "cod", label: "Coffee final site(s)", file: `${DEPOT_SERVER}/hih-cod-coffee-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-maize-final", group: "final", country: "cod", label: "Maize final site(s)", file: `${DEPOT_SERVER}/hih-cod-maize-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-palmoil-final", group: "final", country: "cod", label: "Palm-oil final site(s)", file: `${DEPOT_SERVER}/hih-cod-palmoil-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-wheat-final", group: "final", country: "cod", label: "Wheat final site(s)", file: `${DEPOT_SERVER}/hih-cod-wheat-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-livestock-final", group: "final", country: "cod", label: "Livestock final site(s)", file: `${DEPOT_SERVER}/hih-cod-livestock-final.geojson`, color: "#c0392b" },
 ];
+
+// Country labels for the score/final accordion headers (D27's expansion target
+// list) — only "cod" has live data today; the rest appear here so the UI
+// mechanism needs no further changes once their layers are actually uploaded.
+const COUNTRY_LABELS = {
+  cod: "DR Congo (COD)",
+  civ: "Côte d'Ivoire (CIV)",
+  caf: "Central African Republic (CAF)",
+  cmr: "Cameroon (CMR)",
+  cog: "Republic of Congo (COG)",
+};
 
 const CENTER = [21.78, -4.09];
 const ZOOM = 5;
@@ -329,6 +349,7 @@ function applyStoryStep(story, i) {
   document.querySelectorAll('#panel input[type=checkbox]').forEach((cb) => {
     const id = cb.dataset.layerId;
     cb.checked = activeRaster.has(id) || activeVector.has(id);
+    if (cb.checked) cb.closest("details")?.setAttribute("open", "");
   });
   refresh();
 
@@ -402,11 +423,38 @@ function buildCheckbox(spec, isVector) {
   return label;
 }
 
+// score/final are per-country-coded (D9) and get a per-country <details>
+// accordion inside their group div, created on demand; gaez/access/fishfarm
+// stay flat (single shared archives regardless of country, D9) and use the
+// group div directly. This means adding a new country's layers to
+// rasterLayers/vectorLayers (with a `country` field) is enough on its own —
+// no further HTML changes needed once that country's data actually exists.
+const PER_COUNTRY_GROUPS = new Set(["score", "final"]);
+function groupContainer(spec) {
+  const groupDiv = document.getElementById(`group-${spec.group}`);
+  if (!PER_COUNTRY_GROUPS.has(spec.group) || !spec.country) return groupDiv;
+  const detailsId = `group-${spec.group}-${spec.country}`;
+  let inner = document.getElementById(detailsId);
+  if (!inner) {
+    const details = document.createElement("details");
+    details.className = "country-group";
+    if (spec.country === "cod") details.open = true; // only country with live data so far
+    const summary = document.createElement("summary");
+    summary.textContent = COUNTRY_LABELS[spec.country] || spec.country.toUpperCase();
+    details.appendChild(summary);
+    inner = document.createElement("div");
+    inner.id = detailsId;
+    details.appendChild(inner);
+    groupDiv.appendChild(details);
+  }
+  return inner;
+}
+
 for (const spec of rasterLayers) {
-  document.getElementById(`group-${spec.group}`).appendChild(buildCheckbox(spec, false));
+  groupContainer(spec).appendChild(buildCheckbox(spec, false));
 }
 for (const spec of vectorLayers) {
-  document.getElementById(`group-${spec.group}`).appendChild(buildCheckbox(spec, true));
+  groupContainer(spec).appendChild(buildCheckbox(spec, true));
 }
 
 init();
