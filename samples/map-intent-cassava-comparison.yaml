@@ -1,0 +1,29 @@
+# Sample Map Intent — verified working against the live Cartographer, 2026-09-03.
+# Represents a plain "show me X" question, not a narrative — see the ferspas57
+# Staff prompt's Narrative Mode guidance (STAFF-PROMPT.md) for when to use which.
+spec_version: "map-intent/v2"
+goal: "Compare DR Congo's cassava storage suitability score against where FAO actually chose to build"
+area:
+  name: "DR Congo, eastern region"
+  bbox: [28.0, -2.0, 30.5, 1.0]
+catalog_context:
+  active_catalogs:
+    - id: "stars-martin"
+      type: "martin"
+      uri: "https://stars.optgeo.org"
+      version: "2026-09-03"
+  resolution_policy:
+    precedence: ["stars-martin"]
+required_layers:
+  - source_id: "hih-cod-cassava-score"
+    label: "Cassava storage suitability score"
+  - source_id: "hih-cod-cassava-final"
+    label: "FAO-selected cassava storage site(s)"
+render_hints:
+  initial_center: [29.2, -1.0]
+  initial_zoom: 8
+provenance:
+  generated_by: "ferspas57 Staff v0.1 (draft, hand-authored)"
+  generated_at: "2026-09-03T23:30:00Z"
+  intent_id: "test-cassava-001"
+  user_context: "Where does FAO's Hand-in-Hand analysis suggest building cassava storage in eastern DR Congo, and how does it compare to the raw suitability score?"

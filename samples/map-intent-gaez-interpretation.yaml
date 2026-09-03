@@ -1,0 +1,28 @@
+# Sample Map Intent — a GAEZ-only interpretation question. Per the ferspas57 Staff
+# prompt's Narrative Mode guidance, this kind of "what does this classification
+# mean" question fits plain Map Intent better than a multi-step narrative — there's
+# one thing to look at, not a story to walk through.
+spec_version: "map-intent/v2"
+goal: "Show DR Congo's finer-grained (57-class) agro-ecological classification, to understand the country's climate/soil/terrain diversity"
+area:
+  name: "Democratic Republic of the Congo"
+  bbox: [12.0, -13.5, 31.5, 5.5]
+catalog_context:
+  active_catalogs:
+    - id: "stars-martin"
+      type: "martin"
+      uri: "https://stars.optgeo.org"
+      version: "2026-09-03"
+  resolution_policy:
+    precedence: ["stars-martin"]
+required_layers:
+  - source_id: "gaez-aez57"
+    label: "AEZ57 classification (fine-grained)"
+render_hints:
+  initial_center: [23.5, -3.0]
+  initial_zoom: 5
+provenance:
+  generated_by: "ferspas57 Staff v0.1 (draft, hand-authored)"
+  generated_at: "2026-09-03T23:45:00Z"
+  intent_id: "test-gaez57-001"
+  user_context: "What does DR Congo's agro-ecological zoning look like at a finer resolution than the basic 33-class scheme?"
