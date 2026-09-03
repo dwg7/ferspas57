@@ -6,6 +6,26 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D15 — Production upload done (2 martin.yaml PRs open); narrating-Staff prototype: story JSON compressed into a URL fragment, played back client-side
+**Date**: 2026-09-03
+**Status**: Upload complete and verified. Narrative transport mechanism prototyped and working end-to-end, not yet connected to an actual Staff (the sample story is hand-written, not LLM-generated).
+
+**Production upload — done**: hfu approved proceeding; `stars-fd` confirmed the earlier `spacex.optgeo.org` mention was not a different host — `spacex` is just the machine's SSH hostname, with Martin (`stars.optgeo.org`) and Caddy (`depot.optgeo.org`) as its two public-facing roles, "三位一体" (one machine, three names) per hfu. All 23 files transferred and checksum-verified. The 7 GeoJSON final-location files needed no config change and are already live via `depot.optgeo.org` (confirmed 200 + CORS). Opened two PRs against `hfu/stars` for the 16 PMTiles sources, matching the existing `config/martin.yaml` schema (`pmtiles.sources.<name>: /home/stars/data/<file>.pmtiles`) and `stars-fd`'s requested split:
+- [`hfu/stars#9`](https://github.com/hfu/stars/pull/9) — `gaez-aez33`, `gaez-aez57`
+- [`hfu/stars#10`](https://github.com/hfu/stars/pull/10) — the 14 HIH DR Congo sources
+Both awaiting `stars-fd` review/merge + Martin restart as of this writing.
+
+**Narrative implementation — the actual design problem, per hfu**: a single Staff→Cartographer handoff (one Map Intent) can't express an animated, multi-step narrative — you need something closer to a story map's sequence of scenes. hfu's own constraints going in: stay GET-only (no POST — a static Cartographer site, per this repo's whole architecture, has nowhere to receive one), and avoid needing a manual "paste the JSON in" fallback if avoidable.
+
+**Solution prototyped and confirmed working**: a narrative is a small JSON script — `{title, steps: [{center, zoom, layers, caption}, ...]}` — compressed with `lz-string` (`compressToEncodedURIComponent`) and carried entirely in the URL **fragment** (`#story=...`), not a query string or POST body. The fragment is never transmitted to any server, so this fits a pure static-file Cartographer perfectly and, as a side benefit, never shows up in server/CDN access logs the way a query string could. Built the actual sample story from D13's real, verified maize/GAEZ finding (4 steps: GAEZ context → score overlay → the surprising final-site location → the open question) and confirmed:
+- The 4-step story, Japanese captions included, compresses into a **1,321-character URL** — comfortably inside any practical browser URL-length limit, with real headroom for longer/richer stories.
+- "Playing" a story: collapses the layer panel, syncs the checkbox state to each step's active layers, `map.flyTo()`s between steps (1.8s), and displays the caption — with prev/next/autoplay controls. Verified visually stepping through to the "surprising final site" step: the right layers, the right location (Nyamilima), the right caption, in sync.
+- This is architecturally just a richer instance of what `README.md` already describes Staccato as doing ("a plain-language question into a real map link") — a narrative is a link that encodes a sequence of views instead of one, not a new mechanism requiring backend support.
+
+**Not yet done**: no Staff actually generates these JSON scripts yet — the sample story was hand-written by this session as a proof of the transport/playback mechanism, using D13's already-verified real finding as content. Producing narratives from an LLM call (the actual "narrating Staff" from D6/D12) is separate, follow-on work.
+
+---
+
 ### D14 — All 23 files now genuinely complete (fish-farming was missed, then a real type error found in one of them); checkbox-based multi-layer UI working
 **Date**: 2026-09-03
 **Status**: Corrected and complete. Local client now supports combining layers, not just viewing one at a time.
