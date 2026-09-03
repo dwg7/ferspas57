@@ -6,6 +6,22 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D27c — Real bug found and fixed: NaN-NoData sources were silently miscast to a real score value, not masked
+**Date**: 2026-09-04
+**Status**: Fixed in `scripts/convert-hih.sh`; the one already-affected staged file (`hih-caf-cassava-score`) re-converted and verified. No live production archive affected (checked directly, see below).
+
+**How this was found**: while gathering source resolutions for the shared fishfarm/access archive merge (D27's paused step), the DR Congo fishfarm-closed source COG turned out to declare its NoData as literal `nan` — not `-9999`, not `-3.4e38` like every file checked so far. That prompted checking what `scripts/convert-hih.sh`'s mask condition, `(A<=-9999)|(A>100)`, actually does with NaN input: **NaN comparisons are always `False` in numpy**, so neither half of that condition ever catches a NaN pixel — it falls through to the "keep as real data" branch, gets `numpy.round`ed (NaN stays NaN), and the final `.astype(numpy.uint8)` cast silently produces `0`, not 255. A NoData pixel becomes indistinguishable from a genuine, valid zero score — with no error, no exception, just a quiet `RuntimeWarning: invalid value encountered in cast` easy to read past.
+
+**Checked whether this had already shipped**: yes for one already-completed file — `hih-caf-cassava-score`'s own source also declares NoData as `nan` (confirmed directly: `gdalinfo` shows `NoData Value=nan`), and its already-converted `_byte.tif` was still sitting in this session's scratchpad. Direct pixel comparison confirmed the bug was real in that specific staged output (not yet uploaded anywhere, per D27's own "staged, not deployed" note — caught before it could reach production). **No currently-live production archive is affected**: the original DR Congo fishfarm-closed conversion (done by hand in the original D7-D11 batch, before this script existed) was checked pixel-by-pixel against its own NaN source and found to correctly map 100% of NaN positions to byte 255 — whatever hand-run `gdal_calc.py` invocation was used originally evidently handled this correctly (very likely by relying on `gdal_calc.py`'s own default respect for an input band's registered NoData value, rather than an explicit numeric-threshold condition), even though this script's own simplified re-implementation of "the same idea" did not.
+
+**Fix**: the mask condition now checks `numpy.isnan(A)` explicitly, and the "keep" branch replaces NaN with 0 (via an inner `numpy.where`) *before* rounding/clipping/casting, both catching the NaN case and eliminating the cast warning entirely (rather than just suppressing it) since the cast never sees a NaN input on either branch anymore.
+
+**Re-verified**: `hih-caf-cassava-score` reconverted; direct pixel check confirms 100% of the source's NaN positions (55.7% of all pixels — a genuinely large fraction, not an edge case) now map to byte 255. `pmtiles verify` clean. CIV's five commodities were checked and confirmed **not** affected (their sources all declare NoData as `-3.4028235e+38`, which the original `<=-9999` condition already caught correctly) — no re-conversion needed for those.
+
+**Why this is worth dwelling on**: this is exactly the class of silent-corruption risk this project's own established philosophy (D7/D8's resampling discipline, the "厳禁" stance on lossy encoding for classification data) exists to guard against — a plausible-looking, warning-only failure mode that produces a technically-valid-looking output (a byte value in the correct 0-100 range, not an obviously-wrong number) while actually corrupting the transparent/NoData signal into "this place scored exactly 0." Caught here because the file was re-inspected for an unrelated reason (resolution audit), not because anything visibly broke — worth remembering that a clean `pmtiles verify` and a plausible-looking tile do not by themselves prove correctness for this kind of masking logic.
+
+---
+
 ### D27b — Panel UI restructured into per-country accordions, ahead of new countries' data actually landing
 **Date**: 2026-09-04
 **Status**: Built and locally verified (DOM structure inspected directly; no console errors) — safe to ship ahead of D27's staged data since it's purely additive/backward-compatible.

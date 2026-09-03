@@ -18,6 +18,12 @@
 #
 # --collection fetches the STAC item's `data` asset href (Google Cloud
 # Storage, public) and downloads it; --input uses an already-local COG.
+#
+# --name <full-name> overrides the hih-<country>-<commodity>-<mode> naming
+# template entirely — for the country-agnostic shared archives (D9's
+# hih-fishfarm-*/hih-access-* naming), where --input should be a raster
+# already mosaicked across countries (see D27's note on resampling to a
+# common grid before mosaicking), not a single country's own source COG.
 
 set -euo pipefail
 
@@ -34,6 +40,7 @@ COLLECTION=""
 INPUT=""
 OUT_DIR="."
 DRY_RUN=0
+NAME_OVERRIDE=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -43,6 +50,7 @@ while [[ $# -gt 0 ]]; do
     --input) INPUT="$2"; shift 2 ;;
     --out-dir) OUT_DIR="$2"; shift 2 ;;
     --dry-run) DRY_RUN=1; shift ;;
+    --name) NAME_OVERRIDE="$2"; shift 2 ;;
     *) echo "unknown argument: $1" >&2; exit 1 ;;
   esac
 done
@@ -50,15 +58,19 @@ done
 if [[ "$MODE" != "score" && "$MODE" != "final" ]]; then
   echo "first argument must be 'score' or 'final'" >&2; exit 1
 fi
-if [[ -z "$COUNTRY" || -z "$COMMODITY" ]]; then
-  echo "--country and --commodity are required" >&2; exit 1
+if [[ -z "$NAME_OVERRIDE" && ( -z "$COUNTRY" || -z "$COMMODITY" ) ]]; then
+  echo "--country and --commodity are required (or pass --name directly, e.g. for the country-agnostic shared fishfarm/access archives)" >&2; exit 1
 fi
 if [[ -z "$COLLECTION" && -z "$INPUT" ]]; then
   echo "one of --collection or --input is required" >&2; exit 1
 fi
 
 mkdir -p "$OUT_DIR"
-NAME="hih-${COUNTRY}-${COMMODITY}-${MODE}"
+if [[ -n "$NAME_OVERRIDE" ]]; then
+  NAME="$NAME_OVERRIDE"
+else
+  NAME="hih-${COUNTRY}-${COMMODITY}-${MODE}"
+fi
 
 run() {
   echo "+ $*"
@@ -84,9 +96,16 @@ if [[ "$DRY_RUN" -eq 0 && ! -f "$SRC" ]]; then
 fi
 
 # --- Score mode: continuous 0-100, hidden -9999 sentinel ----------------
-# D10: Score/LocationScore layers are Float32 with a *hidden* -9999 sentinel
-# on top of the declared NoData — mask both in one condition since -9999 is
-# well below any real declared NoData value (typically float32 min).
+# D10: Score/LocationScore layers are Float32/Float64 with a *hidden* -9999
+# sentinel on top of the declared NoData — mask both. Declared NoData varies
+# by file (nan, -3.4e38, -999999, or 0 have all been observed across
+# countries, D27) so NaN must be checked explicitly with numpy.isnan(), not
+# just "<=-9999" — a real bug found and fixed during this expansion: NaN
+# comparisons are always False in numpy, so a NaN-NoData file silently cast
+# to byte value 0 (a real score, not transparent) instead of 255, with no
+# error or warning to notice by. Replacing NaN with 0 before the round/clip/
+# cast (inner numpy.where) also avoids an "invalid value encountered in
+# cast" warning on the branch numpy.where doesn't end up choosing.
 if [[ "$MODE" == "score" ]]; then
   BYTE="$OUT_DIR/${NAME}_byte.tif"
   PAL_VRT="$OUT_DIR/${NAME}_pal.vrt"
@@ -94,7 +113,7 @@ if [[ "$MODE" == "score" ]]; then
   OUT_PMT="$OUT_DIR/${NAME}.pmtiles"
 
   run gdal_calc.py -A "$SRC" --outfile="$BYTE" --type=Byte --NoDataValue=255 \
-    --calc="numpy.where((A<=-9999)|(A>100),255,numpy.clip(numpy.round(A),0,100).astype(numpy.uint8))" \
+    --calc="numpy.where(numpy.isnan(A)|(A<=-9999)|(A>100),255,numpy.clip(numpy.round(numpy.where(numpy.isnan(A),0,A)),0,100).astype(numpy.uint8))" \
     --overwrite --quiet
 
   run python3 "$PALETTE_VRT_PY" "$BYTE" "$PALETTE" "$PAL_VRT"
