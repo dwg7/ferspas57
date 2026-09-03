@@ -6,6 +6,22 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D25 — `BACKGROUND.md` added: reference knowledge for the Staff, separate from its operational prompt
+**Date**: 2026-09-04
+**Status**: Built, referenced from `STAFF-PROMPT.md`, real (sourced, not invented) research.
+
+**hfu's request**: a background-knowledge document — what FAO, HIH, FAO CSI, the UN Open GIS Initiative, DWG5/DWG7, and this project itself actually are — kept separate from `STAFF-PROMPT.md` (which stays task-focused and short) but referenced from it, and written to also be useful to humans (hfu, DWG5/DWG7 collaborators), not just an LLM. hfu's suggested process — draft a chapter structure first, get it reviewed, then research and write, then revisit the structure — was followed: an 11-chapter table of contents was proposed and confirmed before any research or writing happened.
+
+**Built**: `BACKGROUND.md` (repo root), covering: what the document is and why it's separate from the prompt (§1); FAO (§2); FAO CSI, confirmed via research to be FAO's Division of Digitalization and Informatics, led by the FAO CIO — not previously verified in this repo, only referenced as "FAO CSI" without expansion (§3); HIH, including its actual SDG1/SDG2 mission and its GIS-based multi-criteria-evaluation methodology (climate + accessibility + poverty-reduction priority) that explains this project's own "why does the constrained site score higher" finding (§4); FERSPAS, its full name (FAO Essential Remote Sensing data Product portal for Agrifood Systems) and structure (§5); GAEZ's FAO/IIASA history and v5's 2025-04-14 launch (§6); the UN Open GIS Initiative's actual DWG numbering, confirmed via its own site — **DWG5 is officially "GEOAI and Geo-Analytics"** (co-chaired by UN Global Pulse, FAO, Politecnico di Milano) and **DWG7 is officially "Smart Maps"** (§7); the DWG5/DWG7 ↔ "Staccato"/`dwg7` naming distinction, made explicit for the first time in this repo (§8) — Staccato is `dwg7`'s own project name for an architecture built within DWG7's broader mission, not DWG7's own official name; this project's own purpose and current state (§9); a consolidated explanation of both the source STAC data's real shape and what's actually hosted/converted (§10); and a pointers section (§11).
+
+**Real research, not assumed**: FAO CSI's expansion, GAEZ v5's exact launch date, HIH's exact launch date (2020-07-21) and SDG framing, FERSPAS's full name, and the DWG5/DWG7 official names were all confirmed via web search against FAO's and unopengis.org's own materials — none of this was carried over from memory or invented. Sources are cited inline per section.
+
+**Wiring**: `STAFF-PROMPT.md` gained a new "Background Knowledge" section (inside the system prompt itself, right after "Primary Role") instructing whoever wires this prompt to a real model to include `BACKGROUND.md` in context, plus a note in its own "Notes for whoever wires this" section pointing back. `BACKGROUND.md` is explicitly framed as reference knowledge, not instructions — corrections belong there, not duplicated into the prompt.
+
+**Still open**: this is a first pass — accurate as researched, but not reviewed by anyone at FAO CSI or DWG5. Should be revisited (per hfu's own suggested process) once more of the catalog/countries are real, and the "further reading" section should grow as `staccato-spec-19`'s narrative ADR and other owed knowledge-flow items actually land.
+
+---
+
 ### D24 — Backlog (not implemented): pack multiple Score layers into one PMTiles archive's RGB(A) channels
 **Date**: 2026-09-04
 **Status**: Recorded only. Explicitly deferred by hfu — "早すぎる最適化はしない... この果実を刈り取るのは一通りできてからだ" (avoid premature optimization; harvest this fruit only after everything else is done).
