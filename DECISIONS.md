@@ -6,6 +6,18 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D24 — Backlog (not implemented): pack multiple Score layers into one PMTiles archive's RGB(A) channels
+**Date**: 2026-09-04
+**Status**: Recorded only. Explicitly deferred by hfu — "早すぎる最適化はしない... この果実を刈り取るのは一通りできてからだ" (avoid premature optimization; harvest this fruit only after everything else is done).
+
+**The idea**: each `hih-*-score` layer today is its own single-band PMTiles archive, so viewing N commodities' scores at once costs N independent tile fetches per viewport. Since these are all continuous 0–100 domains sampled at the same resolution/extent, up to 3 (RGB) or 4 (RGBA) of them could be packed as separate channels of one shared PMTiles archive instead — cutting simultaneous tile requests to roughly 1/3 or 1/4 for that group. The client would decode the relevant channel per legend/probe lookup (already reading raw pixel values via `gl.readPixels()` in `aez_legend.js`/`score_probe.js`, so the decode-side mechanism already exists in spirit).
+
+**Why not now**: this is a real optimization opportunity but a genuine premature one while the catalog is still actively growing (the imminent multi-country expansion — see the next entry — will add more Score layers, changing exactly which layers would group well together). Packing now would mean re-packing again shortly, for no benefit yet realized. hfu's own framing: do this once the catalog is done growing, not before.
+
+**Where to look when this is picked up**: the current per-commodity Score layers (`hih-cod-*-score`, and their post-expansion equivalents for CIV/CAF) are the natural first candidates — same extent, resolution, and 0–100 domain, differing only in which commodity. `score_probe.js`'s existing per-source tile-fetch-and-decode logic is the place that would need to become channel-aware.
+
+---
+
 ### D23 — "Final" sites get a gold glow marker, per hfu's parting request that this rare data "shine"
 **Date**: 2026-09-04
 **Status**: Built and verified in `docs/index.html`.

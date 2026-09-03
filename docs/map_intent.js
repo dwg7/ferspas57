@@ -66,7 +66,8 @@ function applyMapIntent(intent) {
 function initMapIntentUI() {
   const btn = document.createElement("button");
   btn.id = "intent-open-btn";
-  btn.textContent = "\u{1F4C4} Map Intent";
+  btn.textContent = "\u{1F4C4}";
+  btn.title = "Map Intent";
   const toolbar = document.getElementById("top-right-toolbar") || document.body;
   toolbar.appendChild(btn);
 
