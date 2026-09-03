@@ -6,6 +6,47 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D27 — Horizontal expansion, first real batch: CAF cassava + CIV's 5 commodities converted and verified; shared fishfarm/access archives found to need a resampling step before merging
+**Date**: 2026-09-04
+**Status**: 6 new crop-storage layers (score + final, so 12 files) built, `pmtiles verify`-clean, staged locally — **not yet uploaded to `stars.optgeo.org`/`depot.optgeo.org`, not yet wired into `docs/index.html`**, per this expansion's own plan (`.claude/plans/declarative-floating-wadler.md`) and the standing ground rule that new production changes are prepared, not applied, without hfu's review. The shared fishfarm/access archive rebuild (this same plan's step 5) is investigated but not yet executed — see below for why.
+
+**`scripts/convert-hih.sh` validated before first real use**: run against the leftover, already-known-good DR Congo cassava score/final source COGs (still on disk in this session's scratchpad from the original D7-D11 batch) and compared output structure directly against the live archives. Score mode reproduced the *exact* same PMTiles internals as the original (273 addressed tiles, 231 tile entries after RLE, 196 tile contents, minzoom 4/maxzoom 8) — a real regression match, not just "looks about right." Final mode reproduced the exact same feature count (12). One real bug found and fixed during validation: the `gdal_calc.py` mask expression cast out-of-range float values to `Byte` before `numpy.where` discarded them, throwing a (harmless but noisy) `RuntimeWarning: invalid value encountered in cast` — fixed by clipping to `[0,100]` before the cast (`numpy.clip(numpy.round(A),0,100).astype(numpy.uint8)`), so only in-range values are ever cast.
+
+**CIV's commodity identity required checking real STAC descriptions, not guessing from abbreviated IDs** — this caught what would have been a real labeling mistake: `CIV-LOCATION-SH`'s "SH" is **slaughterhouse**, not an unknown code — it pairs with `CIV-LOCATIONSCORE-SH` (described as "slaughterhouse location") as the livestock/slaughter theme, consistent with DR Congo's own `hih-cod-livestock-*` naming, so it's named `hih-civ-livestock-*` here too, not "sh". Separately, `CIV-LOCATIONSCORE-DAIRY` ("dairy processing industry facilities") pairs with `CIV-FINALLOCATION-CATTLE` (not a same-named "DAIRY" final — FAO's own naming isn't perfectly symmetric between the score and final layer of the same theme), so this is `hih-civ-dairy-*`. Cross-checked all 5 CIV commodity descriptions before assigning names; final mapping: cereal, fruits, vegetables, dairy (↔ `FINALLOCATION-CATTLE`), livestock (↔ `LOCATION-SH`). CAF's `CSSV` code was already confirmed as cassava in D5/D8's earlier audit.
+
+**Real conversions completed** (all CC-BY-4.0, license-link-verified per collection, `numberMatched: 1` each — matching D5's "complete" audit standard):
+
+| new layer | source collection | features/tiles |
+|---|---|---|
+| `hih-caf-cassava-score` / `-final` | `CAF-SCORE-CSSV` / `CAF-FINAL-CSSV` | 30 tiles / 27 features |
+| `hih-civ-cereal-score` / `-final` | `CIV-LOCATIONSCORE-CEREAL` / `CIV-FINALLOCATION-CEREAL` | — / 23 features |
+| `hih-civ-fruits-score` / `-final` | `CIV-LOCATIONSCORE-FRUITS` / `CIV-FINALLOCATION-FRUITS` | — / 70 features |
+| `hih-civ-vegetables-score` / `-final` | `CIV-LOCATIONSCORE-VEGE` / `CIV-FINALLOCATION-VEGE` | — / 67 features |
+| `hih-civ-dairy-score` / `-final` | `CIV-LOCATIONSCORE-DAIRY` / `CIV-FINALLOCATION-CATTLE` | — / 12 features |
+| `hih-civ-livestock-score` / `-final` | `CIV-LOCATIONSCORE-SH` / `CIV-LOCATION-SH` | — / 12 features |
+
+Total: 2.5MB of PMTiles + 224KB of GeoJSON, all `pmtiles verify`-clean.
+
+**Why the shared fishfarm/access archive rebuild (this expansion's step 5) is paused, not skipped**: checking each country's actual source-COG resolution (via each item's `bands[0].raster:spatial_resolution`) before attempting a mosaic found real heterogeneity — **DR Congo, Côte d'Ivoire, Cameroon, and Republic of Congo each publish their HIH rasters at a different native pixel size** (roughly 507m for DR Congo's own cassava layer seen earlier, ~1002m for CIV/COG, ~1113m for CMR, ~891m for CAF — all near-round fractions of a degree, but not a shared grid). Naively mosaicking rasters at different resolutions without an explicit resample-to-common-grid step first would either fail outright or silently produce a mosaic with inconsistent effective resolution across country borders. This needs a deliberate resampling decision (which target resolution, confirmed nearest-neighbor to avoid blending real score values per D7's established policy) before it's safe to execute against what would become a *live, shared* archive — exactly the kind of production-adjacent judgment call worth pausing on rather than guessing through unsupervised. Recorded here as the next concrete step, not lost.
+
+**Staged for hfu's review — not executed**:
+```yaml
+# Additions to hfu/stars's config/martin.yaml, staged, not yet a PR:
+pmtiles:
+  sources:
+    hih-caf-cassava-score: /home/stars/data/hih-caf-cassava-score.pmtiles
+    hih-civ-cereal-score: /home/stars/data/hih-civ-cereal-score.pmtiles
+    hih-civ-fruits-score: /home/stars/data/hih-civ-fruits-score.pmtiles
+    hih-civ-vegetables-score: /home/stars/data/hih-civ-vegetables-score.pmtiles
+    hih-civ-dairy-score: /home/stars/data/hih-civ-dairy-score.pmtiles
+    hih-civ-livestock-score: /home/stars/data/hih-civ-livestock-score.pmtiles
+```
+Plus 6 GeoJSON files (`hih-{caf-cassava,civ-cereal,civ-fruits,civ-vegetables,civ-dairy,civ-livestock}-final.geojson`) ready to drop onto `depot.optgeo.org` alongside the existing 7. All 12 files currently sit in this session's scratchpad, not in this git repo (matching the existing pattern — converted data lives on the serving infrastructure, not in version control) and not yet transferred anywhere.
+
+**Sequencing reminder for whoever continues this**: per this expansion's own plan, do not wire these new layer IDs into `docs/index.html` (the live GitHub Pages site) until they're actually uploaded and confirmed serving — that page is live production, and wiring in not-yet-resolvable tile URLs would show broken layers to real visitors.
+
+---
+
 ### D26 — `CONCEPT.md` added: one-page external-facing summary for FAO FERSPAS/DWG5 outreach
 **Date**: 2026-09-04
 **Status**: Built, committed at hfu's request for immediate work use (email to FAO's FERSPAS team and DWG5 Lead Zhongxin — as a one-page Word attachment or pasted email body).
