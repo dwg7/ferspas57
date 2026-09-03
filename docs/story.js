@@ -120,11 +120,28 @@ function decodeStory(encoded) {
   return json ? JSON.parse(json) : null;
 }
 
+// staccato-spec ADR 0004 (one-shot fragment hand-off): a fragment-carried intent
+// MUST be read at most once and cleared via history.replaceState before any
+// rendering derived from it occurs, so a URL copied after the map renders is
+// indistinguishable from one with no fragment at all — not bookmarkable/replayable
+// map state. This must run BEFORE applying the story, not after.
 function getStoryFromUrl() {
-  const m = location.hash.match(/(?:^|&)story=([^&]+)/);
-  if (!m) return null;
+  // Split on "&" rather than regex-matching "(?:^|&)story=": with MapLibre's
+  // built-in hash:"map" removed (it was defeating this exact clearing step by
+  // re-injecting a stale copy of the fragment on every map move — see
+  // DECISIONS.md), a shared story link's hash is often *just* "#story=...", and
+  // "^" in that older regex only matched "story=" at position 0, never "#story=".
+  const raw = location.hash.replace(/^#/, "");
+  if (!raw) return null;
+  const parts = raw.split("&");
+  const idx = parts.findIndex((p) => p.startsWith("story="));
+  if (idx === -1) return null;
+  const encoded = parts[idx].slice("story=".length);
+  parts.splice(idx, 1);
+  const rest = parts.length ? "#" + parts.join("&") : "";
+  history.replaceState(null, "", location.pathname + location.search + rest);
   try {
-    return decodeStory(decodeURIComponent(m[1]));
+    return decodeStory(decodeURIComponent(encoded));
   } catch (e) {
     console.error("failed to decode story from URL", e);
     return null;
@@ -133,9 +150,10 @@ function getStoryFromUrl() {
 
 function setStoryInUrl(story) {
   const encoded = encodeStory(story);
-  const rest = location.hash.replace(/(?:^|&)story=[^&]+/, "");
-  const sep = rest && rest !== "#" ? "&" : "";
-  location.hash = rest.replace(/^#/, "") + sep + "story=" + encoded;
+  const raw = location.hash.replace(/^#/, "");
+  const parts = raw ? raw.split("&").filter((p) => !p.startsWith("story=")) : [];
+  parts.push("story=" + encoded);
+  location.hash = parts.join("&");
 }
 
 function pickLang(field, lang) {

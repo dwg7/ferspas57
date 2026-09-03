@@ -105,11 +105,24 @@ function initMapIntentUI() {
     }
   });
 
-  // Optional URL-fragment path (spec allows this; not the required baseline — see D19).
-  const m = location.hash.match(/(?:^|&)intent=([^&]+)/);
-  if (m) {
+  // Optional URL-fragment path — staccato-spec ADR 0004's one-shot fragment
+  // hand-off, not the required plain-text baseline (see D19). Per ADR 0004: read
+  // at most once and clear via history.replaceState before rendering, so a URL
+  // copied after the map renders is indistinguishable from one with no fragment.
+  // Split on "&" rather than regex-matching "(?:^|&)intent=" — see story.js's
+  // getStoryFromUrl for why: with MapLibre's hash:"map" removed, a shared
+  // intent link's hash is often just "#intent=...", and the old regex's "^"
+  // only matched at position 0, never right after the leading "#".
+  const raw = location.hash.replace(/^#/, "");
+  const parts = raw ? raw.split("&") : [];
+  const idx = parts.findIndex((p) => p.startsWith("intent="));
+  if (idx !== -1) {
+    const encoded = parts[idx].slice("intent=".length);
+    parts.splice(idx, 1);
+    const rest = parts.length ? "#" + parts.join("&") : "";
+    history.replaceState(null, "", location.pathname + location.search + rest);
     try {
-      const yamlText = LZString.decompressFromEncodedURIComponent(decodeURIComponent(m[1]));
+      const yamlText = LZString.decompressFromEncodedURIComponent(decodeURIComponent(encoded));
       const intent = parseMapIntent(yamlText);
       map.once("load", () => applyMapIntent(intent));
     } catch (e) {
