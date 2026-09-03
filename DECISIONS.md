@@ -6,6 +6,20 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D23 — "Final" sites get a gold glow marker, per hfu's parting request that this rare data "shine"
+**Date**: 2026-09-04
+**Status**: Built and verified in `docs/index.html`.
+
+**Context**: before stepping away, hfu asked (verbatim): "この final系統のデータをどうするかだね。こちらは、画面上に輝いていてもいいくらい（レア）なんだよね？おそらく" — the seven `hih-*-final` layers are each exactly one real site FAO actually selected, out of a whole raster of scored candidates behind each — genuinely rare in a way the flat `fill-color: #c0392b` treatment (identical styling to any other vector layer) didn't communicate.
+
+**Built**: each active `group: "final"` vector layer now also gets a small `maplibregl.Marker` at its polygon's centroid — a warm gold radial-gradient core plus a CSS-animated pulsing ring (`final-glow-pulse`, 1.8s ease-out, scale 1→3.2 with fading opacity), deliberately gold/celebratory rather than red/urgent, consistent with the "probe ring" precedent (D-numbered earlier in this log) of choosing shapes/colors that read as positive-attention rather than alarm or targeting. The underlying fill polygon is kept as-is (still meaningful at high zoom for the actual site boundary); the glow is an additional affordance, not a replacement.
+
+**Implementation notes**: centroid is a simple ring-average of the first polygon (good enough for placement, not claimed as a true area centroid), fetched once per layer and cached (`finalCentroidCache`) since these files don't change mid-session. Marker lifecycle (`updateFinalGlowMarkers()`) is driven from the single `refresh()` function already called by every code path that changes `activeVector` — checkbox toggles, `story.js` step transitions, and `map_intent.js`'s `applyMapIntent` — so no separate wiring was needed per call site. Guards against the checkbox being toggled off again while the centroid fetch is still in flight.
+
+**Verified**: marker add/remove lifecycle (toggling two different final layers on, then one off, correctly leaves exactly the still-active one), correct centroid placement (visually confirmed against the Beni, DR Congo maize site), and the CSS animation actually running (`getComputedStyle(...).animationName === "final-glow-pulse"`), not just present in the stylesheet.
+
+---
+
 ### D22 — D21's ADR 0004 fix didn't actually work: MapLibre's `hash:"map"` was reinjecting the cleared payload; fixed by removing it, plus a second latent bug it exposed
 **Date**: 2026-09-03
 **Status**: Fixed and verified end-to-end (real shared story link → fresh receiving page → payload cleared and stays cleared through multi-step playback).

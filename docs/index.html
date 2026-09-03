@@ -31,6 +31,25 @@
   label { display: flex; align-items: center; gap: 6px; padding: 2px 0; cursor: pointer; }
   label input { flex-shrink: 0; }
   .swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  /* "Final" (FinalLocation) sites are rare — exactly one real place per commodity
+     that FAO actually selected, out of a whole raster of candidates — so they get
+     a small gold "beacon" glow instead of the plain fill everything else uses. */
+  .final-glow-marker { position: relative; width: 1px; height: 1px; pointer-events: none; }
+  .final-glow-core {
+    position: absolute; left: 0; top: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff7cc 0%, #ffcc33 55%, #c0392b 100%);
+    box-shadow: 0 0 6px 2px rgba(255, 204, 51, 0.9);
+  }
+  .final-glow-ring {
+    position: absolute; left: 0; top: 0; width: 10px; height: 10px; margin: -5px 0 0 -5px;
+    border-radius: 50%; background: rgba(255, 204, 51, 0.55);
+    animation: final-glow-pulse 1.8s ease-out infinite;
+  }
+  @keyframes final-glow-pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    70%, 100% { transform: scale(3.2); opacity: 0; }
+  }
   #story {
     position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%);
     z-index: 10; background: white; font: 14px/1.5 sans-serif;
@@ -130,6 +149,64 @@ const ZOOM = 5;
 let map;
 const activeRaster = new Set();
 const activeVector = new Set();
+
+// --- "Final" site glow markers --------------------------------------------
+// Each hih-*-final layer is a single real site FAO actually picked, out of a
+// whole raster of candidates behind it — rare enough to deserve to visually
+// stand out, not just render as one more flat-colored fill among many.
+const finalCentroidCache = new Map(); // id -> [lng, lat] | null
+const finalMarkers = new Map(); // id -> maplibregl.Marker
+
+function polygonCentroidRough(geometry) {
+  let ring;
+  if (geometry.type === "Polygon") ring = geometry.coordinates[0];
+  else if (geometry.type === "MultiPolygon") ring = geometry.coordinates[0][0];
+  else return null;
+  let sx = 0, sy = 0;
+  for (const [x, y] of ring) { sx += x; sy += y; }
+  return [sx / ring.length, sy / ring.length];
+}
+
+async function getFinalCentroid(spec) {
+  if (finalCentroidCache.has(spec.id)) return finalCentroidCache.get(spec.id);
+  let centroid = null;
+  try {
+    const resp = await fetch(spec.file);
+    const geojson = await resp.json();
+    const feature = geojson.features && geojson.features[0];
+    if (feature) centroid = polygonCentroidRough(feature.geometry);
+  } catch (e) {
+    console.warn("failed to compute glow-marker centroid for", spec.id, e);
+  }
+  finalCentroidCache.set(spec.id, centroid);
+  return centroid;
+}
+
+async function updateFinalGlowMarkers() {
+  const activeFinalIds = vectorLayers
+    .filter((s) => s.group === "final" && activeVector.has(s.id))
+    .map((s) => s.id);
+
+  for (const [id, marker] of finalMarkers) {
+    if (!activeFinalIds.includes(id)) {
+      marker.remove();
+      finalMarkers.delete(id);
+    }
+  }
+
+  for (const id of activeFinalIds) {
+    if (finalMarkers.has(id)) continue;
+    const spec = vectorLayers.find((s) => s.id === id);
+    const centroid = await getFinalCentroid(spec);
+    if (!centroid || finalMarkers.has(id) || !activeVector.has(id)) continue; // toggled off mid-fetch
+    const el = document.createElement("div");
+    el.className = "final-glow-marker";
+    el.title = spec.label;
+    el.innerHTML = '<span class="final-glow-ring"></span><span class="final-glow-core"></span>';
+    const marker = new maplibregl.Marker({ element: el }).setLngLat(centroid).addTo(map);
+    finalMarkers.set(id, marker);
+  }
+}
 
 async function fetchPositron() {
   try {
@@ -303,6 +380,7 @@ async function refresh() {
   const style = map.getStyle();
   rebuildStyleLayers(style);
   map.setStyle(style);
+  updateFinalGlowMarkers();
 }
 
 function buildCheckbox(spec, isVector) {
