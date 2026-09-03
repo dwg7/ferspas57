@@ -6,6 +6,20 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D14 — All 23 files now genuinely complete (fish-farming was missed, then a real type error found in one of them); checkbox-based multi-layer UI working
+**Date**: 2026-09-03
+**Status**: Corrected and complete. Local client now supports combining layers, not just viewing one at a time.
+
+**D13's "all 23 files exist" claim was wrong** — the 4 fish-farming files (`hih-fishfarm-closed`, `-open`, `-extensive`, `-closed-final`) were missing entirely; the batch script only covered accessibility + 7 commodities. Caught while wiring up the client UI (files referenced by the UI that didn't actually exist on disk). Built them the same day, same pipeline.
+
+**A real data-shape error found in the process, not just an omission**: `hih-fishfarm-closed-final` (source: `COD-FISH-FIN-CLOSED`) was built with D10's binary-site vector pipeline (`numpy.where(A==1, 1, 0)` → polygonize) by blind analogy to the commodity `FINALLOCATION` layers — and produced **0 features**. Checking the actual raster (which the process should have done before building, per D10's own stated lesson) showed why: it's Float64, range 28.19–83.77 — a **continuous score, not a binary site flag** — despite "FIN"/"final" in its name suggesting the same shape as `COD-FINALLOCATION-MAIZE`. Not every FAO layer sharing a naming pattern shares a data shape; `FIN` here apparently means something closer to "a later/refined round of scoring," not "the selected site." Rebuilt with the Score pipeline instead (PNG8, 0–100 domain) — 21.9KB, tiny because the underlying data footprint is small, not because anything is wrong. The other 6 commodities' `FINALLOCATION` files were re-checked against this and are fine (each produced a plausible, non-zero, varied polygon count — the telltale sign of genuine binary data, unlike fishfarm's silent zero).
+
+All 23 files (D9's list) now genuinely exist and are internally consistent: 16 raster PMTiles (2 GAEZ + 3 accessibility + 4 fish-farming + 7 commodity scores) and 7 vector GeoJSON (commodity final-locations only, fish-farming's own "final" turned out not to be one of these).
+
+**Client UI — checkboxes, not a dropdown**: rebuilt the local test page around hfu's framing — the interesting thing isn't any one layer alone, it's seeing how layers relate, so the interface should let a User freely combine them (Staccato-style composability) rather than force a one-at-a-time selection. Implemented as grouped checkboxes (GAEZ / crop-storage scores / accessibility / fish-farming / final sites), each toggling a source+layer pair independently; raster layers still insert below the basemap's label layer (D13) and fade in over one zoom level at their minzoom (D12). Verified by combining `hih-cod-maize-score` with `hih-cod-maize-final`: the selected maize-storage site renders correctly on top of the suitability gradient, right next to a real named settlement (Nyamilima) on the Positron basemap — a small, concrete confirmation that the siting data lines up with real-world geography in an intuitively sensible way, not just internally consistent numbers.
+
+**Process, now underway**: hfu approved moving forward with the actual `stars.optgeo.org` upload and `config/martin.yaml` PR(s). Asked `stars-fd` (2026-09-03) two concrete questions before proceeding: how to physically get these files onto the Pi from this session's own filesystem, and whether the 7 tiny GeoJSON files should be served as plain static files (via `depot.optgeo.org`'s Caddy) rather than tiled through Martin, given their size (5–70KB, a handful of polygons each) doesn't warrant real vector-tiling. Reply pending as of this writing; not blocking further client-side work.
+
 ### D13 — Full DR Congo batch conversion complete; client-map fixes (globe, label-over-raster ordering); a verified real narrative example
 **Date**: 2026-09-03
 **Status**: All 23 D9-scoped files now exist locally (not uploaded anywhere). Client test page reflects D11/D12's design decisions, two real implementation bugs found and fixed along the way.
