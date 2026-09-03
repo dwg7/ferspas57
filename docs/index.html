@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>ferspas57 client test — GAEZ / HIH (DR Congo)</title>
+<script src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+<link href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" rel="stylesheet">
+<script src="https://unpkg.com/lz-string@1.5.0/libs/lz-string.min.js"></script>
+<script src="story.js"></script>
+<script src="aez_legend.js"></script>
+<script src="score_probe.js"></script>
+<style>
+  html, body { margin: 0; height: 100%; }
+  #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+  #panel {
+    position: absolute; top: 8px; left: 8px; z-index: 10;
+    background: white; font: 13px sans-serif; border-radius: 4px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.3); max-width: 280px;
+    max-height: 90vh; overflow-y: auto;
+  }
+  #panel-header {
+    padding: 6px 10px; cursor: pointer; display: flex;
+    justify-content: space-between; align-items: center; font-weight: bold;
+  }
+  #panel-body { padding: 0 10px 10px 10px; }
+  #panel.collapsed #panel-body { display: none; }
+  .group-title { font-weight: bold; margin-top: 8px; font-size: 12px; color: #555; }
+  label { display: flex; align-items: center; gap: 6px; padding: 2px 0; cursor: pointer; }
+  label input { flex-shrink: 0; }
+  .swatch { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+  #story {
+    position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%);
+    z-index: 10; background: white; font: 14px/1.5 sans-serif;
+    border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.35);
+    width: min(560px, 90vw); padding: 14px 18px; display: none;
+  }
+  #story.active { display: block; }
+  #story h3 { margin: 0 0 6px 0; font-size: 14px; }
+  #story-caption { margin: 0 0 10px 0; }
+  #story-controls { display: flex; align-items: center; gap: 8px; }
+  #story-controls button {
+    border: 1px solid #ccc; background: #f7f7f7; border-radius: 4px;
+    padding: 4px 10px; cursor: pointer; font: inherit;
+  }
+  #story-step-indicator { font-size: 12px; color: #777; margin-left: auto; }
+  #story-share {
+    position: absolute; top: 8px; right: 46px; z-index: 10;
+    background: white; border: 1px solid #ccc; border-radius: 4px;
+    padding: 5px 10px; cursor: pointer; font: 12px sans-serif;
+  }
+</style>
+</head>
+<body>
+<div id="map"></div>
+<div id="panel" class="collapsed">
+  <div id="panel-header" onclick="document.getElementById('panel').classList.toggle('collapsed')">
+    <span>ferspas57 — DR Congo</span><span>▾</span>
+  </div>
+  <div id="panel-body">
+    <div class="group-title">GAEZ (Agro-Ecological Zones)</div>
+    <div id="group-gaez"></div>
+    <div class="group-title">HIH — Crop / livestock storage &amp; processing (score)</div>
+    <div id="group-score"></div>
+    <div class="group-title">HIH — Accessibility</div>
+    <div id="group-access"></div>
+    <div class="group-title">HIH — Fish farming (score)</div>
+    <div id="group-fishfarm"></div>
+    <div class="group-title">HIH — Final selected sites</div>
+    <div id="group-final"></div>
+  </div>
+</div>
+<button id="story-share" onclick="shareStory()">▶ このストーリーを再生</button>
+<div id="story">
+  <h3 id="story-title"></h3>
+  <p id="story-caption"></p>
+  <div id="story-controls">
+    <button onclick="storyPrev()">◀ 前へ</button>
+    <button onclick="storyNext()">次へ ▶</button>
+    <button id="story-autoplay" onclick="toggleAutoplay()">自動再生</button>
+    <span id="story-step-indicator"></span>
+  </div>
+</div>
+<script>
+const TILE_SERVER = "https://stars.optgeo.org";
+const DEPOT_SERVER = "https://depot.optgeo.org";
+
+// Layers a user can freely combine, checkbox-style, rather than pick one at a time —
+// the point of the whole exercise is to let GAEZ context and HIH siting data be
+// read together, not layer-by-layer.
+const rasterLayers = [
+  { id: "gaez-aez33", group: "gaez", label: "AEZ33 classification", minzoom: 0, maxzoom: 7, color: "#c98", attribution: '© FAO / IIASA GAEZ v5 (CC BY 4.0)' },
+  { id: "gaez-aez57", group: "gaez", label: "AEZ57 classification", minzoom: 0, maxzoom: 7, color: "#c98", attribution: '© FAO / IIASA GAEZ v5 (CC BY 4.0)' },
+  { id: "hih-cod-cassava-score", group: "score", label: "Cassava storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-cocoa-score", group: "score", label: "Cocoa storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-coffee-score", group: "score", label: "Coffee storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-maize-score", group: "score", label: "Maize storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-palmoil-score", group: "score", label: "Palm-oil processing score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-wheat-score", group: "score", label: "Wheat storage score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-cod-livestock-score", group: "score", label: "Livestock/slaughter score", minzoom: 4, maxzoom: 8, color: "#e8952d" },
+  { id: "hih-access-urban", group: "access", label: "Accessibility: urban areas", minzoom: 4, maxzoom: 8, color: "#4a90d9" },
+  { id: "hih-access-urban-weighted", group: "access", label: "Accessibility: demand-weighted", minzoom: 4, maxzoom: 8, color: "#4a90d9" },
+  { id: "hih-access-port", group: "access", label: "Accessibility: ports", minzoom: 4, maxzoom: 8, color: "#4a90d9" },
+  { id: "hih-fishfarm-closed", group: "fishfarm", label: "Fish farming: closed system", minzoom: 4, maxzoom: 8, color: "#3aa0a0" },
+  { id: "hih-fishfarm-open", group: "fishfarm", label: "Fish farming: open system", minzoom: 4, maxzoom: 8, color: "#3aa0a0" },
+  { id: "hih-fishfarm-extensive", group: "fishfarm", label: "Fish farming: extensive", minzoom: 4, maxzoom: 8, color: "#3aa0a0" },
+  { id: "hih-fishfarm-closed-final", group: "fishfarm", label: "Fish farming: closed, final round", minzoom: 4, maxzoom: 8, color: "#3aa0a0" },
+];
+
+const vectorLayers = [
+  { id: "hih-cod-cassava-final", group: "final", label: "Cassava final site(s)", file: `${DEPOT_SERVER}/hih-cod-cassava-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-cocoa-final", group: "final", label: "Cocoa final site(s)", file: `${DEPOT_SERVER}/hih-cod-cocoa-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-coffee-final", group: "final", label: "Coffee final site(s)", file: `${DEPOT_SERVER}/hih-cod-coffee-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-maize-final", group: "final", label: "Maize final site(s)", file: `${DEPOT_SERVER}/hih-cod-maize-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-palmoil-final", group: "final", label: "Palm-oil final site(s)", file: `${DEPOT_SERVER}/hih-cod-palmoil-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-wheat-final", group: "final", label: "Wheat final site(s)", file: `${DEPOT_SERVER}/hih-cod-wheat-final.geojson`, color: "#c0392b" },
+  { id: "hih-cod-livestock-final", group: "final", label: "Livestock final site(s)", file: `${DEPOT_SERVER}/hih-cod-livestock-final.geojson`, color: "#c0392b" },
+];
+
+const CENTER = [21.78, -4.09];
+const ZOOM = 5;
+
+let map;
+const activeRaster = new Set();
+const activeVector = new Set();
+
+async function fetchPositron() {
+  try {
+    const resp = await fetch("https://basemaps.cartocdn.com/gl/positron-gl-style/style.json");
+    return await resp.json();
+  } catch (e) {
+    console.warn("Positron fetch failed, falling back", e);
+    return { version: 8, sources: {}, layers: [
+      { id: "bg", type: "background", paint: { "background-color": "#e8e8e0" } }
+    ]};
+  }
+}
+
+function rebuildStyleLayers(style) {
+  // Insert below the basemap's reference features (water, waterways, roads,
+  // administrative boundaries, buildings), not just below labels — those features
+  // stay meaningful and worth reading even with our data tinted underneath them.
+  // In Positron's layer order, base land-color fills (background/landcover/landuse)
+  // come first, then the first "line"-type layer is water/boundary/road linework —
+  // everything from there on (including later fills like water/buildings, and all
+  // symbols) should stay above our raster.
+  const firstLineIdx = style.layers.findIndex((l) => l.type === "line");
+  const firstSymbolIdx = style.layers.findIndex((l) => l.type === "symbol");
+  const insertIdx = firstLineIdx !== -1 ? firstLineIdx
+    : firstSymbolIdx !== -1 ? firstSymbolIdx
+    : style.layers.length;
+
+  // strip any data layers/sources we added on a previous rebuild
+  style.layers = style.layers.filter((l) => !l.id.startsWith("ferspas57-"));
+  for (const key of Object.keys(style.sources)) {
+    if (key.startsWith("ferspas57-")) delete style.sources[key];
+  }
+
+  const dataLayers = [];
+
+  for (const spec of rasterLayers) {
+    if (!activeRaster.has(spec.id)) continue;
+    const srcId = `ferspas57-${spec.id}`;
+    style.sources[srcId] = {
+      type: "raster",
+      tiles: [`${TILE_SERVER}/${spec.id}/{z}/{x}/{y}`],
+      tileSize: 256,
+      minzoom: spec.minzoom,
+      maxzoom: spec.maxzoom,
+      attribution: spec.attribution || '© FAO GISMGR / Hand-in-Hand Initiative (CC BY 4.0) — processed by dwg7/ferspas57'
+    };
+    dataLayers.push({
+      id: `ferspas57-${spec.id}-layer`,
+      type: "raster",
+      source: srcId,
+      paint: {
+        "raster-resampling": "nearest",
+        "raster-opacity": ["interpolate", ["linear"], ["zoom"], spec.minzoom, 0, spec.minzoom + 1, 0.85]
+      }
+    });
+  }
+
+  for (const spec of vectorLayers) {
+    if (!activeVector.has(spec.id)) continue;
+    const srcId = `ferspas57-${spec.id}`;
+    style.sources[srcId] = {
+      type: "geojson",
+      data: spec.file,
+      attribution: '© FAO GISMGR / Hand-in-Hand Initiative (CC BY 4.0) — processed by dwg7/ferspas57'
+    };
+    dataLayers.push({
+      id: `ferspas57-${spec.id}-fill`,
+      type: "fill",
+      source: srcId,
+      paint: { "fill-color": spec.color, "fill-opacity": 0.85, "fill-outline-color": "#fff" }
+    });
+  }
+
+  style.layers.splice(insertIdx, 0, ...dataLayers);
+  return style;
+}
+
+async function init() {
+  const style = await fetchPositron();
+  style.projection = { type: "globe" };
+  rebuildStyleLayers(style);
+
+  map = new maplibregl.Map({
+    container: "map",
+    hash: "map",
+    style,
+    center: CENTER,
+    zoom: ZOOM,
+    projection: { type: "globe" },
+    attributionControl: false,
+    preserveDrawingBuffer: true
+  });
+  map.addControl(new maplibregl.NavigationControl());
+  map.addControl(new maplibregl.AttributionControl({ compact: true }));
+  initAezLegend(map);
+  initScoreProbe(map);
+
+  map.on("load", () => {
+    const story = getStoryFromUrl();
+    if (story) startStory(story);
+  });
+}
+
+// --- Story playback -------------------------------------------------------
+let currentStory = null;
+let currentStep = 0;
+let autoplayTimer = null;
+
+function applyStoryStep(story, i) {
+  currentStep = i;
+  const step = story.steps[i];
+
+  activeRaster.clear();
+  activeVector.clear();
+  for (const id of step.layers) {
+    if (rasterLayers.some((l) => l.id === id)) activeRaster.add(id);
+    if (vectorLayers.some((l) => l.id === id)) activeVector.add(id);
+  }
+  document.querySelectorAll('#panel input[type=checkbox]').forEach((cb) => {
+    const id = cb.dataset.layerId;
+    cb.checked = activeRaster.has(id) || activeVector.has(id);
+  });
+  refresh();
+
+  map.flyTo({ center: step.center, zoom: step.zoom, duration: 1800 });
+  // Language selection happens upstream, when Staff generates the story JSON, not
+  // here — the map page itself has no language menu. Defaulting to "en" for now.
+  const lang = "en";
+  document.getElementById("story-title").textContent = pickLang(story.title, lang);
+  document.getElementById("story-caption").textContent = pickLang(step.caption, lang);
+  document.getElementById("story-step-indicator").textContent = `${i + 1} / ${story.steps.length}`;
+  document.getElementById("story").classList.add("active");
+}
+
+function startStory(story) {
+  currentStory = story;
+  document.getElementById("panel").classList.add("collapsed");
+  applyStoryStep(story, 0);
+}
+
+function storyNext() {
+  if (!currentStory) return;
+  applyStoryStep(currentStory, (currentStep + 1) % currentStory.steps.length);
+}
+
+function storyPrev() {
+  if (!currentStory) return;
+  applyStoryStep(currentStory, (currentStep - 1 + currentStory.steps.length) % currentStory.steps.length);
+}
+
+function toggleAutoplay() {
+  const btn = document.getElementById("story-autoplay");
+  if (autoplayTimer) {
+    clearInterval(autoplayTimer);
+    autoplayTimer = null;
+    btn.textContent = "自動再生";
+  } else {
+    autoplayTimer = setInterval(storyNext, 5000);
+    btn.textContent = "■ 停止";
+  }
+}
+
+function shareStory() {
+  setStoryInUrl(SAMPLE_STORY);
+  startStory(SAMPLE_STORY);
+  navigator.clipboard?.writeText(location.href).catch(() => {});
+}
+
+async function refresh() {
+  const style = map.getStyle();
+  rebuildStyleLayers(style);
+  map.setStyle(style);
+}
+
+function buildCheckbox(spec, isVector) {
+  const label = document.createElement("label");
+  const cb = document.createElement("input");
+  cb.type = "checkbox";
+  cb.dataset.layerId = spec.id;
+  cb.addEventListener("change", () => {
+    const set = isVector ? activeVector : activeRaster;
+    if (cb.checked) set.add(spec.id); else set.delete(spec.id);
+    refresh();
+  });
+  const swatch = document.createElement("span");
+  swatch.className = "swatch";
+  swatch.style.background = spec.color;
+  label.appendChild(cb);
+  label.appendChild(swatch);
+  label.appendChild(document.createTextNode(spec.label));
+  return label;
+}
+
+for (const spec of rasterLayers) {
+  document.getElementById(`group-${spec.group}`).appendChild(buildCheckbox(spec, false));
+}
+for (const spec of vectorLayers) {
+  document.getElementById(`group-${spec.group}`).appendChild(buildCheckbox(spec, true));
+}
+
+init();
+</script>
+</body>
+</html>
