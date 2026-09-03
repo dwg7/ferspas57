@@ -6,6 +6,16 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D29 — Narrative-extension ADR drafted (not yet proposed upstream)
+**Date**: 2026-09-04
+**Status**: Draft written at `adr-drafts/0009-narrative-sequence.md`, following `staccato-spec`'s actual ADR template and register (0001/0004/0005/0007 were re-read directly for this, not from memory). Owed since D6/D12/D19, reaffirmed D21/D22 — finally written.
+
+**Proposal, briefly**: an optional `narrative.steps[]` field on Map Intent, each step reusing the *existing* `required_layers`/`render_hints` shapes verbatim (no new per-step vocabulary invented) plus one genuinely new field, `caption`. A `narrative`-bearing document is required to still populate its top-level `required_layers`/`render_hints` with a coherent single-state fallback, so any pre-existing Map Intent consumer that doesn't know about `narrative` keeps working unmodified — purely additive, matching how ADR 0004/0005/0007/0008 each extend rather than replace ADR 0001. Cites `docs/story.js`'s real, working `SAMPLE_STORY` (the maize-siting narrative) as reference-implementation evidence, the same way ADR 0004 cited `hfu/faceless-cartographer`.
+
+**Deliberately not opened as an actual PR/issue against `UNopenGIS/staccato-spec` in this pass** — that's a cross-repository, externally-visible action that deserves hfu's own sign-off, not something to do unsupervised while away. The draft is complete and ready; opening it upstream is a one-step follow-up once reviewed.
+
+---
+
 ### D28 — Shared fishfarm/access archives rebuilt across all 5 target countries; two more real bugs caught in the process
 **Date**: 2026-09-04
 **Status**: `hih-fishfarm-{closed,open,extensive}` and `hih-access-urban-weighted` rebuilt to include CIV/CAF/CMR/COG geometry (CMR excluded from the access-weighted merge — it has no accessibility collections in HIH at all, confirmed directly, not just "unconfirmed" as D27 first flagged). All four `pmtiles verify`-clean, staged locally only — **not yet uploaded**, same ground-rule status as D27's per-country layers.
