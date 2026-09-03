@@ -6,6 +6,24 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D18 — GitHub Pages live; AEZ57's 57-class legend sourced and implemented; autonomous work plan for hfu's absence
+**Date**: 2026-09-03
+**Status**: Pages live and confirmed. AEZ57 legend working, with one documented inference (not full primary-source certainty, unlike AEZ33). Autonomous plan set, execution starting.
+
+**GitHub Pages published**: hfu approved pushing `main` to `origin` and enabling Pages (`docs/` on `main`) — done. Live at `https://dwg7.github.io/ferspas57/`, confirmed 200 with correct content.
+
+**AEZ57's 57-class legend, sourced and built**: found the primary source — FAO/IIASA's GAEZ v5 GitHub wiki (`github.com/un-fao/gaezv5.wiki`, page "10. Agro-ecological Zones classification"), cloned directly since the REST content API doesn't expose wiki pages. Classes 0 and 49–57 are **directly confirmed** against this source (same special-purpose categories as AEZ33's 25–33, renumbered: very-steep-terrain, severe-soil-limitations, irrigated, hydromorphic, desert/arid, permafrost, arctic, built-up, water). Classes 1–48 are FAO's documented combinatorial scheme — 8 Temperature Regime Classes × {semi-arid, sub-humid, humid} moisture × {no/slight, moderate} soil-terrain limitation = 48 — and the **class definitions are exact**, but the wiki's prose ("AEZ-01 to AEZ-06: combinations of TRC1 with M2-M4 and S3-S4") describes the grouping, not a literal enumeration table; this session inferred the within-group ordering (moisture varying slower than soil/terrain) rather than reading it off an explicit numbered list. Documented as a caveat directly in `docs/aez57_legend.js`, not just here — if this class table is ever found to mismatch FAO's own rendered legend, the ordering assumption is the first thing to suspect, not the underlying class definitions. Implemented as `docs/aez57_legend.js`, mirroring D16's AEZ33 mechanism (center-probe nearest-color match against the official STAC colormap), wired into `index.html`, and visually confirmed working against production tiles.
+
+**Open, not yet explained**: the score-comparison panel (D17) keeps showing several different commodities with *exactly* the same value at one probe point (e.g. six commodities all at 35, or all at 37 a moment later after panning) — changed between probes, so it's not frozen/stuck, but the coincidence rate seems too high to be pure chance. Two live hypotheses, neither confirmed: (a) genuine HIH behavior — broad regional areas may share a common baseline component in the underlying multi-criteria score (D16) before local factors differentiate it; (b) an artifact of nearest-color matching against a 101-entry ramp, where real-but-close values collapse into the same bucket. Worth a focused check (e.g. reading several real Score COGs' raw float values at the same coordinates directly, bypassing the color round-trip) before trusting this feature's precision for anything narrative-critical.
+
+**Autonomous work plan, hfu stepping away for ~8 hours**: agreed priority order —
+1. Map Intent / Staff design: formalize the `story.json` shape as `staccato-spec`'s Map Intent concept, draft a Staff system prompt that produces one from a free-form user query referencing real layer IDs/coordinates, hand-build 2–3 sample intents across different content types (GAEZ interpretation, HIH country narrative, cross-layer comparison) and verify each plays back correctly.
+2. Horizontal expansion: batch-convert the mergeable-across-country HIH themes (fish-farming across COD/CIV/CAF/CMR/COG, accessibility across COD/CIV/CAF/COG per D8) for the five countries left unscoped since D9, plus whatever per-country commodity data exists.
+3. Fact-gathering: basemap (Positron/OpenMapTiles) language-field coverage against the 10-language target list; HIH background/country context for the five newly-added countries.
+- Ground rule set by this session, not hfu explicitly but consistent with how this whole session has operated: new local conversion/research work proceeds freely and gets committed; anything that would touch shared production infrastructure again (new `stars.optgeo.org` uploads, new `hfu/stars` PRs) gets prepared and drafted but held for hfu's review before actually being requested/merged, rather than repeating D15's upload flow unsupervised at scale.
+
+---
+
 ### D17 — Site moved into `docs/` against production URLs; a real Martin URL-format bug found; interaction/visual-design principles for a device-agnostic, buttonless Cartographer
 **Date**: 2026-09-03
 **Status**: `docs/` now holds the real client (not yet pushed/GitHub-Pages-enabled — see "Still open"). Several design principles set for how this site should look and behave going forward, mostly not fully executed yet.

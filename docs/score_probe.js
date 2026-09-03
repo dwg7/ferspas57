@@ -157,6 +157,14 @@ function initScoreProbe(map) {
     });
   }
 
-  map.on("move", sampleCenter);
+  // Debounce: sample after panning/zooming settles (moveend + a short extra
+  // delay), not on every continuous "move" tick — steadier, and avoids redundant
+  // WebGL reads / tile fetches mid-gesture. hfu's suggestion, for stability.
+  let debounceTimer = null;
+  function scheduleSample() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(sampleCenter, 200);
+  }
+  map.on("moveend", scheduleSample);
   map.on("load", sampleCenter);
 }

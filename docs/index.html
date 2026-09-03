@@ -8,6 +8,7 @@
 <script src="https://unpkg.com/lz-string@1.5.0/libs/lz-string.min.js"></script>
 <script src="story.js"></script>
 <script src="aez_legend.js"></script>
+<script src="aez57_legend.js"></script>
 <script src="score_probe.js"></script>
 <style>
   html, body { margin: 0; height: 100%; }
@@ -217,6 +218,7 @@ async function init() {
   map.addControl(new maplibregl.NavigationControl());
   map.addControl(new maplibregl.AttributionControl({ compact: true }));
   initAezLegend(map);
+  initAez57Legend(map);
   initScoreProbe(map);
 
   map.on("load", () => {
