@@ -36,7 +36,7 @@ This is an internal working log, not a polished external communication — its w
 
 **Structural precedent used**: ADR 0003 (client-side SPA transition satisfies the Faceless Cartographer endpoint model) — a clarifying ADR reconciling spec text with a real, deployed implementation, without introducing new schema. Read directly (not from memory) before drafting.
 
-**Still not opened upstream** — same reasoning as D29: a cross-repository, externally-visible action left for hfu's own sign-off, not done unsupervised.
+**Update, same day**: hfu approved opening this upstream. Filed as [`UNopenGIS/staccato-spec#6`](https://github.com/UNopenGIS/staccato-spec/pull/6), adding `spec/adr/0009-vocabulary-flexibility.md` and its `spec/adr/README.md` index entry, following ADR 0003's citation pattern (`docs/story.js` offered as the motivating, non-normalized example). Status header/footer adjusted from "draft, not yet proposed" to the repo's normal "Proposed" convention for the actual submission. This closes out the D6/D12/D19-owed narrative-extension ADR — not with a narrative schema, but with the more load-bearing clarification about where Map Intent's mandatory contract actually ends.
 
 ---
 
