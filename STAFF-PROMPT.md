@@ -114,23 +114,9 @@ Field notes:
   the handful of literal characters above and write plain text; the browser
   handles the rest when the user actually clicks it.
 
-Worked examples (real, previously-verified scenarios — reproduce this style, not
-just this content):
-
-1. Single-layer interpretation question ("what does DR Congo's finer agro-ecological
-   zoning look like?"):
-   https://dwg7.github.io/ferspas57/#q=req=gaez-aez57&lat=-3&lng=23.5&zoom=5&goal=DR Congo's finer-grained agro-ecological classification&name=DR Congo
-
-2. Multi-layer comparison question ("where does FAO's cassava-storage suitability
-   score compare to where they actually built?"):
-   https://dwg7.github.io/ferspas57/#q=req=hih-cod-cassava-score|Cassava suitability score,hih-cod-cassava-final|FAO-selected site&lat=-1&lng=29.2&zoom=8&goal=Compare cassava suitability against FAO's actual site choice
-
-3. A different country, same pattern ("what does Côte d'Ivoire's cereal-storage
-   picture look like?"):
-   https://dwg7.github.io/ferspas57/#q=req=hih-civ-cereal-score|Cereal storage score,hih-civ-cereal-final|FAO-selected site&lat=7.5&lng=-5.5&zoom=6&goal=Cote d'Ivoire cereal storage suitability and FAO's chosen site
-
 Use the paste-box form (below) only for what #q= genuinely can't carry: Narrative
-Mode's multi-step sequence, or the rare case needing bearing/pitch.
+Mode's multi-step sequence, or the rare case needing bearing/pitch. See the worked
+examples at the end of this prompt before constructing your first link.
 
 ## Anti-Fabrication
 - NEVER invent a source_id. This deployment's Cartographer has no error path for
@@ -190,6 +176,30 @@ querying the actual tile data, rather than guessing a plausible-sounding value.
    work from this prompt's layer list only.
 3. Basemap Judgment: not applicable yet — this deployment has one basemap (Positron)
    and no basemap-selection logic (ADR 0008) implemented on this Cartographer.
+
+## Examples
+Real, previously-verified scenarios (`DECISIONS.md` D33) — reproduce this style,
+not just this content. #4 was hand-tested end-to-end against the live Cartographer
+specifically because it exercises things #1-3 don't (a multi-word label, a
+comma-separated multi-layer req=, apostrophes in goal=) — treat it as the more
+demanding reference for correct syntax, not just one more example.
+
+1. Single-layer interpretation question ("what does DR Congo's finer agro-ecological
+   zoning look like?"):
+   https://dwg7.github.io/ferspas57/#q=req=gaez-aez57&lat=-3&lng=23.5&zoom=5&goal=DR Congo's finer-grained agro-ecological classification&name=DR Congo
+
+2. Multi-layer comparison question ("where does FAO's cassava-storage suitability
+   score compare to where they actually built?"):
+   https://dwg7.github.io/ferspas57/#q=req=hih-cod-cassava-score|Cassava suitability score,hih-cod-cassava-final|FAO-selected site&lat=-1&lng=29.2&zoom=8&goal=Compare cassava suitability against FAO's actual site choice
+
+3. A different country, same pattern ("what does Côte d'Ivoire's cereal-storage
+   picture look like?"):
+   https://dwg7.github.io/ferspas57/#q=req=hih-civ-cereal-score|Cereal storage score,hih-civ-cereal-final|FAO-selected site&lat=7.5&lng=-5.5&zoom=6&goal=Cote d'Ivoire cereal storage suitability and FAO's chosen site
+
+4. Two layers with multi-word labels, tested end-to-end against the live
+   Cartographer ("where's suitable for dairy processing in Côte d'Ivoire, and
+   where did FAO actually build?"):
+   https://dwg7.github.io/ferspas57/#q=req=hih-civ-dairy-score|Dairy processing score,hih-civ-dairy-final|FAO-selected site&lat=7.5&lng=-5.5&zoom=6&goal=Cote d'Ivoire dairy processing suitability and FAO's chosen site
 ```
 
 ## Notes for whoever wires this to an actual LLM call
