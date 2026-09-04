@@ -6,6 +6,20 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D30 — First real upload to production: 6 new CIV/CAF crop-storage layers live at the GeoJSON level, PMTiles pending Martin restart
+**Date**: 2026-09-04
+**Status**: In progress, with hfu's explicit per-action confirmation at each production-touching step (not just the general "進めよう" go-ahead) — the safety layer around direct writes to `spacex.optgeo.org` (a personal host, distinct in kind from pushing to this repo's own GitHub) asked for that separately, and hfu gave it.
+
+**What happened**: the 12 files from D27 (6 `hih-{caf-cassava,civ-cereal,civ-fruits,civ-vegetables,civ-dairy,civ-livestock}-score.pmtiles` + 6 companion `-final.geojson`) — the brand-new layers only, **not** D28's 6 rebuilt/overwriting shared archives, which hfu's confirmation didn't cover and which are held for a separate explicit go-ahead — were uploaded to `/home/stars/data/` via `scp`. The 6 GeoJSON files are immediately live (confirmed `200` from `depot.optgeo.org`, no config or restart needed — Caddy serves that directory directly). The 6 PMTiles files need a `config/martin.yaml` entry before Martin will serve them (confirmed `404` from `stars.optgeo.org` pre-PR, as expected).
+
+**Opened [`hfu/stars#11`](https://github.com/hfu/stars/pull/11)** adding those 6 `pmtiles.sources` entries, following the exact existing file's style/pattern. Messaged `stars-fd` (the established PR-gatekeeper peer session for this host, per D2/D15) to review and merge + restart Martin, the same pattern used for the original `#9`/`#10` PRs.
+
+**Still held, awaiting separate confirmation**: D28's 6 rebuilt shared archives (`hih-fishfarm-{closed,open,extensive}`, `hih-access-{urban,urban-weighted,port}`) are an *overwrite* of already-live files, not new files — a meaningfully different risk profile (replacing what real visitors are currently being served) from adding brand-new files nobody depends on yet. Not uploaded in this pass.
+
+**Once `#11` merges and Martin restarts**: `docs/index.html` can be wired with the 6 new layer entries (the per-country accordion UI is already built and live, D27b — this is now purely a data-array change), and `STAFF-PROMPT.md`'s refusal list can be updated for CIV/CAF (CMR/COG still have no crop-storage theme at all, so their refusal stays accurate).
+
+---
+
 ### D29 — Narrative-extension ADR drafted (not yet proposed upstream)
 **Date**: 2026-09-04
 **Status**: Draft written at `adr-drafts/0009-narrative-sequence.md`, following `staccato-spec`'s actual ADR template and register (0001/0004/0005/0007 were re-read directly for this, not from memory). Owed since D6/D12/D19, reaffirmed D21/D22 — finally written.
