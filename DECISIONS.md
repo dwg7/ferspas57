@@ -24,6 +24,20 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D33 — `STAFF-PROMPT.md` rewritten (link-first) + narrative paste-box added, closing the gap D32's plan flagged
+**Date**: 2026-09-04
+**Status**: Both built and verified. Live-agent testing (this plan's actual completion criterion) still to come.
+
+**`STAFF-PROMPT.md` rewritten to v0.2**: link-first Handoff Protocol built around `#q=` (D32) instead of a YAML-dump-first flow; three worked examples reusing `samples/*.yaml`'s already-verified scenarios (GAEZ57 interpretation, cassava comparison) plus a new one for Côte d'Ivoire, rewritten as `#q=` links rather than freshly invented; an upgraded, explicit Anti-Fabrication section (never invent a `source_id` — this Cartographer's failure mode is silent, a blank map with no error, worse than chukei's own documented `lcmfc2`/`lcmfc2_1` incident since there's nothing to even notice went wrong; freely guess `lat`/`lng`/`zoom` since a wrong guess just needs panning); a Response Format section adopting `chukei-24`'s direct advice from the D32 consultation (keep "always traceable, never silent," swap the mechanism — surface the resolved layers/link inline for this technical audience instead of a feedback-form link); a hardcoded version tag (`ferspas57-staff-2026-09-04a`) with an explicit "never compute this from your own sense of the date" instruction; and an updated, accurate catalog section reflecting the real current 5-country reach (D27/D28/D30) rather than the stale DR-Congo-only refusal list.
+
+**Narrative Mode's real gap (flagged in the D32 plan) fixed**: `docs/story.js` had no paste-box at all, only an LZString-fragment path a tool-less Staff can't produce — meaning the prompt's own Narrative Mode section was asking for output with no delivery path. Fixed by extending `map_intent.js`'s existing paste overlay to auto-detect format: `JSON.parse` the pasted text first, and if it succeeds with a `.steps` array, call `startStory()`; otherwise fall through to `parseMapIntent`/`applyMapIntent` as before. One textarea, one Apply button, two outcomes — no second competing UI surface.
+
+**Verified in-browser, both branches**, working around this session's now-familiar browser-side static-file caching gotcha (a plain page load kept running stale cached JS even after the server was serving the edited files — `fetch(url, {cache:"no-store"})` with a cache-busting query plus `eval` of the fresh source was needed to actually exercise new code, same technique D32 already had to use): pasted narrative JSON correctly routes to `startStory()` (`currentStory`/`storyActive` confirmed set); pasted Map Intent YAML correctly still falls through to `parseMapIntent()` unaffected (JSON.parse throws on non-JSON YAML text as expected, caught, falls through).
+
+**Still to come**: the plan's actual completion criterion (Section E) — testing this prompt against a genuinely tool-less chat agent (not this Claude Code session, which would "cheat" by just executing any encoding asked of it) with real held-out questions, verbatim transcripts logged here.
+
+---
+
 ### D32 — `#q=` shorthand added: a hand-typeable Map Intent hand-off for a prompt-only Staff (with real chukei/spiccato consultation)
 **Date**: 2026-09-04
 **Status**: `docs/map_intent.js`/`docs/story.js` changes built and verified in-browser (three-way regression: `#intent=`, `#story=`, `#q=` all confirmed working). `STAFF-PROMPT.md` rewrite and live-agent testing still to come (this session's approved plan, `.claude/plans/declarative-floating-wadler.md`).

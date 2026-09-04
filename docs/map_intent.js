@@ -80,9 +80,9 @@ function initMapIntentUI() {
   });
   overlay.innerHTML = `
     <div style="background:white;border-radius:8px;padding:16px;width:min(560px,90vw);max-height:80vh;display:flex;flex-direction:column;gap:8px;">
-      <strong>Paste a Map Intent (YAML)</strong>
+      <strong>Paste a Map Intent (YAML) or a narrative (JSON)</strong>
       <div id="intent-goal" style="font-size:12px;color:#555;min-height:1.2em;"></div>
-      <textarea id="intent-textarea" style="width:100%;height:240px;font:12px monospace;" placeholder="spec_version: map-intent/v2\ngoal: ...\nrequired_layers:\n  - gaez-aez33\n..."></textarea>
+      <textarea id="intent-textarea" style="width:100%;height:240px;font:12px monospace;" placeholder="spec_version: map-intent/v2\ngoal: ...\nrequired_layers:\n  - gaez-aez33\n...\n\n(or paste narrative JSON: {title, steps: [...]})"></textarea>
       <div style="display:flex;gap:8px;justify-content:flex-end;">
         <button id="intent-cancel">Close</button>
         <button id="intent-apply">Apply</button>
@@ -97,6 +97,24 @@ function initMapIntentUI() {
   overlay.querySelector("#intent-apply").addEventListener("click", () => {
     const text = overlay.querySelector("#intent-textarea").value;
     const errBox = overlay.querySelector("#intent-error");
+    // Auto-detect: this repo's narrative extension (JSON, {title, steps: [...]})
+    // has no paste-box of its own — a tool-less Staff can't produce story.js's
+    // LZString-compressed #story= fragment any more than it can #intent='s, so
+    // this same overlay doubles as the narrative paste path too, one textarea,
+    // one Apply button, two possible outcomes (D32/STAFF-PROMPT.md's Narrative
+    // Mode). Try JSON-with-steps first since valid YAML Map Intent text is
+    // essentially never also valid JSON with a top-level "steps" array.
+    try {
+      const maybeStory = JSON.parse(text);
+      if (maybeStory && Array.isArray(maybeStory.steps)) {
+        startStory(maybeStory);
+        errBox.textContent = "";
+        overlay.style.display = "none";
+        return;
+      }
+    } catch {
+      // Not JSON at all, or JSON without a .steps array — fall through to Map Intent.
+    }
     try {
       const intent = parseMapIntent(text);
       applyMapIntent(intent);
