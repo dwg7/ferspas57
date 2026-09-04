@@ -14,9 +14,9 @@ This is an internal working log, not a polished external communication — its w
 
 **Opened [`hfu/stars#11`](https://github.com/hfu/stars/pull/11)** adding those 6 `pmtiles.sources` entries, following the exact existing file's style/pattern. Messaged `stars-fd` (the established PR-gatekeeper peer session for this host, per D2/D15) to review and merge + restart Martin, the same pattern used for the original `#9`/`#10` PRs.
 
-**Still held, awaiting separate confirmation**: D28's 6 rebuilt shared archives (`hih-fishfarm-{closed,open,extensive}`, `hih-access-{urban,urban-weighted,port}`) are an *overwrite* of already-live files, not new files — a meaningfully different risk profile (replacing what real visitors are currently being served) from adding brand-new files nobody depends on yet. Not uploaded in this pass.
+**Update, same day**: hfu separately and explicitly confirmed the overwrite of D28's 6 rebuilt shared archives too. Uploaded via `scp` to a `.pmtiles.new` suffix on each, then `mv`'d into place on the host — near-atomic, so Martin (or any concurrent request) never sees a partially-written file. File sizes on the host confirmed to match the locally-built originals exactly. No `config/martin.yaml` change needed for these (same filenames/paths as before, only the file contents changed) — messaged `stars-fd` separately to restart Martin so it picks up the new contents (unlike `#11`'s brand-new sources, there's no PR to merge here, just a process bounce).
 
-**Once `#11` merges and Martin restarts**: `docs/index.html` can be wired with the 6 new layer entries (the per-country accordion UI is already built and live, D27b — this is now purely a data-array change), and `STAFF-PROMPT.md`'s refusal list can be updated for CIV/CAF (CMR/COG still have no crop-storage theme at all, so their refusal stays accurate).
+**Once `#11` merges and Martin restarts (for both the new sources and the in-place replacements)**: `docs/index.html` can be wired with the 6 new layer entries (the per-country accordion UI is already built and live, D27b — this is now purely a data-array change) and updated `minzoom`/`maxzoom` for the rebuilt shared archives (3-7, not the old 4-8), and `STAFF-PROMPT.md`'s refusal list can be updated for CIV/CAF (CMR/COG still have no crop-storage theme at all, so their refusal stays accurate).
 
 ---
 
