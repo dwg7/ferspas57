@@ -108,21 +108,11 @@ function initMapIntentUI() {
   });
 
   // Optional URL-fragment path — staccato-spec ADR 0004's one-shot fragment
-  // hand-off, not the required plain-text baseline (see D19). Per ADR 0004: read
-  // at most once and clear via history.replaceState before rendering, so a URL
-  // copied after the map renders is indistinguishable from one with no fragment.
-  // Split on "&" rather than regex-matching "(?:^|&)intent=" — see story.js's
-  // getStoryFromUrl for why: with MapLibre's hash:"map" removed, a shared
-  // intent link's hash is often just "#intent=...", and the old regex's "^"
-  // only matched at position 0, never right after the leading "#".
-  const raw = location.hash.replace(/^#/, "");
-  const parts = raw ? raw.split("&") : [];
-  const idx = parts.findIndex((p) => p.startsWith("intent="));
-  if (idx !== -1) {
-    const encoded = parts[idx].slice("intent=".length);
-    parts.splice(idx, 1);
-    const rest = parts.length ? "#" + parts.join("&") : "";
-    history.replaceState(null, "", location.pathname + location.search + rest);
+  // hand-off, not the required plain-text baseline (see D19). readAndClearFragmentKey
+  // (story.js) handles the read-once-and-clear mechanics shared by every
+  // fragment key this Cartographer accepts.
+  const encoded = readAndClearFragmentKey("intent");
+  if (encoded !== null) {
     try {
       const yamlText = LZString.decompressFromEncodedURIComponent(decodeURIComponent(encoded));
       const intent = parseMapIntent(yamlText);
@@ -131,4 +121,87 @@ function initMapIntentUI() {
       console.error("failed to apply Map Intent from URL fragment", e);
     }
   }
+
+  // #q= — a hand-typeable alternative to #intent=, for a Staff with no code
+  // execution (see staccato-spec ADR 0009: Map Intent is the required baseline
+  // vocabulary, not the exclusive one — this is exactly the kind of additional,
+  // non-normative vocabulary that ADR exists to permit). An LLM prompted to
+  // produce a URL cannot compute a real LZString compression by "thinking" —
+  // it can only reliably hand-type a plain, deterministic key=value string.
+  // Grammar and rationale below follow dwg7/chukei + dwg7/spiccato's own
+  // #q= precedent (same key name, deliberately) — see STAFF-PROMPT.md.
+  const qRaw = readAndClearFragmentKey("q");
+  if (qRaw !== null) {
+    try {
+      const intent = parseShorthandFragment(qRaw);
+      if (intent) map.once("load", () => applyMapIntent(intent));
+      else console.error("Map Intent shorthand (#q=) had no usable req= layers");
+    } catch (e) {
+      console.error("failed to apply Map Intent shorthand (#q=) from URL fragment", e);
+    }
+  }
+}
+
+// A req= entry is "source_id" or "source_id|label" — same wire shape as
+// spiccato's parseRefEntry, including the same defensive decodeURIComponent
+// with fallback-to-raw-text on malformed percent-encoding (a hand-typed label
+// with a lone "%" shouldn't reject the whole link). The label half is
+// currently inert display-wise in this Cartographer (normalizeLayerRefs()
+// already drops the label half of the YAML {source_id,label} form too — the
+// checkbox panel always shows its own static config label) — included anyway
+// for parity with the YAML path; this is a known no-op, not a bug to "fix".
+function parseShorthandRefEntry(entry) {
+  const sep = entry.indexOf("|");
+  if (sep === -1) return { source_id: entry };
+  const source_id = entry.slice(0, sep);
+  const rawLabel = entry.slice(sep + 1);
+  if (rawLabel === "") return { source_id };
+  try {
+    return { source_id, label: decodeURIComponent(rawLabel) };
+  } catch {
+    return { source_id, label: rawLabel };
+  }
+}
+
+function parseShorthandRefList(raw) {
+  if (!raw) return [];
+  return raw.split(",").map((s) => s.trim()).filter((s) => s.length > 0).map(parseShorthandRefEntry);
+}
+
+// #q=req=<id1[|label1],id2,...>&lat=<deg>&lng=<deg>&zoom=<n>&goal=<text>&name=<text>
+// Deliberately narrower than spiccato's own #q= grammar: no catalog=/type=
+// (this Cartographer has exactly one fixed catalog; applyMapIntent() doesn't
+// route by catalog at all — confirmed by reading it, not assumed), no opt=
+// (normalizeLayerRefs() already flattens required/optional into one list and
+// applyMapIntent() activates every id identically — no "off by default" UI
+// distinction exists here to justify the split), no bbox= (parseMapIntent()
+// never even stores doc.area — only render_hints.initial_center/initial_zoom
+// drive the camera). lat/lng (not [lng,lat]) matches how a Staff would
+// actually say a coordinate in prose, reducing transposition risk.
+// Returns null for anything unusable (no req= layers at all), matching
+// parseMapIntent's own "throw and let the caller decide" convention loosely —
+// here a null return lets the caller log and move on rather than crash.
+function parseShorthandFragment(body) {
+  const params = new URLSearchParams(body);
+  const required = parseShorthandRefList(params.get("req"));
+  if (required.length === 0) return null;
+
+  const lat = params.get("lat");
+  const lng = params.get("lng");
+  const renderHints = {};
+  if (lat !== null && lng !== null) {
+    renderHints.center = [Number(lng), Number(lat)];
+    const zoom = params.get("zoom");
+    if (zoom !== null) renderHints.zoom = Number(zoom);
+  }
+
+  return {
+    goal: params.get("goal") || "",
+    layers: required.map((r) => r.source_id),
+    renderHints,
+    provenance: {
+      generated_by: "ferspas57-shorthand",
+      generated_at: new Date().toISOString(),
+    },
+  };
 }

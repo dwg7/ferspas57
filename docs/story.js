@@ -124,22 +124,34 @@ function decodeStory(encoded) {
 // MUST be read at most once and cleared via history.replaceState before any
 // rendering derived from it occurs, so a URL copied after the map renders is
 // indistinguishable from one with no fragment at all — not bookmarkable/replayable
-// map state. This must run BEFORE applying the story, not after.
-function getStoryFromUrl() {
-  // Split on "&" rather than regex-matching "(?:^|&)story=": with MapLibre's
-  // built-in hash:"map" removed (it was defeating this exact clearing step by
-  // re-injecting a stale copy of the fragment on every map move — see
-  // DECISIONS.md), a shared story link's hash is often *just* "#story=...", and
-  // "^" in that older regex only matched "story=" at position 0, never "#story=".
+// map state. Shared by every fragment-carried key this Cartographer accepts
+// (#intent=, #story=, #q=) rather than reimplemented per key — D21/D22 already
+// found and fixed a real ADR-0004 compliance bug from exactly this kind of
+// duplication. Lives here (loaded first, before map_intent.js) so every reader
+// can call it regardless of script order; actual calls only happen inside
+// init()'s map.on("load", ...), by which point every script has already loaded.
+//
+// The whole hash is treated as ONE key's value (not "&"-split into multiple
+// coexisting top-level keys) — found the hard way while adding #q=: unlike
+// #intent=/#story= (opaque LZString blobs with no literal "&" inside), #q='s
+// own value is itself a multi-param blob using "&" as an internal delimiter
+// (req=...&lat=...&lng=...), which collides with any scheme that treats "&"
+// as a top-level key separator. The old multi-key "&"-joined design existed
+// only to coexist with MapLibre's own hash:"map" reflection (removed, D22) —
+// with that gone, none of #intent=/#story=/#q= are ever actually combined in
+// one URL (each is a complete, standalone hand-off), so there's nothing left
+// to preserve after clearing: the whole hash is consumed and cleared as a unit.
+function readAndClearFragmentKey(key) {
   const raw = location.hash.replace(/^#/, "");
-  if (!raw) return null;
-  const parts = raw.split("&");
-  const idx = parts.findIndex((p) => p.startsWith("story="));
-  if (idx === -1) return null;
-  const encoded = parts[idx].slice("story=".length);
-  parts.splice(idx, 1);
-  const rest = parts.length ? "#" + parts.join("&") : "";
-  history.replaceState(null, "", location.pathname + location.search + rest);
+  if (!raw.startsWith(key + "=")) return null;
+  const value = raw.slice(key.length + 1);
+  history.replaceState(null, "", location.pathname + location.search);
+  return value;
+}
+
+function getStoryFromUrl() {
+  const encoded = readAndClearFragmentKey("story");
+  if (encoded === null) return null;
   try {
     return decodeStory(decodeURIComponent(encoded));
   } catch (e) {
