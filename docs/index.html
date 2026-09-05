@@ -330,7 +330,11 @@ async function init() {
     attributionControl: false,
     preserveDrawingBuffer: true
   });
-  map.addControl(new maplibregl.NavigationControl());
+  // Moved to bottom-right (hfu's design review, D47): top-right was crowded
+  // (narrative/paste-box buttons + zoom control + the score radial all
+  // competing for the same corner) — pairs naturally with the attribution
+  // control already there instead.
+  map.addControl(new maplibregl.NavigationControl(), "bottom-right");
   map.addControl(new maplibregl.AttributionControl({ compact: true }));
   initAezLegend(map);
   initAez57Legend(map);

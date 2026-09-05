@@ -24,26 +24,36 @@
 // returning a lower-resolution tile — Martin does not overzoom-serve past a
 // source's real max — so this had been silently zeroing out fishfarm/access
 // from the panel for every location, not just the newly-added countries.
+// icon: a language-agnostic pictogram standing in for the commodity/theme —
+// same reasoning as the emoji-only playback controls (D40) and the
+// (COD)/(CAF)/(CIV) codes above: a picture or a code, never a natural-language
+// word, in anything Cartographer renders on its own. flag: a real Unicode flag
+// emoji, used only for the per-country commodity layers (fishfarm/access are
+// already country-agnostic merged archives, D28, so they carry no flag). No
+// emoji maps perfectly onto e.g. "cassava" or "demand-weighted accessibility" —
+// these are approximate, recognizable pictograms, not literal claims about the
+// data; `label` (still English) survives only as this widget's hover tooltip,
+// not anything drawn directly on screen.
 const SCORE_SOURCES = [
-  { id: "hih-cod-cassava-score", label: "Cassava (COD)", maxzoom: 8 },
-  { id: "hih-cod-cocoa-score", label: "Cocoa (COD)", maxzoom: 8 },
-  { id: "hih-cod-coffee-score", label: "Coffee (COD)", maxzoom: 8 },
-  { id: "hih-cod-maize-score", label: "Maize (COD)", maxzoom: 8 },
-  { id: "hih-cod-palmoil-score", label: "Palm oil (COD)", maxzoom: 8 },
-  { id: "hih-cod-wheat-score", label: "Wheat (COD)", maxzoom: 8 },
-  { id: "hih-cod-livestock-score", label: "Livestock (COD)", maxzoom: 8 },
-  { id: "hih-caf-cassava-score", label: "Cassava (CAF)", maxzoom: 7 },
-  { id: "hih-civ-cereal-score", label: "Cereal (CIV)", maxzoom: 8 },
-  { id: "hih-civ-fruits-score", label: "Fruits (CIV)", maxzoom: 8 },
-  { id: "hih-civ-vegetables-score", label: "Vegetables (CIV)", maxzoom: 8 },
-  { id: "hih-civ-dairy-score", label: "Dairy (CIV)", maxzoom: 8 },
-  { id: "hih-civ-livestock-score", label: "Livestock (CIV)", maxzoom: 8 },
-  { id: "hih-fishfarm-closed", label: "Fish (closed)", maxzoom: 7 },
-  { id: "hih-fishfarm-open", label: "Fish (open)", maxzoom: 7 },
-  { id: "hih-fishfarm-extensive", label: "Fish (extensive)", maxzoom: 7 },
-  { id: "hih-access-urban", label: "Access: urban", maxzoom: 7 },
-  { id: "hih-access-urban-weighted", label: "Access: weighted", maxzoom: 7 },
-  { id: "hih-access-port", label: "Access: port", maxzoom: 7 },
+  { id: "hih-cod-cassava-score", label: "Cassava (COD)", maxzoom: 8, icon: "🍠", flag: "🇨🇩" },
+  { id: "hih-cod-cocoa-score", label: "Cocoa (COD)", maxzoom: 8, icon: "🍫", flag: "🇨🇩" },
+  { id: "hih-cod-coffee-score", label: "Coffee (COD)", maxzoom: 8, icon: "☕", flag: "🇨🇩" },
+  { id: "hih-cod-maize-score", label: "Maize (COD)", maxzoom: 8, icon: "🌽", flag: "🇨🇩" },
+  { id: "hih-cod-palmoil-score", label: "Palm oil (COD)", maxzoom: 8, icon: "🌴", flag: "🇨🇩" },
+  { id: "hih-cod-wheat-score", label: "Wheat (COD)", maxzoom: 8, icon: "🌾", flag: "🇨🇩" },
+  { id: "hih-cod-livestock-score", label: "Livestock (COD)", maxzoom: 8, icon: "🐄", flag: "🇨🇩" },
+  { id: "hih-caf-cassava-score", label: "Cassava (CAF)", maxzoom: 7, icon: "🍠", flag: "🇨🇫" },
+  { id: "hih-civ-cereal-score", label: "Cereal (CIV)", maxzoom: 8, icon: "🌿", flag: "🇨🇮" },
+  { id: "hih-civ-fruits-score", label: "Fruits (CIV)", maxzoom: 8, icon: "🍎", flag: "🇨🇮" },
+  { id: "hih-civ-vegetables-score", label: "Vegetables (CIV)", maxzoom: 8, icon: "🥬", flag: "🇨🇮" },
+  { id: "hih-civ-dairy-score", label: "Dairy (CIV)", maxzoom: 8, icon: "🥛", flag: "🇨🇮" },
+  { id: "hih-civ-livestock-score", label: "Livestock (CIV)", maxzoom: 8, icon: "🐄", flag: "🇨🇮" },
+  { id: "hih-fishfarm-closed", label: "Fish (closed)", maxzoom: 7, icon: "🐟" },
+  { id: "hih-fishfarm-open", label: "Fish (open)", maxzoom: 7, icon: "🐠" },
+  { id: "hih-fishfarm-extensive", label: "Fish (extensive)", maxzoom: 7, icon: "🎣" },
+  { id: "hih-access-urban", label: "Access: urban", maxzoom: 7, icon: "🏙️" },
+  { id: "hih-access-urban-weighted", label: "Access: weighted", maxzoom: 7, icon: "🏘️" },
+  { id: "hih-access-port", label: "Access: port", maxzoom: 7, icon: "⚓" },
 ];
 
 const PROBE_ZOOM = 8; // the best resolution ANY source reaches — capped per-source below
@@ -132,16 +142,41 @@ async function probeScoresAt(lon, lat) {
 // persistent pointer position without an active touch), while "pan to move the
 // probe" is the same physical gesture on mouse and touch alike, and fits this
 // project's push toward a buttonless, device-agnostic Cartographer.
+//
+// Radial layout (replacing an earlier plain vertical list, hfu's request): one
+// icon-bubble per valid score, arranged in a ring around the probe point itself
+// rather than boxed off in a side panel — directly inspired by radial/compass-
+// style controls (a fixed center, items arranged evenly around it). Three
+// REDUNDANT visual channels encode the score value, not color alone (a real
+// accessibility/color-management concern, not just aesthetics): (1) the ring's
+// border color, drawn from the exact same 0-100 ramp the raster tiles
+// themselves use (scoreRampColor) — never an independent color choice; (2) the
+// bubble's diameter, larger for a higher score; (3) position — bubbles are
+// sorted highest-first starting at 12 o'clock, going clockwise, so higher
+// scores always cluster near the top regardless of color perception. A plain
+// number is still available (mouse-only) via each bubble's `title` tooltip,
+// but nothing textual is drawn on screen — language-agnostic by construction,
+// same as narrative playback's controls (D40).
+//
+// Liquid/mobile-responsive (hfu's request): the ring's radius and bubble sizes
+// are recomputed from the viewport's own short side (`vmin`-equivalent) on
+// every render and on window resize/orientation change, not fixed pixel
+// values — shrinks gracefully on a phone rather than overflowing it.
+function radialGeometry() {
+  const vmin = Math.min(window.innerWidth, window.innerHeight);
+  const radius = Math.max(60, Math.min(150, vmin * 0.22));
+  const sizeScale = radius / 110; // 110 = the reference desktop radius this was tuned at
+  return { radius, sizeScale };
+}
+
 function initScoreProbe(map) {
-  const panel = document.createElement("div");
-  panel.id = "score-probe";
-  Object.assign(panel.style, {
-    position: "absolute", right: "8px", top: "44px", zIndex: 10,
-    background: "white", font: "18px sans-serif", padding: "8px 10px",
-    borderRadius: "4px", boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
-    width: "290px", display: "none"
+  const radial = document.createElement("div");
+  radial.id = "score-radial";
+  Object.assign(radial.style, {
+    position: "absolute", left: "50%", top: "50%", zIndex: 10,
+    width: "0", height: "0", display: "none"
   });
-  document.body.appendChild(panel);
+  map.getContainer().appendChild(radial);
 
   const probeRing = document.createElement("div");
   Object.assign(probeRing.style, {
@@ -153,10 +188,48 @@ function initScoreProbe(map) {
   map.getContainer().appendChild(probeRing);
 
   let scheduled = false;
+  let lastValid = null; // cached, so a window resize can re-lay-out without re-probing tiles
+
+  function render(valid) {
+    // Narrative Mode already tells its own story with its own curated numbers
+    // in prose (D39) — showing every raw score at the same time is redundant
+    // clutter exactly when the caption is what the user should be reading, so
+    // this widget (like the AEZ tooltip) stays hidden for the duration.
+    const narrativeShowing = document.getElementById("narrative")?.classList.contains("active");
+    if (!valid || valid.length === 0 || narrativeShowing) {
+      radial.style.display = "none";
+      return;
+    }
+    const { radius, sizeScale } = radialGeometry();
+    const n = valid.length;
+    radial.innerHTML = valid.map((r, i) => {
+      const angle = (-90 + (360 / n) * i) * (Math.PI / 180);
+      const x = Math.round(Math.cos(angle) * radius);
+      const y = Math.round(Math.sin(angle) * radius);
+      const size = Math.round((22 + (r.value / 100) * 26) * sizeScale);
+      const [cr, cg, cb] = scoreRampColor(r.value);
+      const borderW = Math.max(2, Math.round((2 + (r.value / 100) * 4) * sizeScale));
+      const flagBadge = r.flag
+        ? `<span style="position:absolute;right:-4px;bottom:-4px;font-size:${Math.round(size * 0.42)}px;line-height:1;">${r.flag}</span>`
+        : "";
+      return `
+        <div title="${r.label}: ${r.value}" style="
+          position:absolute; left:calc(50% + ${x}px); top:calc(50% + ${y}px);
+          width:${size}px; height:${size}px; transform:translate(-50%,-50%);
+          border-radius:50%; background:white;
+          border:${borderW}px solid rgb(${cr},${cg},${cb});
+          box-shadow:0 1px 4px rgba(0,0,0,0.35);
+          display:flex; align-items:center; justify-content:center;
+          font-size:${Math.round(size * 0.56)}px; line-height:1;
+        ">${r.icon}${flagBadge}</div>
+      `;
+    }).join("");
+    radial.style.display = "block";
+  }
 
   function sampleCenter() {
     const z = Math.floor(map.getZoom());
-    if (z < 3) { panel.style.display = "none"; probeRing.style.display = "none"; return; }
+    if (z < 3) { lastValid = null; radial.style.display = "none"; probeRing.style.display = "none"; return; }
     probeRing.style.display = "block";
     if (scheduled) return;
     scheduled = true;
@@ -164,22 +237,9 @@ function initScoreProbe(map) {
     const { lng, lat } = map.getCenter();
     probeScoresAt(lng, lat).then((results) => {
       scheduled = false;
-      const valid = results.filter((r) => r.value !== null);
-      if (valid.length === 0) { panel.style.display = "none"; return; }
-      valid.sort((a, b) => b.value - a.value);
-      panel.innerHTML =
-        `<div style="font-weight:bold;margin-bottom:6px;">Scores</div>` +
-        valid.map((r) => `
-          <div style="margin-bottom:4px;">
-            <div style="display:flex;justify-content:space-between;">
-              <span>${r.label}</span><span>${r.value}</span>
-            </div>
-            <div style="background:#eee;height:5px;border-radius:2px;">
-              <div style="background:#c0392b;width:${(r.value / 100) * 100}%;height:5px;border-radius:2px;"></div>
-            </div>
-          </div>
-        `).join("");
-      panel.style.display = "block";
+      const valid = results.filter((r) => r.value !== null).sort((a, b) => b.value - a.value);
+      lastValid = valid.length ? valid : null;
+      render(lastValid);
     });
   }
 
@@ -193,4 +253,13 @@ function initScoreProbe(map) {
   }
   map.on("moveend", scheduleSample);
   map.on("load", sampleCenter);
+
+  // Re-lay-out (not re-probe) on resize/orientation change, and whenever
+  // narrative playback starts/stops (MutationObserver on its "active" class,
+  // since nothing else here already hooks narrative start/stop events).
+  window.addEventListener("resize", () => render(lastValid));
+  const narrativeEl = document.getElementById("narrative");
+  if (narrativeEl) {
+    new MutationObserver(() => render(lastValid)).observe(narrativeEl, { attributes: true, attributeFilter: ["class"] });
+  }
 }

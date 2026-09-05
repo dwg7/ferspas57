@@ -87,6 +87,11 @@ function initAez57Legend(map) {
   let pending = false;
 
   function sampleCenter() {
+    // Hidden during narrative playback — same reasoning as aez_legend.js (D47).
+    if (document.getElementById("narrative")?.classList.contains("active")) {
+      tooltip.style.display = "none";
+      return;
+    }
     if (!activeRaster.has("gaez-aez57") || pending) return;
     pending = true;
     const canvas = map.getCanvas();

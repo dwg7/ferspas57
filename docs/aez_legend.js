@@ -95,6 +95,15 @@ function initAezLegend(map) {
   let pending = false;
 
   function sampleCenter() {
+    // Hidden during narrative playback: the caption already explains the
+    // classification in its own prose (and in whatever language it's actually
+    // in), so this English-only technical tooltip would be both redundant and
+    // a real language-agnostic-chrome violation the moment a non-English
+    // narrative is on screen (hfu's design review, D47).
+    if (document.getElementById("narrative")?.classList.contains("active")) {
+      tooltip.style.display = "none";
+      return;
+    }
     if (!activeRaster.has("gaez-aez33") || pending) return;
     pending = true;
 
