@@ -1,8 +1,8 @@
 // Map Intent (staccato-spec's map-intent-vnext.md, spec_version "map-intent/v2")
-// support — distinct from story.js's multi-step narrative extension (D19: the
+// support — distinct from narrative.js's multi-step narrative extension (D19: the
 // normative spec has a single render_hints camera state, no steps[] sequence; the
 // narrative concept is this repo's own proposed extension, not to be confused with
-// plain Map Intent).
+// plain Map Intent). See NARRATIVE-FORMAT.md for the narrative document schema.
 //
 // Per spec: YAML, and plain-text sharing is the REQUIRED baseline
 // (sharing_policy.url_share SHOULD be false for a "faceless" Cartographer like this
@@ -98,16 +98,16 @@ function initMapIntentUI() {
     const text = overlay.querySelector("#intent-textarea").value;
     const errBox = overlay.querySelector("#intent-error");
     // Auto-detect: this repo's narrative extension (JSON, {title, steps: [...]})
-    // has no paste-box of its own — a tool-less Staff can't produce story.js's
-    // LZString-compressed #story= fragment any more than it can #intent='s, so
+    // has no paste-box of its own — a tool-less Staff can't produce narrative.js's
+    // LZString-compressed #narrative= fragment any more than it can #intent='s, so
     // this same overlay doubles as the narrative paste path too, one textarea,
     // one Apply button, two possible outcomes (D32/STAFF-PROMPT.md's Narrative
     // Mode). Try JSON-with-steps first since valid YAML Map Intent text is
     // essentially never also valid JSON with a top-level "steps" array.
     try {
-      const maybeStory = JSON.parse(text);
-      if (maybeStory && Array.isArray(maybeStory.steps)) {
-        startStory(maybeStory);
+      const maybeNarrative = JSON.parse(text);
+      if (maybeNarrative && Array.isArray(maybeNarrative.steps)) {
+        startNarrative(maybeNarrative);
         errBox.textContent = "";
         overlay.style.display = "none";
         return;
@@ -127,7 +127,7 @@ function initMapIntentUI() {
 
   // Optional URL-fragment path — staccato-spec ADR 0004's one-shot fragment
   // hand-off, not the required plain-text baseline (see D19). readAndClearFragmentKey
-  // (story.js) handles the read-once-and-clear mechanics shared by every
+  // (narrative.js) handles the read-once-and-clear mechanics shared by every
   // fragment key this Cartographer accepts.
   const encoded = readAndClearFragmentKey("intent");
   if (encoded !== null) {

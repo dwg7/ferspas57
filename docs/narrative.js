@@ -1,10 +1,17 @@
-// Minimal "story map" playback prototype.
-// A narrative is a small JSON script: a sequence of {center, zoom, layers, caption}
-// steps. It's compressed and carried in the URL fragment (#story=...), never sent
-// to any server — matches Staccato's "Staff hands the User a link" model without
-// needing a backend or POST.
+// Narrative playback. A narrative is a small JSON document — see
+// NARRATIVE-FORMAT.md for the schema — a sequence of
+// {center, zoom, layers, caption} steps. It's compressed and carried in the
+// URL fragment (#narrative=...), never sent to any server — matches
+// Staccato's "Staff hands the User a link" model without needing a backend
+// or POST. (2026-09-05: renamed from "story" throughout this project —
+// "narrative" is the settled term, matching STAFF-PROMPT.md's "Narrative
+// Mode" and staccato-spec ADR 0009's "narrative JSON"; the old #story=
+// fragment key and SAMPLE_STORY/startStory-family identifiers are gone, not
+// kept as aliases, since this predates any real external consumer.)
 //
-// Staff's job (not implemented here) is to produce this JSON. This file only plays it.
+// Staff's job is to SELECT a pre-authored narrative from NARRATIVES.md, not
+// generate one live (see DECISIONS.md D34 item 2, D37) — this file only
+// plays back whatever narrative JSON it's given.
 //
 // Target language list (intent to support, not all equally battle-tested):
 // - UN's six official languages: en, fr, es, ru, zh, ar
@@ -12,8 +19,8 @@
 // - it: FAO is headquartered in Rome — a deliberate nod to the host country,
 //   not just UN-official coverage
 // - sw: the harder regional challenge — DRC's own official language is French,
-//   already in the UN set, so Swahili (actually spoken in the story's setting,
-//   eastern DRC) is the one that genuinely stretches this
+//   already in the UN set, so Swahili (actually spoken in the narrative's
+//   setting, eastern DRC) is the one that genuinely stretches this
 // Machine-translated by this session, not reviewed by native speakers — treat as
 // a working demonstration of the mechanism, not publication-ready copy.
 
@@ -30,7 +37,8 @@ const LANGUAGES = [
   { code: "sw", label: "Kiswahili" }
 ];
 
-const SAMPLE_STORY = {
+const SAMPLE_NARRATIVE = {
+  narrative_version: "ferspas57-narrative/v1",
   title: {
     en: "DR Congo: A Small Mystery in Maize Storage",
     fr: "RD Congo : un petit mystère autour du stockage du maïs",
@@ -110,12 +118,12 @@ const SAMPLE_STORY = {
   ]
 };
 
-function encodeStory(story) {
-  const json = JSON.stringify(story);
+function encodeNarrative(narrative) {
+  const json = JSON.stringify(narrative);
   return LZString.compressToEncodedURIComponent(json);
 }
 
-function decodeStory(encoded) {
+function decodeNarrative(encoded) {
   const json = LZString.decompressFromEncodedURIComponent(encoded);
   return json ? JSON.parse(json) : null;
 }
@@ -125,7 +133,7 @@ function decodeStory(encoded) {
 // rendering derived from it occurs, so a URL copied after the map renders is
 // indistinguishable from one with no fragment at all — not bookmarkable/replayable
 // map state. Shared by every fragment-carried key this Cartographer accepts
-// (#intent=, #story=, #q=) rather than reimplemented per key — D21/D22 already
+// (#intent=, #narrative=, #q=) rather than reimplemented per key — D21/D22 already
 // found and fixed a real ADR-0004 compliance bug from exactly this kind of
 // duplication. Lives here (loaded first, before map_intent.js) so every reader
 // can call it regardless of script order; actual calls only happen inside
@@ -133,12 +141,12 @@ function decodeStory(encoded) {
 //
 // The whole hash is treated as ONE key's value (not "&"-split into multiple
 // coexisting top-level keys) — found the hard way while adding #q=: unlike
-// #intent=/#story= (opaque LZString blobs with no literal "&" inside), #q='s
+// #intent=/#narrative= (opaque LZString blobs with no literal "&" inside), #q='s
 // own value is itself a multi-param blob using "&" as an internal delimiter
 // (req=...&lat=...&lng=...), which collides with any scheme that treats "&"
 // as a top-level key separator. The old multi-key "&"-joined design existed
 // only to coexist with MapLibre's own hash:"map" reflection (removed, D22) —
-// with that gone, none of #intent=/#story=/#q= are ever actually combined in
+// with that gone, none of #intent=/#narrative=/#q= are ever actually combined in
 // one URL (each is a complete, standalone hand-off), so there's nothing left
 // to preserve after clearing: the whole hash is consumed and cleared as a unit.
 function readAndClearFragmentKey(key) {
@@ -149,22 +157,22 @@ function readAndClearFragmentKey(key) {
   return value;
 }
 
-function getStoryFromUrl() {
-  const encoded = readAndClearFragmentKey("story");
+function getNarrativeFromUrl() {
+  const encoded = readAndClearFragmentKey("narrative");
   if (encoded === null) return null;
   try {
-    return decodeStory(decodeURIComponent(encoded));
+    return decodeNarrative(decodeURIComponent(encoded));
   } catch (e) {
-    console.error("failed to decode story from URL", e);
+    console.error("failed to decode narrative from URL", e);
     return null;
   }
 }
 
-function setStoryInUrl(story) {
-  const encoded = encodeStory(story);
+function setNarrativeInUrl(narrative) {
+  const encoded = encodeNarrative(narrative);
   const raw = location.hash.replace(/^#/, "");
-  const parts = raw ? raw.split("&").filter((p) => !p.startsWith("story=")) : [];
-  parts.push("story=" + encoded);
+  const parts = raw ? raw.split("&").filter((p) => !p.startsWith("narrative=")) : [];
+  parts.push("narrative=" + encoded);
   location.hash = parts.join("&");
 }
 

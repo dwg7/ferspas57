@@ -33,9 +33,9 @@ duplicating a correction into `STAFF-PROMPT.md`.
 
 The Food and Agriculture Organization of the United Nations is the UN
 specialized agency for food, agriculture, and rural development —
-headquartered in Rome (hence `story.js`'s inclusion of Italian among its
-narrative languages: a deliberate nod to the host country, alongside the UN's
-six official languages). FAO's mandate spans agricultural statistics, food
+headquartered in Rome (hence `docs/narrative.js`'s inclusion of Italian among
+its narrative languages: a deliberate nod to the host country, alongside the
+UN's six official languages). FAO's mandate spans agricultural statistics, food
 security monitoring, land and water resource management, fisheries, forestry,
 and — increasingly, and most relevant to this project — geospatial data
 infrastructure supporting all of the above. FAO turned 80 in 2025, a
@@ -77,7 +77,8 @@ just from FAO itself but from partner UN agencies, NGOs, the private sector,
 and space agencies.
 
 **Why this matters for interpreting HIH's own scores** (this is the finding
-behind this project's sample narrative, `story.js`'s `SAMPLE_STORY`): HIH's
+behind this project's first library narrative, `NARRATIVES.md`'s DR Congo
+maize entry, `samples/narrative-cod-maize-mystery.json`): HIH's
 per-site "Score" and "FinalLocation" layers are not simple agro-climatic
 suitability maps. They come out of a **GIS-based multi-criteria evaluation**
 that combines climatic/agronomic suitability with accessibility (distance to
@@ -219,13 +220,22 @@ MapLibre GL JS, serving real converted data — GAEZ AEZ33/AEZ57
 classifications (global) and Hand-in-Hand data for DR Congo, with expansion
 to Côte d'Ivoire, Central African Republic, Cameroon, and Republic of Congo
 in progress — via `stars.optgeo.org` (Martin, PMTiles) and
-`depot.optgeo.org` (static GeoJSON). It supports a hand-authored narrative
-story mode, a spec-compliant Map Intent paste/URL-fragment mechanism
-(`staccato-spec` ADRs 0001/0004/0005/0007), dynamic legends, and a
-cursor-anchored score-comparison probe. What does **not** yet exist is the
-"Staff" itself: an LLM that actually takes a user's open-ended question and
-produces a Map Intent. `STAFF-PROMPT.md` and this document are groundwork for
-that, not the Staff running.
+`depot.optgeo.org` (static GeoJSON). It supports narrative playback (see
+`NARRATIVE-FORMAT.md`/`NARRATIVES.md`), a spec-compliant Map Intent
+paste/URL-fragment mechanism (`staccato-spec` ADRs 0001/0004/0005/0007),
+dynamic legends, and a cursor-anchored score-comparison probe. Staff itself
+(`STAFF-PROMPT.md`) is a system prompt, not a backend service (`DECISIONS.md`
+D32) — see that file's own status header for what's live-tested and what
+isn't yet. This section otherwise predates D32/D34/D37 and hasn't been
+refreshed against them; treat it as historical background on the technical
+shape, not a current-status summary — `HANDOVER.md` is the place for that.
+An LLM that actually takes a user's open-ended question and produces a Map
+Intent — or, for a narrative-shaped question, selects from `NARRATIVES.md` —
+runs whenever `STAFF-PROMPT.md` is pasted into that LLM's system/custom
+instructions (D32's corrected mental model: Staff's implementation IS the
+prompt, no backend needed). What's still genuinely open, as of D34, is
+testing that prompt against a real, tool-less chat agent — see
+`STAFF-PROMPT.md`'s own status header for whether that's happened yet.
 
 **The framing that matters more than any of the above** (`CLAUDE.md`'s
 "Positive intent" section, worth repeating here since it's easy to lose sight

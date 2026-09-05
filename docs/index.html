@@ -7,7 +7,7 @@
 <link href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" rel="stylesheet">
 <script src="https://unpkg.com/lz-string@1.5.0/libs/lz-string.min.js"></script>
 <script src="https://unpkg.com/js-yaml@4.1.0/dist/js-yaml.min.js"></script>
-<script src="story.js"></script>
+<script src="narrative.js"></script>
 <script src="aez_legend.js"></script>
 <script src="aez57_legend.js"></script>
 <script src="score_probe.js"></script>
@@ -59,21 +59,21 @@
     0% { transform: scale(1); opacity: 0.7; }
     70%, 100% { transform: scale(3.2); opacity: 0; }
   }
-  #story {
+  #narrative {
     position: absolute; left: 50%; bottom: 20px; transform: translateX(-50%);
     z-index: 10; background: white; font: 14px/1.5 sans-serif;
     border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.35);
     width: min(560px, 90vw); padding: 14px 18px; display: none;
   }
-  #story.active { display: block; }
-  #story h3 { margin: 0 0 6px 0; font-size: 14px; }
-  #story-caption { margin: 0 0 10px 0; }
-  #story-controls { display: flex; align-items: center; gap: 8px; }
-  #story-controls button {
+  #narrative.active { display: block; }
+  #narrative h3 { margin: 0 0 6px 0; font-size: 14px; }
+  #narrative-caption { margin: 0 0 10px 0; }
+  #narrative-controls { display: flex; align-items: center; gap: 8px; }
+  #narrative-controls button {
     border: 1px solid #ccc; background: #f7f7f7; border-radius: 4px;
     padding: 4px 10px; cursor: pointer; font: inherit;
   }
-  #story-step-indicator { font-size: 12px; color: #777; margin-left: auto; }
+  #narrative-step-indicator { font-size: 12px; color: #777; margin-left: auto; }
   #top-right-toolbar {
     position: absolute; top: 8px; right: 46px; z-index: 10;
     display: flex; gap: 6px;
@@ -104,16 +104,16 @@
   </div>
 </div>
 <div id="top-right-toolbar">
-  <button id="story-share" onclick="shareStory()" title="Play this story">▶</button>
+  <button id="narrative-share" onclick="shareNarrative()" title="Play this narrative">▶</button>
 </div>
-<div id="story">
-  <h3 id="story-title"></h3>
-  <p id="story-caption"></p>
-  <div id="story-controls">
-    <button onclick="storyPrev()">◀ 前へ</button>
-    <button onclick="storyNext()">次へ ▶</button>
-    <button id="story-autoplay" onclick="toggleAutoplay()">自動再生</button>
-    <span id="story-step-indicator"></span>
+<div id="narrative">
+  <h3 id="narrative-title"></h3>
+  <p id="narrative-caption"></p>
+  <div id="narrative-controls">
+    <button onclick="narrativePrev()">◀ 前へ</button>
+    <button onclick="narrativeNext()">次へ ▶</button>
+    <button id="narrative-autoplay" onclick="toggleAutoplay()">自動再生</button>
+    <span id="narrative-step-indicator"></span>
   </div>
 </div>
 <script>
@@ -338,19 +338,19 @@ async function init() {
   initMapIntentUI();
 
   map.on("load", () => {
-    const story = getStoryFromUrl();
-    if (story) startStory(story);
+    const narrative = getNarrativeFromUrl();
+    if (narrative) startNarrative(narrative);
   });
 }
 
-// --- Story playback -------------------------------------------------------
-let currentStory = null;
+// --- Narrative playback -----------------------------------------------------
+let currentNarrative = null;
 let currentStep = 0;
 let autoplayTimer = null;
 
-function applyStoryStep(story, i) {
+function applyNarrativeStep(narrative, i) {
   currentStep = i;
-  const step = story.steps[i];
+  const step = narrative.steps[i];
 
   activeRaster.clear();
   activeVector.clear();
@@ -366,46 +366,46 @@ function applyStoryStep(story, i) {
   refresh();
 
   map.flyTo({ center: step.center, zoom: step.zoom, duration: 1800 });
-  // Language selection happens upstream, when Staff generates the story JSON, not
-  // here — the map page itself has no language menu. Defaulting to "en" for now.
+  // Language selection happens upstream, when Staff selects/authors the narrative
+  // JSON, not here — the map page itself has no language menu. Defaulting to "en".
   const lang = "en";
-  document.getElementById("story-title").textContent = pickLang(story.title, lang);
-  document.getElementById("story-caption").textContent = pickLang(step.caption, lang);
-  document.getElementById("story-step-indicator").textContent = `${i + 1} / ${story.steps.length}`;
-  document.getElementById("story").classList.add("active");
+  document.getElementById("narrative-title").textContent = pickLang(narrative.title, lang);
+  document.getElementById("narrative-caption").textContent = pickLang(step.caption, lang);
+  document.getElementById("narrative-step-indicator").textContent = `${i + 1} / ${narrative.steps.length}`;
+  document.getElementById("narrative").classList.add("active");
 }
 
-function startStory(story) {
-  currentStory = story;
+function startNarrative(narrative) {
+  currentNarrative = narrative;
   document.getElementById("panel").classList.add("collapsed");
-  applyStoryStep(story, 0);
+  applyNarrativeStep(narrative, 0);
 }
 
-function storyNext() {
-  if (!currentStory) return;
-  applyStoryStep(currentStory, (currentStep + 1) % currentStory.steps.length);
+function narrativeNext() {
+  if (!currentNarrative) return;
+  applyNarrativeStep(currentNarrative, (currentStep + 1) % currentNarrative.steps.length);
 }
 
-function storyPrev() {
-  if (!currentStory) return;
-  applyStoryStep(currentStory, (currentStep - 1 + currentStory.steps.length) % currentStory.steps.length);
+function narrativePrev() {
+  if (!currentNarrative) return;
+  applyNarrativeStep(currentNarrative, (currentStep - 1 + currentNarrative.steps.length) % currentNarrative.steps.length);
 }
 
 function toggleAutoplay() {
-  const btn = document.getElementById("story-autoplay");
+  const btn = document.getElementById("narrative-autoplay");
   if (autoplayTimer) {
     clearInterval(autoplayTimer);
     autoplayTimer = null;
     btn.textContent = "自動再生";
   } else {
-    autoplayTimer = setInterval(storyNext, 5000);
+    autoplayTimer = setInterval(narrativeNext, 5000);
     btn.textContent = "■ 停止";
   }
 }
 
-function shareStory() {
-  setStoryInUrl(SAMPLE_STORY);
-  startStory(SAMPLE_STORY);
+function shareNarrative() {
+  setNarrativeInUrl(SAMPLE_NARRATIVE);
+  startNarrative(SAMPLE_NARRATIVE);
   navigator.clipboard?.writeText(location.href).catch(() => {});
 }
 
