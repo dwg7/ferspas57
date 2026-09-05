@@ -4,6 +4,16 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D44 — Cartographer's paste-box now also accepts a dropped file, alongside paste
+**Date**: 2026-09-05
+**Status**: Done, verified in-browser for both a dropped narrative JSON and a dropped Map Intent YAML file.
+
+**hfu's design question**: for the tool-less/no-code-execution fallback (D42's "if lz-string isn't available, what then?"), hfu proposed: Staff shows the translated/adapted narrative as a plain code block, and Cartographer accepts it either pasted or dropped as a file. The paste half was already exactly D39's existing design; the drop half was new.
+
+**Assessment and implementation**: adding file-drop support is a cheap, low-risk complement to the existing paste-box, not a new format or a new judgment call — it's just another way to get the same plain-text content into the same textarea, reusing the exact same auto-detect/parse/apply logic (`docs/map_intent.js`) unchanged. Refactored the Apply button's inline handler into a shared `applyPastedText()` function, then added `dragover`/`drop` listeners scoped to the textarea itself: a dropped file's contents are read via the File API, written into the textarea (for visible feedback), and run through the same `applyPastedText()` call the Apply button uses. No new dependency, no new schema, no Cartographer capability that didn't already exist for paste.
+
+**Verified in-browser**: dispatched a synthetic `drop` event carrying a real `File` (via `DataTransfer`) for both a narrative JSON (`samples/narrative-cod-wheat-highlands.json`) and a Map Intent YAML snippet — both correctly auto-detected, applied, and closed the overlay, identically to the paste path.
+
 ---
 
 ### D43 — Panel title de-localized; a real, pre-existing multi-country/zoom bug found and fixed in the score-comparison probe

@@ -162,7 +162,10 @@ architecture's "faceless Cartographer" baseline — via two paths:
 1. **Paste-box (required baseline)**: the Cartographer's Map Intent paste overlay
    (`📄` button) auto-detects a pasted narrative — `JSON.parse` succeeds and the
    result has a `.steps` array — and routes to `startNarrative()` instead of
-   `parseMapIntent()`. One textarea, one Apply button, two possible outcomes.
+   `parseMapIntent()`. One textarea, one Apply button, two possible outcomes. The
+   same textarea also accepts a dropped file (read via the File API, not a new
+   format) as an alternative to typing/pasting — useful when Staff's output was
+   saved locally first rather than copied directly from a code block.
 2. **URL fragment (optional enhancement, ADR 0004-compliant)**: `#narrative=<LZString-
    compressed JSON, compressToEncodedURIComponent>`, read once and cleared via
    `history.replaceState` before use (`docs/narrative.js`'s `getNarrativeFromUrl()`)
