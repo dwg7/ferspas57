@@ -79,8 +79,8 @@ function initAez57Legend(map) {
   Object.assign(tooltip.style, {
     position: "absolute", left: "50%", top: "50%", zIndex: 20,
     transform: "translate(14px, 34px)", pointerEvents: "none",
-    background: "rgba(0,0,0,0.8)", color: "white", font: "12px sans-serif",
-    padding: "4px 8px", borderRadius: "4px", display: "none", maxWidth: "260px"
+    background: "rgba(0,0,0,0.8)", color: "white", font: "19px sans-serif",
+    padding: "4px 8px", borderRadius: "4px", display: "none", maxWidth: "400px"
   });
   map.getContainer().appendChild(tooltip);
 

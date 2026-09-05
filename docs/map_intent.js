@@ -79,15 +79,15 @@ function initMapIntentUI() {
     display: "none", alignItems: "center", justifyContent: "center",
   });
   overlay.innerHTML = `
-    <div style="background:white;border-radius:8px;padding:16px;width:min(560px,90vw);max-height:80vh;display:flex;flex-direction:column;gap:8px;">
+    <div style="background:white;border-radius:8px;padding:16px;width:min(720px,90vw);max-height:80vh;display:flex;flex-direction:column;gap:8px;font-size:19px;">
       <strong>Paste — or drop a file — a Map Intent (YAML) or a narrative (JSON)</strong>
-      <div id="intent-goal" style="font-size:12px;color:#555;min-height:1.2em;"></div>
-      <textarea id="intent-textarea" style="width:100%;height:240px;font:12px monospace;" placeholder="spec_version: map-intent/v2\ngoal: ...\nrequired_layers:\n  - gaez-aez33\n...\n\n(or paste narrative JSON: {title, steps: [...]})"></textarea>
+      <div id="intent-goal" style="font-size:19px;color:#555;min-height:1.2em;"></div>
+      <textarea id="intent-textarea" style="width:100%;height:240px;font:19px monospace;" placeholder="spec_version: map-intent/v2\ngoal: ...\nrequired_layers:\n  - gaez-aez33\n...\n\n(or paste narrative JSON: {title, steps: [...]})"></textarea>
       <div style="display:flex;gap:8px;justify-content:flex-end;">
         <button id="intent-cancel">Close</button>
         <button id="intent-apply">Apply</button>
       </div>
-      <div id="intent-error" style="color:#c0392b;font-size:12px;"></div>
+      <div id="intent-error" style="color:#c0392b;font-size:19px;"></div>
     </div>
   `;
   document.body.appendChild(overlay);

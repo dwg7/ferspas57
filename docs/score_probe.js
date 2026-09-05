@@ -137,9 +137,9 @@ function initScoreProbe(map) {
   panel.id = "score-probe";
   Object.assign(panel.style, {
     position: "absolute", right: "8px", top: "44px", zIndex: 10,
-    background: "white", font: "11px sans-serif", padding: "8px 10px",
+    background: "white", font: "18px sans-serif", padding: "8px 10px",
     borderRadius: "4px", boxShadow: "0 1px 4px rgba(0,0,0,0.3)",
-    width: "180px", display: "none"
+    width: "290px", display: "none"
   });
   document.body.appendChild(panel);
 

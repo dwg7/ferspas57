@@ -4,6 +4,22 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D46 — Readability pass: 1.6x text size across Cartographer's UI, boosted narrative playback zoom, simplified prev/next glyphs
+**Date**: 2026-09-05
+**Status**: Done, verified in-browser (computed font sizes, captured `flyTo` zoom argument, and button glyphs all checked directly).
+
+**hfu's three requests**: (1) all of Cartographer's displayed text about 1.6x larger, for readability; (2) narrative playback's camera zoom a bit closer/larger than each step's raw `zoom` value; (3) the narrative prev/next buttons simplified from `⏮`/`⏭` (each already a "two overlapping triangles" glyph) to plain single-triangle `◀`/`▶`, matching the existing single-triangle "▶ Play this narrative" button's style.
+
+**Font sizes**: scaled every explicit `font`/`font-size` declaration across `docs/index.html`'s `<style>` block and the four JS files that build their own UI (`score_probe.js`, `aez_legend.js`, `aez57_legend.js`, `map_intent.js`) by ~1.6x (13px→21px panel body, 12px→19px for the various secondary labels/legends/tooltips, 14px→22px narrative caption text, 11px→18px score-probe panel). Widened a few fixed-width containers that would otherwise wrap awkwardly at the larger size (`#panel` max-width 280→340px, `#narrative` width 560→680px, the score-probe panel 180→290px, the Map Intent/narrative paste-box overlay 560→720px) rather than leaving them visually cramped. Most checkbox/label text needed no direct edit — it inherits `#panel`'s font size.
+
+**Narrative zoom boost**: rather than hand-editing every step's `zoom` value in every `samples/*.json` file (which won't scale as `NARRATIVES.md` grows toward D45's ~300-entry target), added a single `NARRATIVE_ZOOM_BOOST = 1.5` constant in `docs/index.html`'s `applyNarrativeStep`, added to whatever zoom a narrative step specifies before calling `map.flyTo()`. This is a Cartographer-side rendering decision, not a change to any narrative document's content — every existing and future narrative benefits automatically, with no data migration.
+
+**Button glyphs**: `⏮`/`⏭` → `◀`/`▶` in `docs/index.html`'s narrative controls. Purely cosmetic — no behavior change, and doesn't affect the language-agnostic-chrome principle either way (both old and new glyphs are symbols, not words).
+
+**Verified in-browser**: computed `getComputedStyle(...).fontSize` for the panel and narrative box matched the new declared values exactly (21px/22px); the narrative-controls buttons render as `◀`/`▶`/`🔁`/step-indicator, not the old double-triangle glyphs. This session's browser tool hit its now-familiar CDN-connectivity limitation (the Positron basemap style never finishes loading in this sandboxed environment, so `map.flyTo()` doesn't visibly animate — a recurring, previously-documented environment quirk, not a new bug) — worked around by temporarily wrapping `map.flyTo` to capture its actual `zoom` argument directly: confirmed `12.5` for a step whose raw `zoom` is `11` (i.e. `11 + NARRATIVE_ZOOM_BOOST`), confirming the boost is applied correctly regardless of whether the camera animation itself could be visually observed in this session.
+
+---
+
 ### D45 — Scaling `NARRATIVES.md` toward ~300: strategy set (70% honest per-site profiles, 30% commodity-level divergence stories); the full 357-site backing dataset captured and made durable
 **Date**: 2026-09-05
 **Status**: Strategy agreed; data-capture stage done. Narrative production itself (both buckets) not yet started.
