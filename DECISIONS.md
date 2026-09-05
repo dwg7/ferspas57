@@ -6,6 +6,22 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D38 — Clarified: narrative *language* is Staff's job, not fixed at authoring time (a stated project goal, not yet built)
+**Date**: 2026-09-05
+**Status**: Documentation-only pass, clarifying scope right after D37 landed. Nothing implemented yet — see the "current gap" note below and `HANDOVER.md`'s open items for the actual follow-up work.
+
+**hfu's direction**: D37's "Staff selects from `NARRATIVES.md`, does not generate" rule was scoped to a narrative's *facts* — steps, coordinates, layers, and the substantive claims a caption makes (a score, a classification, a finding). It should not be read as also meaning "the language a narrative is rendered in is fixed once and for all by whoever authored it." hfu's stated ideal: a user should be able to ask Staff something like "コンゴ民主共和国のキャッサバの投資見込みについて知りたい。フランス語でお願い" (wanting to know about DR Congo's cassava investment prospects, in French) and actually get a narrative rendered in French back — language selection/translation is explicitly part of Staff's job, not something to route around by always serving whichever language happened to get typed in first. hfu flagged this as possibly belonging to this project's stated goals, worth writing down explicitly now rather than letting D37's scoping accidentally close it off by omission.
+
+**Why this doesn't contradict D37, not just a carve-out**: translating an already-verified caption into another language is a different kind of act than inventing a score or classification — the underlying claim is unchanged, only its expression. D37's anti-fabrication concern was specifically about claims Staff cannot verify against live tile data (a number, a class code); it was never meant to cover which language those already-verified words get said in. The distinction is content vs. expression, and it's a real, principled line, not a convenient loophole.
+
+**A real, previously-unnoticed mechanical gap this surfaced**: `docs/narrative.js`'s playback (`applyNarrativeStep`) hardcodes `const lang = "en"` unconditionally. Even though narrative documents are language-keyed objects and `NARRATIVES.md`'s one existing entry already carries all 10 target languages, there is currently no mechanism — no URL parameter, no field, nothing — for Staff or a user to actually select a non-English render. This has been true since the narrative feature was first built (D15) and was never flagged as a gap until this conversation surfaced it, because nothing before now needed multi-language rendering to actually work end-to-end.
+
+**Proposed target shape** (not decided in detail, recorded as a starting point for whoever implements this): two tiers — (1) a plain, hand-typeable `?lang=fr` query-string parameter alongside the existing pre-built `#narrative=` link, for languages a narrative document already has stored (deliberately a *query* parameter, not another fragment key, so it doesn't reopen D32's "whole hash is one key's value" simplification); (2) for a language not yet in the stored document, Staff produces a translated copy via the paste-box path, with a hard constraint that only the natural-language fields may differ from the verified original — `steps[].center`/`zoom`/`layers` and each caption's substantive claim must stay byte-identical. Full detail in `NARRATIVE-FORMAT.md`'s new "Whose job is the language?" section.
+
+**Documentation updated**: `NARRATIVE-FORMAT.md` (new section + a line in "Responsibility split"), `STAFF-PROMPT.md` (Narrative Mode gained an honest statement of today's limitation — v0.3 bumped to tag `ferspas57-staff-2026-09-05b`, Status header updated). `HANDOVER.md`'s open items list should carry this as real follow-up work — not yet added as of this entry; see that file directly for current status.
+
+---
+
 ### D37 — "Narrative" settled as this project's term (not "story"); format hardened into `NARRATIVE-FORMAT.md`; first `NARRATIVES.md` library entry built
 **Date**: 2026-09-05
 **Status**: Done — renamed, documented, built, verified in-browser.

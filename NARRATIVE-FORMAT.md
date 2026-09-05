@@ -83,6 +83,59 @@ a fabricated one is not distinguishable from a correct one to a reader who doesn
 speak that language, which is exactly the failure mode this project's
 anti-fabrication discipline (`STAFF-PROMPT.md`) exists to avoid.
 
+## Whose job is the language?
+
+A narrative's **content** — steps, coordinates, layers, and the substantive claims
+a caption makes (a score, a classification, a finding) — is fixed at authoring
+time and verified against real data (see "Responsibility split" below); Staff must
+never alter or invent this. A narrative's **language of expression** is a
+different concern, and it is explicitly Staff's job, not something baked in once
+by whoever authored the narrative and left alone forever.
+
+**The target shape**: a user should be able to ask, in the same breath as their
+question, for a response in whichever language they prefer — e.g.
+"コンゴ民主共和国のキャッサバの投資見込みについて知りたい。フランス語でお願い"
+("I'd like to know about DR Congo's cassava investment prospects. In French,
+please") — and get back a narrative actually rendered in French, not just
+whichever language happened to be typed in first when the narrative was authored.
+This is a real project goal (hfu, 2026-09-05; `DECISIONS.md` D38), not a nice-to-have
+detail. Translating an already-verified caption into another language is not the
+same kind of act as inventing a score or a classification: the underlying claim
+doesn't change, only how it's said — which is why the "Language keys" caution
+above ("never invent a translation you haven't actually produced or verified") is
+about not silently guessing at a translation's *accuracy*, not a blanket rule
+against Staff ever touching the natural-language layer. Producing that layer
+correctly, in the language actually requested, is squarely Staff's responsibility.
+
+**Two tiers this probably splits into** (proposed shape, not yet built or decided
+in detail):
+
+1. **Selecting among languages a narrative already has stored.** `NARRATIVES.md`'s
+   one existing entry already carries all 10 target languages. The likely
+   mechanism: a plain (uncompressed, hand-typeable) `?lang=fr` query-string
+   parameter alongside the pre-built `#narrative=` link — deliberately a query
+   parameter, not another fragment key, so it doesn't reopen the "whole hash is
+   one key's value" simplification D32 settled on for `#intent=`/`#narrative=`/`#q=`.
+   Staff can freely append this itself (no compression involved, same reasoning as
+   why `lat=`/`lng=`/`goal=` in `#q=` are hand-typeable) without touching the
+   opaque blob at all.
+2. **A language the stored narrative doesn't have yet.** This needs actual
+   translation, which only the paste-box path (not a link) can carry, since it
+   produces a genuinely different document. If Staff does this, the structural
+   fields (`steps[].center`/`zoom`/`layers`, and the substantive claim inside each
+   caption) must stay identical to the verified original — only the language of
+   the prose changes. This is real generation of a document, but of *expression*,
+   not of *fact*, which is why it doesn't reopen D37's anti-fabrication concern.
+
+**Current gap, stated honestly**: neither tier is built yet. `docs/narrative.js`'s
+playback hardcodes `const lang = "en"` unconditionally, regardless of what
+languages a narrative document actually carries or what a user asked for — there
+is no `?lang=` reader today, and no verification step for tier 2's "only the prose
+changed" constraint. See `HANDOVER.md`'s open items and `STAFF-PROMPT.md`'s
+Narrative Mode section for how Staff should handle a language request given this
+gap in the meantime (say so plainly, don't silently serve English or overclaim
+support that doesn't exist yet).
+
 ## Transport
 
 A narrative travels the same way Map Intent does — as plain text, per this
@@ -122,7 +175,10 @@ pre-authored library, the three roles' jobs are simple and separate.
   the user its link directly — no generation, no fabrication surface, a bounded
   choice among already-verified options. If nothing in the library fits, say so
   plainly (same Anti-Fabrication discipline as an unlisted `source_id`) rather than
-  improvising a new narrative on the spot.
+  improvising a new narrative on the spot. **Separately, and just as much Staff's
+  job**: serving the narrative in whatever language the user actually asked for —
+  see "Whose job is the language?" above. This is not covered by "no generation" —
+  that rule is about facts, not language.
 - **Cartographer** (`docs/narrative.js` + `docs/map_intent.js`'s paste-box wiring):
   plays back whatever valid narrative document it's given, from either transport.
   It has no opinion about where the document came from and does not change based on
