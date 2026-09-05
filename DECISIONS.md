@@ -4,6 +4,23 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D52 — A radial/compass-style MapLibre UI pattern submitted jointly to `dwg7/cafebabe`, coordinating with `height-coverage` and `vientiane-planning-map`
+**Date**: 2026-09-06
+**Status**: Done — merged upstream (`dwg7/cafebabe` commit `6d5fb96`, `patterns/style-composition.md`).
+
+hfu asked this session to lead a joint pattern submission, since three `dwg7` sessions (this one, `height-coverage`, `vientiane-planning-map`) had each independently built a "arrange elements radially around a fixed point" MapLibre UI (this repo's `docs/score_probe.js` Scores radial, D47/D50). Consulted `cafebabe` first on submission format/granularity/existing-pattern overlap, then `height-coverage` and `vientiane-planning-map` one-on-one (serially, per hfu's instruction, not a group broadcast) for their own design accounts. A Fable subagent drafted the initial writeup from the three gathered accounts (hfu pre-approved delegating this refinement step); the draft then went through two more real fact-checks before submission, not just cafebabe's own template compliance:
+- Caught, before sending anywhere, one fabricated table cell the Fable draft had invented (height-coverage's icon style) with no source — corrected to "unconfirmed."
+- `vientiane-planning-map`'s review caught a second, more substantive discrepancy: the draft's account of `height-coverage`'s click-trigger scope didn't match what `height-coverage` had told *them*. Traced to a real timing gap (height-coverage's trigger scope changed, by hfu's own later request, between when they briefed `vientiane-planning-map` and when they briefed this session) — resolved by asking `height-coverage` to `grep` their own current code rather than trusting either secondhand account.
+- `cafebabe` did a third independent check against all three projects' live code before merging and found the (by-then-corrected) content accurate.
+
+**A real process correction along the way**: `cafebabe` flagged that an early message to `vientiane-planning-map` implicitly framed this project's own implementation as "the one that solved touch-target problems" versus the other two "just featuring circles" — before those two sessions had even been asked how they handled it. Acknowledged directly rather than defended; the rest of the coordination (and the final published pattern) treats all three as parallel valid solutions under different constraints, with the one genuine asymmetry that survived review (touch/mobile handling verified nowhere, for any of the three) stated plainly and equally, not attributed to just the "other" implementations.
+
+**Origin finding, confirmed by all three parties independently**: not three independent inventions. `vientiane-planning-map` built the original (a user-specified 8-direction Street View compass, D-equivalent in that repo's own log); `height-coverage` ported it near-directly (two deliberate differences: broadened click-trigger scope, and a conditional center edit-button with a time-delay guard instead of `vientiane-planning-map`'s deliberate no-center-button design); this repo's Scores radial is independently designed, solving a different interaction model (continuous pan-driven sampling vs. discrete click-to-act). The published pattern (`patterns/style-composition.md`) preserves this origin distinction explicitly, per `cafebabe`'s own house standard for not overstating independent convergence when one implementation is actually a derivative.
+
+Saved as a reusable process memory in this session's own memory store (cafebabe submission format/process; the "verify peer claims against their own primary source before writing them down" discipline) — not repeated in full here since it's not project-specific.
+
+---
+
 ### D51 — Zoom control moved back to top-right (reverses D47)
 **Date**: 2026-09-05
 **Status**: Done, verified.
