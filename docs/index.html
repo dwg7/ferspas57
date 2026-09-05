@@ -110,9 +110,9 @@
   <h3 id="narrative-title"></h3>
   <p id="narrative-caption"></p>
   <div id="narrative-controls">
-    <button onclick="narrativePrev()">◀ 前へ</button>
-    <button onclick="narrativeNext()">次へ ▶</button>
-    <button id="narrative-autoplay" onclick="toggleAutoplay()">自動再生</button>
+    <button onclick="narrativePrev()" title="Previous step">⏮</button>
+    <button onclick="narrativeNext()" title="Next step">⏭</button>
+    <button id="narrative-autoplay" onclick="toggleAutoplay()" title="Toggle autoplay">🔁</button>
     <span id="narrative-step-indicator"></span>
   </div>
 </div>
@@ -396,10 +396,10 @@ function toggleAutoplay() {
   if (autoplayTimer) {
     clearInterval(autoplayTimer);
     autoplayTimer = null;
-    btn.textContent = "自動再生";
+    btn.textContent = "🔁";
   } else {
     autoplayTimer = setInterval(narrativeNext, 5000);
-    btn.textContent = "■ 停止";
+    btn.textContent = "⏹";
   }
 }
 

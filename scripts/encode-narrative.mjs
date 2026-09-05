@@ -8,6 +8,13 @@
 // split"). Fetches the exact same lz-string version docs/index.html loads
 // from unpkg, so the encoding can never drift out of sync with the decoder.
 //
+// This script deliberately does NOT offer a --lang/flatten option. An earlier
+// pass added one (to pre-generate a link per language), but D39 reverted that
+// design: pre-baking translations into the Library causes them to drift out
+// of sync with the English source over time, and a live Staff can already
+// translate/adapt a narrative better, with real conversational context, at
+// the moment it's actually asked for. samples/*.json stays English-only.
+//
 // Usage: node scripts/encode-narrative.mjs samples/narrative-<slug>.json
 //        [--base https://dwg7.github.io/ferspas57/]
 

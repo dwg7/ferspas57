@@ -35,13 +35,13 @@ verifiable choice) — see "Responsibility split" below and `DECISIONS.md` D34 i
 ```json
 {
   "narrative_version": "ferspas57-narrative/v1",
-  "title": { "en": "...", "fr": "...", "...": "..." },
+  "title": "...",
   "steps": [
     {
       "center": [lng, lat],
       "zoom": 8,
       "layers": ["source-id-1", "source-id-2"],
-      "caption": { "en": "...", "fr": "...", "...": "..." }
+      "caption": "..."
     }
   ]
 }
@@ -52,11 +52,13 @@ verifiable choice) — see "Responsibility split" below and `DECISIONS.md` D34 i
   validate this — an unrecognized value is not an error — but future readers may
   warn on mismatch the same way `parseMapIntent()` does. Current value:
   `"ferspas57-narrative/v1"`.
-- **`title`**: a language-keyed object (see "Language keys" below). A plain string
-  is also accepted (`pickLang()` returns a bare string field unchanged) for a
-  narrative that hasn't been translated yet — don't invent translations you can't
-  verify; an English-only `title`/`caption` is a legitimate, incomplete-but-honest
-  narrative, not a malformed one.
+- **`title`**: a plain string, in whatever language the document is currently
+  in (see "Language keys" below — this Library's own entries are English,
+  matching their FAO source material). A language-keyed object
+  (`{ "en": "...", "fr": "..." }`) is also accepted (`pickLang()` picks a field
+  out of it) — the shape a live Staff translation ends up in if it hands the
+  Cartographer a copy carrying more than one language at once, though a single
+  plain string per language is the more common and simpler case.
 - **`steps`**: an ordered array, each step a full, self-contained camera+layer+text
   state (not a diff from the previous step) — the Cartographer replaces the active
   layer set and flies the camera fresh on every step, it does not merge.
@@ -70,71 +72,85 @@ verifiable choice) — see "Responsibility split" below and `DECISIONS.md` D34 i
     `STAFF-PROMPT.md`'s "Available layers"). No required/optional distinction (a
     narrative step activates every listed layer identically — same reasoning as
     `#q=`'s `req=`-only design, no `opt=`).
-  - **`caption`**: language-keyed prose for this step, shown while it's active.
+  - **`caption`**: a plain string (or language-keyed object, see "Language keys"
+    below) of prose for this step, shown while it's active.
 
 ## Language keys
 
-Any of the 10 codes `docs/narrative.js`'s `LANGUAGES` array declares intent to
-support: `en, fr, es, ru, zh, ar, de, ja, it, sw`. Not every narrative needs every
-language — `pickLang(field, lang)` falls back to `.en`, then to the first available
-value, then (for a plain string) the string itself. **Never invent a translation you
-haven't actually produced or verified** — an incomplete language set is honest;
-a fabricated one is not distinguishable from a correct one to a reader who doesn't
-speak that language, which is exactly the failure mode this project's
-anti-fabrication discipline (`STAFF-PROMPT.md`) exists to avoid.
+`NARRATIVES.md`'s entries are **English only**, matching the language of the
+FAO source data/documentation they're built from (`DECISIONS.md` D39). An
+earlier version of this project pre-translated every narrative into 10
+languages up front and baked the results into the Library; that was tried and
+deliberately reverted. Two problems with it, both raised by hfu directly: it
+doesn't scale (every new narrative needs 10x the authoring work, for
+languages nobody may ever ask for), and pre-baked translations rot — as the
+English source gets revised, nothing forces the other 9 copies to keep up,
+so content quietly forks and drifts ("lost in translation" as a maintenance
+failure mode, not just a linguistic one). A single English source of truth
+per narrative doesn't have this problem, because there's nothing else to
+drift out of sync with it. See "Whose job is the language?" below for where
+the actual translation work happens instead.
+
+The document format itself still supports a language-keyed object
+(`pickLang(field, lang)` picks a value out of `{ "en": "...", "fr": "..." }`,
+falling back to `.en`, then the first available value, then — for a plain
+string — the string itself) — this isn't dead code, it's what a Staff-made
+translated copy naturally is if it carries more than one language in the same
+document. But nothing in this repo constructs a multi-language document
+anymore, and the Library's own files never will.
 
 ## Whose job is the language?
 
-A narrative's **content** — steps, coordinates, layers, and the substantive claims
-a caption makes (a score, a classification, a finding) — is fixed at authoring
-time and verified against real data (see "Responsibility split" below); Staff must
-never alter or invent this. A narrative's **language of expression** is a
-different concern, and it is explicitly Staff's job, not something baked in once
-by whoever authored the narrative and left alone forever.
+A narrative's **content** — steps, coordinates, layers, and the substantive
+claims a caption makes (a score, a classification, a finding) — is fixed at
+authoring time, verified against real data, and lives in `NARRATIVES.md` in
+English (see "Language keys" above and "Responsibility split" below). Staff
+must never alter or invent this. A narrative's **language of expression** —
+and more generally, *how it's said*: which language, how technical, how much
+background to spell out, what register fits the person asking — is a wholly
+different concern, and it is entirely Staff's job.
 
-**The target shape**: a user should be able to ask, in the same breath as their
-question, for a response in whichever language they prefer — e.g.
+**The target shape**: a user should be able to ask, in the same breath as
+their question, for a response suited to them — e.g.
 "コンゴ民主共和国のキャッサバの投資見込みについて知りたい。フランス語でお願い"
 ("I'd like to know about DR Congo's cassava investment prospects. In French,
-please") — and get back a narrative actually rendered in French, not just
-whichever language happened to be typed in first when the narrative was authored.
-This is a real project goal (hfu, 2026-09-05; `DECISIONS.md` D38), not a nice-to-have
-detail. Translating an already-verified caption into another language is not the
-same kind of act as inventing a score or a classification: the underlying claim
-doesn't change, only how it's said — which is why the "Language keys" caution
-above ("never invent a translation you haven't actually produced or verified") is
-about not silently guessing at a translation's *accuracy*, not a blanket rule
-against Staff ever touching the natural-language layer. Producing that layer
-correctly, in the language actually requested, is squarely Staff's responsibility.
+please") — and get a narrative actually rendered in French, adapted with
+whatever else that conversation's context calls for. This is a real project
+goal (hfu, 2026-09-05; `DECISIONS.md` D38/D39), not a nice-to-have detail.
 
-**Two tiers this probably splits into** (proposed shape, not yet built or decided
-in detail):
+**How this actually works, mechanically**: Staff reads the relevant English
+`NARRATIVES.md` entry (its `samples/*.json` source, or the decoded
+`#narrative=` link — either is plain text Staff can read) and, live, in the
+conversation, produces a translated/adapted copy — structural fields
+(`steps[].center`/`zoom`/`layers`, and each caption's substantive claim) held
+byte-identical to the verified original, only the language and phrasing of
+the prose changing — then hands it to the user via the Cartographer's
+paste-box (the fragment-link path can't carry this, since Staff cannot
+compute the LZString compression a link needs; see "Transport" below). This
+is real generation of a document, but of *expression*, not of *fact*, so it
+doesn't reopen D37's anti-fabrication concern — translating an already-verified
+claim doesn't change what the claim says, only how it's said.
 
-1. **Selecting among languages a narrative already has stored.** `NARRATIVES.md`'s
-   one existing entry already carries all 10 target languages. The likely
-   mechanism: a plain (uncompressed, hand-typeable) `?lang=fr` query-string
-   parameter alongside the pre-built `#narrative=` link — deliberately a query
-   parameter, not another fragment key, so it doesn't reopen the "whole hash is
-   one key's value" simplification D32 settled on for `#intent=`/`#narrative=`/`#q=`.
-   Staff can freely append this itself (no compression involved, same reasoning as
-   why `lat=`/`lng=`/`goal=` in `#q=` are hand-typeable) without touching the
-   opaque blob at all.
-2. **A language the stored narrative doesn't have yet.** This needs actual
-   translation, which only the paste-box path (not a link) can carry, since it
-   produces a genuinely different document. If Staff does this, the structural
-   fields (`steps[].center`/`zoom`/`layers`, and the substantive claim inside each
-   caption) must stay identical to the verified original — only the language of
-   the prose changes. This is real generation of a document, but of *expression*,
-   not of *fact*, which is why it doesn't reopen D37's anti-fabrication concern.
+**Why doing this live, instead of pre-generating, is the better design, not
+just the lazier one**: translation quality genuinely improves when it's done
+with the actual situation in view — who's asking, why, in what register —
+rather than produced once, generically, ahead of any real audience. A
+narrative pre-translated in isolation has no way to know whether the reader
+wants deep technical rigor, a simplified explanation for a classroom, or just
+the language switched with everything else the same; a live Staff, mid-conversation,
+already knows. This also means language turns out to be only one instance of
+a broader pattern — audience/register/complexity adaptation generally — that
+this same mechanism (Staff reads the English source, produces a tailored copy,
+hands it over via paste-box) already covers without any extra machinery.
 
-**Current gap, stated honestly**: neither tier is built yet. `docs/narrative.js`'s
-playback hardcodes `const lang = "en"` unconditionally, regardless of what
-languages a narrative document actually carries or what a user asked for — there
-is no `?lang=` reader today, and no verification step for tier 2's "only the prose
-changed" constraint. See `HANDOVER.md`'s open items and `STAFF-PROMPT.md`'s
-Narrative Mode section for how Staff should handle a language request given this
-gap in the meantime (say so plainly, don't silently serve English or overclaim
-support that doesn't exist yet).
+**What this means for Cartographer**: nothing changes there. `docs/narrative.js`
+was already, and remains, language-agnostic — it renders whatever plain string
+or language-keyed object a step's `caption` field holds, exactly as it renders
+today's English-only Library entries, with zero special-casing for language.
+The same "Faceless Cartographer" principle that keeps its UI to emoji glyphs
+(`▶`, `⏮`, `⏭`, `🔁`, `⏹` — not English words) extends to its content handling:
+Cartographer never makes a judgment call about who's watching, it only plays
+back whatever it's handed.
 
 ## Transport
 
@@ -151,13 +167,17 @@ architecture's "faceless Cartographer" baseline — via two paths:
    — a copied URL after the map renders carries no narrative, matching every other
    fragment key this Cartographer accepts (`#intent=`, `#q=`).
 
-There is no `#q=`-style hand-typeable shorthand for narratives, and there does not
-need to be one: `#q=`'s entire reason for existing is that a tool-less Staff cannot
-compute a real LZString compression "in its head" and must hand-type something
-character-by-character instead. A narrative is never hand-typed by Staff at all —
-it is pre-authored (by a human/Claude Code session working in this repo, verified
-against real data) and pre-encoded once into `NARRATIVES.md`'s link list. Staff's
-job is to copy one of those already-valid links, not construct one.
+There is no `#q=`-style hand-typeable shorthand for the URL-fragment path, and
+there does not need to be one: `#q=`'s entire reason for existing is that a
+tool-less Staff cannot compute a real LZString compression "in its head" and
+must hand-type something character-by-character instead. For an as-authored
+narrative, Staff never needs to construct anything — it copies one of
+`NARRATIVES.md`'s already-valid pre-encoded links verbatim. For a
+translated/adapted copy (see "Whose job is the language?" above), Staff
+composes plain, uncompressed JSON text and hands it over via the paste-box —
+this is exactly the "required baseline" path in item 1, unchanged since D33;
+what's new as of D39 is that it's Staff's normal path for language/audience
+adaptation, not just a rarely-used fallback.
 
 ## Responsibility split
 
@@ -167,18 +187,20 @@ pre-authored library, the three roles' jobs are simple and separate.
 - **This repo's maintainers (human + Claude Code sessions)**: author new narratives
   against real, verified data (same discipline as `DECISIONS.md` D13/D35's
   `gdallocationinfo`-based site checks — never invent a score, a classification, or
-  a site count), add each as a `samples/narrative-*.json` file, generate its
-  `#narrative=` link, and list it in `NARRATIVES.md` with a short description of
-  the question it answers.
+  a site count), add each as an **English-only** `samples/narrative-*.json` file
+  (`DECISIONS.md` D39 — no pre-translation), generate its `#narrative=` link, and
+  list it in `NARRATIVES.md` with a short description of the question it answers.
 - **Staff** (`STAFF-PROMPT.md`): for a question that invites a narrative rather than
-  a single view, select the closest-matching entry from `NARRATIVES.md` and hand
-  the user its link directly — no generation, no fabrication surface, a bounded
-  choice among already-verified options. If nothing in the library fits, say so
-  plainly (same Anti-Fabrication discipline as an unlisted `source_id`) rather than
-  improvising a new narrative on the spot. **Separately, and just as much Staff's
-  job**: serving the narrative in whatever language the user actually asked for —
-  see "Whose job is the language?" above. This is not covered by "no generation" —
-  that rule is about facts, not language.
+  a single view, select the closest-matching entry from `NARRATIVES.md`. If the
+  user's own language/register matches what's there, hand over the pre-built link
+  directly — no generation, no fabrication surface. If not, translate/adapt it live
+  (see "Whose job is the language?" above) and hand over a paste-box document
+  instead, keeping every structural field and substantive claim byte-identical to
+  the English original. If nothing in the library fits the *content* being asked
+  about at all, say so plainly (same Anti-Fabrication discipline as an unlisted
+  `source_id`) rather than improvising a new narrative on the spot. This
+  translation/adaptation work is not covered by "no generation" — that rule is
+  about facts, not expression.
 - **Cartographer** (`docs/narrative.js` + `docs/map_intent.js`'s paste-box wiring):
   plays back whatever valid narrative document it's given, from either transport.
   It has no opinion about where the document came from and does not change based on
