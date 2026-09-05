@@ -124,12 +124,14 @@ goal (hfu, 2026-09-05; `DECISIONS.md` D38/D39), not a nice-to-have detail.
 conversation, produces a translated/adapted copy — structural fields
 (`steps[].center`/`zoom`/`layers`, and each caption's substantive claim) held
 byte-identical to the verified original, only the language and phrasing of
-the prose changing — then hands it to the user via the Cartographer's
-paste-box (the fragment-link path can't carry this, since Staff cannot
-compute the LZString compression a link needs; see "Transport" below). This
-is real generation of a document, but of *expression*, not of *fact*, so it
-doesn't reopen D37's anti-fabrication concern — translating an already-verified
-claim doesn't change what the claim says, only how it's said.
+the prose changing. What happens to that copy next depends on whether Staff's
+runtime gives it real code execution (D42): with it, Staff computes an actual
+`#narrative=` link itself (see "Transport" below) and hands over a clickable
+link, same as an as-authored narrative; without it, Staff hands the copy to
+the user via the Cartographer's paste-box instead. This is real generation of
+a document, but of *expression*, not of *fact*, so it doesn't reopen D37's
+anti-fabrication concern — translating an already-verified claim doesn't
+change what the claim says, only how it's said.
 
 **Why doing this live, instead of pre-generating, is the better design, not
 just the lazier one**: translation quality genuinely improves when it's done
@@ -172,12 +174,28 @@ there does not need to be one: `#q=`'s entire reason for existing is that a
 tool-less Staff cannot compute a real LZString compression "in its head" and
 must hand-type something character-by-character instead. For an as-authored
 narrative, Staff never needs to construct anything — it copies one of
-`NARRATIVES.md`'s already-valid pre-encoded links verbatim. For a
-translated/adapted copy (see "Whose job is the language?" above), Staff
-composes plain, uncompressed JSON text and hands it over via the paste-box —
-this is exactly the "required baseline" path in item 1, unchanged since D33;
-what's new as of D39 is that it's Staff's normal path for language/audience
-adaptation, not just a rarely-used fallback.
+`NARRATIVES.md`'s already-valid pre-encoded links verbatim.
+
+For a translated/adapted copy (see "Whose job is the language?" above), which
+path Staff uses depends on whether its actual runtime gives it genuine code
+execution (`DECISIONS.md` D42):
+- **With real, verified code execution**: Staff runs the exact same
+  `LZString.compressToEncodedURIComponent()` call this Cartographer's own
+  `docs/narrative.js`/`scripts/encode-narrative.mjs` use (the library is small
+  enough — ~4.8KB minified — that `STAFF-PROMPT.md` embeds it verbatim, so this
+  never depends on network access to unpkg), round-trip-verifies the result
+  against the original document, and hands over a real `#narrative=` link —
+  the same experience as an as-authored narrative. This is never approximated
+  by reasoning about what the compression "should" output; it is only ever the
+  result of code that actually ran.
+- **Without code execution** (the tool-less case `#q=` itself was designed
+  for): Staff composes plain, uncompressed JSON text and hands it over via the
+  paste-box — this is the "required baseline" path in item 1, unchanged since
+  D33.
+
+Either way the JSON content is identical; only the delivery mechanism differs,
+and Cartographer's own code needs zero changes to support either — it already
+accepts both a pasted document and a fragment-carried one.
 
 ## Responsibility split
 
