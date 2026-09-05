@@ -4,6 +4,14 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D51 — Zoom control moved back to top-right (reverses D47)
+**Date**: 2026-09-05
+**Status**: Done, verified.
+
+D47 moved MapLibre's `NavigationControl` to bottom-right because the "Scores" panel was, at the time, a boxed list occupying top-right alongside it and the narrative/paste-box buttons. D50 replaced that boxed panel with a radial widget anchored on the probe point itself — it no longer occupies a fixed screen corner at all, so the crowding D47 was solving is gone. hfu called the bottom-right placement a mistake on reflection ("本当は右上にあるべき") — top-right is also the more conventional placement. Moved back in `docs/index.html`.
+
+---
+
 ### D50 — Scores radial kept visible during narrative playback (not hidden like the AEZ tooltip), plus a real-usage pass: relative sizing, legible numbers, a focus glow, and a top-arc layout
 **Date**: 2026-09-05
 **Status**: Done, verified in-browser including an actual screenshot review — this pass is a direct response to hfu trying the D49 links and reacting to what was actually on screen, not a speculative redesign.

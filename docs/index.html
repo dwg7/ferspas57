@@ -337,11 +337,13 @@ async function init() {
     attributionControl: false,
     preserveDrawingBuffer: true
   });
-  // Moved to bottom-right (hfu's design review, D47): top-right was crowded
-  // (narrative/paste-box buttons + zoom control + the score radial all
-  // competing for the same corner) — pairs naturally with the attribution
-  // control already there instead.
-  map.addControl(new maplibregl.NavigationControl(), "bottom-right");
+  // Back to top-right (D51 — reverses D47's move): D47 moved this to
+  // bottom-right because the Scores panel was a boxed list competing for the
+  // same top-right corner at the time. D50 turned that panel into a radial
+  // widget anchored on the probe point itself, not a top-right box anymore —
+  // the crowding D47 was solving no longer exists, and top-right is the more
+  // conventional place for zoom controls (hfu's call).
+  map.addControl(new maplibregl.NavigationControl(), "top-right");
   map.addControl(new maplibregl.AttributionControl({ compact: true }));
   initAezLegend(map);
   initAez57Legend(map);
