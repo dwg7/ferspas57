@@ -131,12 +131,30 @@ fi
 # of value==1 "selected site" pixels — too sparse for raster tiling, so
 # these become GeoJSON polygons instead. -mask excludes NoData/non-1 pixels
 # from polygonization so no giant background polygon is produced.
+#
+# 2026-09-05 real bug found and fixed: unlike score mode's MBTILES/PMTiles
+# path (which reprojects transparently, verified against a live TileJSON's
+# bounds), gdal_polygonize.py emits raw coordinates in the source COG's own
+# CRS and only *labels* them via a GeoJSON `crs` member — a legacy field
+# essentially no consumer (MapLibre included) actually reads; every reader
+# just treats the raw numbers as WGS84 lon/lat. Some countries' FinalLocation
+# sources are natively EPSG:3395 (World Mercator), not WGS84 (found via
+# Côte d'Ivoire's CIV-FINALLOCATION-* collections — all 5 confirmed 3395,
+# same root cause class as D28's CIV-SCORE-EXT-FISH EPSG:3857 finding, just
+# never caught here because this mode has no reprojection step at all). Fixed
+# by warping to EPSG:4326 before masking — nearest-neighbor, matching this
+# project's standing policy of never resampling categorical/near-binary data
+# with anything that could blend values (D7 onward). A no-op in effect for
+# already-WGS84 sources beyond a harmless regrid.
 if [[ "$MODE" == "final" ]]; then
+  WGS84_SRC="$OUT_DIR/${NAME}_wgs84.tif"
   MASK="$OUT_DIR/${NAME}_mask.tif"
   RAW_GEOJSON="$OUT_DIR/${NAME}_raw.geojson"
   OUT_GEOJSON="$OUT_DIR/${NAME}.geojson"
 
-  run gdal_calc.py -A "$SRC" --outfile="$MASK" --type=Byte --NoDataValue=0 \
+  run gdalwarp -t_srs EPSG:4326 -r near -overwrite "$SRC" "$WGS84_SRC"
+
+  run gdal_calc.py -A "$WGS84_SRC" --outfile="$MASK" --type=Byte --NoDataValue=0 \
     --calc="(A==1)" --overwrite --quiet
 
   run gdal_polygonize.py -mask "$MASK" "$MASK" -f GeoJSON "$RAW_GEOJSON" raw DN
