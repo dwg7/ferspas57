@@ -142,7 +142,7 @@ function initScoreProbe(map) {
       if (valid.length === 0) { panel.style.display = "none"; return; }
       valid.sort((a, b) => b.value - a.value);
       panel.innerHTML =
-        `<div style="font-weight:bold;margin-bottom:6px;">この地点のスコア比較</div>` +
+        `<div style="font-weight:bold;margin-bottom:6px;">Scores</div>` +
         valid.map((r) => `
           <div style="margin-bottom:4px;">
             <div style="display:flex;justify-content:space-between;">
