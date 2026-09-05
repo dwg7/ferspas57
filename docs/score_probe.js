@@ -58,6 +58,26 @@ const SCORE_SOURCES = [
 
 const PROBE_ZOOM = 8; // the best resolution ANY source reaches — capped per-source below
 
+// Shared with narrative playback (docs/index.html's applyNarrativeStep, D49) so
+// a step's active layers get the same icon+flag treatment as this widget,
+// instead of inventing a second, divergent icon table. Handles three shapes:
+// a *-score id (looked up directly in SCORE_SOURCES), its *-final counterpart
+// (same commodity, so the same icon+flag — the "site marker" pin communicates
+// "this is the selected-site layer" without needing a whole separate icon
+// language of its own), and the two country-agnostic GAEZ classification
+// layers (their own fixed icon, since they have no SCORE_SOURCES entry).
+function iconForLayerId(id) {
+  if (id === "gaez-aez33" || id === "gaez-aez57") return { icon: "🗺️", flag: null, pin: false };
+  const direct = SCORE_SOURCES.find((s) => s.id === id);
+  if (direct) return { icon: direct.icon, flag: direct.flag || null, pin: false };
+  if (id.endsWith("-final")) {
+    const scoreId = id.slice(0, -"-final".length) + "-score";
+    const match = SCORE_SOURCES.find((s) => s.id === scoreId);
+    if (match) return { icon: match.icon, flag: match.flag || null, pin: true };
+  }
+  return { icon: "❓", flag: null, pin: false }; // unrecognized id — visible rather than silently blank
+}
+
 // Same 0-100 sequential ramp used to build score_ramp.clr (D10) — reproduced here
 // so the client can invert color -> approximate score without a server round trip.
 function scoreRampColor(v) {
@@ -153,10 +173,13 @@ async function probeScoresAt(lon, lat) {
 // themselves use (scoreRampColor) — never an independent color choice; (2) the
 // bubble's diameter, larger for a higher score; (3) position — bubbles are
 // sorted highest-first starting at 12 o'clock, going clockwise, so higher
-// scores always cluster near the top regardless of color perception. A plain
-// number is still available (mouse-only) via each bubble's `title` tooltip,
-// but nothing textual is drawn on screen — language-agnostic by construction,
-// same as narrative playback's controls (D40).
+// scores always cluster near the top regardless of color perception. The exact
+// number is also drawn (a later revision, hfu's request) as a small, light-gray
+// label under each bubble — reachable without hovering (the `title` tooltip
+// alone isn't reachable on touch), but visually secondary on purpose: digits
+// are the one kind of "text" this project treats as language-neutral (D40's
+// ISO codes are the same judgment call), so this doesn't reopen the
+// language-agnostic-chrome principle the way an English word would.
 //
 // Liquid/mobile-responsive (hfu's request): the ring's radius and bubble sizes
 // are recomputed from the viewport's own short side (`vmin`-equivalent) on
@@ -212,6 +235,18 @@ function initScoreProbe(map) {
       const flagBadge = r.flag
         ? `<span style="position:absolute;right:-4px;bottom:-4px;font-size:${Math.round(size * 0.42)}px;line-height:1;">${r.flag}</span>`
         : "";
+      // The exact number, shown lightly (small, low-contrast gray) rather than
+      // as the widget's main signal — hfu's request. Color/size/position above
+      // already carry the comparison at a glance; this is just for whoever
+      // wants the precise value without having to hover (title= alone isn't
+      // reachable on touch), so it stays visually secondary on purpose.
+      const numberLabel = `
+        <div style="
+          position:absolute; left:calc(50% + ${x}px); top:calc(50% + ${y + size / 2 + 2}px);
+          transform:translate(-50%, 0); font-size:${Math.max(10, Math.round(11 * sizeScale))}px;
+          color:#888; line-height:1; font-weight:400; pointer-events:none;
+        ">${r.value}</div>
+      `;
       return `
         <div title="${r.label}: ${r.value}" style="
           position:absolute; left:calc(50% + ${x}px); top:calc(50% + ${y}px);
@@ -222,6 +257,7 @@ function initScoreProbe(map) {
           display:flex; align-items:center; justify-content:center;
           font-size:${Math.round(size * 0.56)}px; line-height:1;
         ">${r.icon}${flagBadge}</div>
+        ${numberLabel}
       `;
     }).join("");
     radial.style.display = "block";

@@ -66,6 +66,9 @@
     width: min(680px, 90vw); padding: 14px 18px; display: none;
   }
   #narrative.active { display: block; }
+  #narrative-layer-icons { display: flex; gap: 6px; margin-bottom: 4px; font-size: 26px; line-height: 1; }
+  #narrative-layer-icons span { position: relative; display: inline-block; }
+  #narrative-layer-icons .pin { position: absolute; right: -6px; bottom: -6px; font-size: 14px; }
   #narrative h3 { margin: 0 0 6px 0; font-size: 22px; }
   #narrative-caption { margin: 0 0 10px 0; }
   #narrative-controls { display: flex; align-items: center; gap: 8px; }
@@ -73,7 +76,10 @@
     border: 1px solid #ccc; background: #f7f7f7; border-radius: 4px;
     padding: 4px 10px; cursor: pointer; font: inherit;
   }
-  #narrative-step-indicator { font-size: 19px; color: #777; margin-left: auto; }
+  #narrative-step-indicator { display: flex; align-items: center; gap: 5px; margin-left: auto; }
+  #narrative-step-indicator .dot { width: 8px; height: 8px; border-radius: 50%; background: #ddd; display: inline-block; }
+  #narrative-step-indicator .dot.current { background: #c0392b; }
+  #narrative-step-indicator .fallback-text { font-size: 19px; color: #777; }
   #top-right-toolbar {
     position: absolute; top: 8px; right: 46px; z-index: 10;
     display: flex; gap: 6px;
@@ -107,6 +113,7 @@
   <button id="narrative-share" onclick="shareNarrative()" title="Play this narrative">▶</button>
 </div>
 <div id="narrative">
+  <div id="narrative-layer-icons"></div>
   <h3 id="narrative-title"></h3>
   <p id="narrative-caption"></p>
   <div id="narrative-controls">
@@ -381,7 +388,35 @@ function applyNarrativeStep(narrative, i) {
   const lang = "en";
   document.getElementById("narrative-title").textContent = pickLang(narrative.title, lang);
   document.getElementById("narrative-caption").textContent = pickLang(step.caption, lang);
-  document.getElementById("narrative-step-indicator").textContent = `${i + 1} / ${narrative.steps.length}`;
+
+  // Which layers this step activates, shown as the same icon+flag pictograms
+  // the Scores radial widget uses (score_probe.js's iconForLayerId, D49) —
+  // extends the "new UI" (D47) into narrative playback itself, rather than
+  // leaving it as free-exploration-only. A small "📍" corner badge marks a
+  // "-final" (FAO's actual selected site) layer, distinguishing it from its
+  // plain score-raster sibling without a second icon vocabulary.
+  document.getElementById("narrative-layer-icons").innerHTML = step.layers.map((id) => {
+    const { icon, flag, pin } = iconForLayerId(id);
+    const flagBadge = flag ? `<span class="pin" style="bottom:auto;top:-6px;">${flag}</span>` : "";
+    const pinBadge = pin ? `<span class="pin">📍</span>` : "";
+    return `<span title="${id}">${icon}${flagBadge}${pinBadge}</span>`;
+  }).join("");
+
+  // Step progress: a row of dots (current step filled), not text — visual and
+  // language-agnostic like everything else in this pass, and legible at a
+  // glance regardless of step count. Falls back to plain "N / M" text only for
+  // an unusually long narrative, where dozens of dots would stop being legible
+  // (none of this library's current entries are anywhere near that long).
+  const total = narrative.steps.length;
+  const stepIndicatorEl = document.getElementById("narrative-step-indicator");
+  if (total <= 20) {
+    stepIndicatorEl.innerHTML = Array.from({ length: total }, (_, d) =>
+      `<span class="dot${d === i ? " current" : ""}" title="${d + 1} / ${total}"></span>`
+    ).join("");
+  } else {
+    stepIndicatorEl.innerHTML = `<span class="fallback-text">${i + 1} / ${total}</span>`;
+  }
+
   document.getElementById("narrative").classList.add("active");
 }
 

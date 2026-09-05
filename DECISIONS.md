@@ -4,6 +4,22 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D49 — D47's "new UI" extended into narrative playback itself: layer icons, dot-based step progress, and a light numeric label on the Scores radial
+**Date**: 2026-09-05
+**Status**: Done, verified in-browser against three real samples (the 4-step DR Congo maize story, a 2-step per-site profile pulled live from `data/narratives-index.json`, and the free-exploration Scores radial).
+
+**hfu's framing**: "narrative.json を再生するモードでも新しいユーザーインタフェースにしてね" — D47's redesign (icons, redundant color/size/position encoding, mobile-liquid) had only touched free-exploration mode's Scores widget and the narrative panel's own text/buttons (D46), not narrative playback's remaining plain-text elements. hfu also asked, separately, for the Scores radial's exact number to be shown "lightly" (かるーく) rather than mouse-hover-only — `title=` tooltips aren't reachable on touch devices at all, so the precise value was invisible on mobile.
+
+**Two plain-text elements in narrative playback replaced**:
+1. **Which layers this step activates** — previously invisible unless the user opened the (collapsed) layer panel and read checkbox state. Now shown as a row of icon+flag pictograms directly in the narrative panel, reusing the *exact same* `SCORE_SOURCES` icon/flag table `score_probe.js` already built for D47's radial widget — a new `iconForLayerId(id)` helper (added to `score_probe.js`, called from `docs/index.html`'s `applyNarrativeStep`) resolves a `-score` id directly, derives a `-final` id's icon from its `-score` sibling plus a small "📍" corner badge (distinguishing "the selected-site layer" without a second icon vocabulary), and gives the two country-agnostic GAEZ layers their own fixed 🗺️. Sharing one table rather than inventing a second keeps free-exploration and narrative mode visually consistent, and means adding a new commodity's icon in one place covers both surfaces automatically.
+2. **The "N / M" step-progress text** — replaced with a row of small dots (filled = current step), matching the visual/non-textual language the rest of this pass established. Falls back to the old text only past 20 steps (none of this library's real entries are anywhere near that long — the 23-step experimental tour from D48 was never added to the live library).
+
+**The Scores radial's number, made reachable without hovering**: each bubble now also draws its exact value as a small, deliberately low-contrast gray label underneath — kept visually secondary (color/size/position still carry the at-a-glance comparison) but no longer hidden from touch users. Plain digits were judged not to reopen the language-agnostic-chrome principle — this project already treats numerals and ISO-style codes as language-neutral (D40's `(COD)`/`(CAF)`/`(CIV)` suffixes were the same judgment call).
+
+**Verified in-browser**: the DR Congo maize story's step 1 shows a lone 🗺️; step 3 shows 🌽 with a 🇨🇩 flag badge for the score layer and 🌽+🇨🇩+📍 for the final layer, with the indicator's 3rd of 4 dots correctly marked current. A live-fetched `caf`/`cassava` rank-1 profile from `data/narratives-index.json` renders correctly as a 2-dot indicator. The Scores radial at a DR Congo point shows paired bubble+number-label elements (e.g. a 100-scored bubble with a "100" label beneath it) for all 13 valid sources.
+
+---
+
 ### D48 — Mass production: 355 machine-generated per-site narrative profiles, indexed in `data/narratives-index.json`; the D45 "300-entry lookup" design gap closed, not deferred further
 **Date**: 2026-09-05
 **Status**: Done. All 355 entries generated, round-trip-verified, and one confirmed working end-to-end in-browser. `NARRATIVES.md`/`STAFF-PROMPT.md` updated to describe the resulting two-tier library.
