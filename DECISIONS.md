@@ -4,6 +4,22 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D53 — Third narrative-library tier: 15 machine-generated "tour" narratives, since the other two tiers are now both at their real ceiling
+**Date**: 2026-09-06
+**Status**: Done, generated and verified.
+
+hfu asked to keep growing `NARRATIVES.md`'s scale ("規模を出していきましょう"). Checking first (rather than assuming there was room to grow): tier 1 (curated divergence stories) is fully mined out — D35/D41 already swept all 13 real commodity/country combinations and found only 3 hold up (DR Congo maize/wheat, Côte d'Ivoire dairy); re-running that sweep would not find anything new without a genuinely new commodity/country. Tier 2 (`data/narratives-index.json`) already covers all 355 real sites once each — also at its ceiling absent new underlying HIH data. New-country expansion (Cameroon, Republic of Congo) is explicitly gated in `HANDOVER.md` on the still-open "live-test Staff end-to-end" item, so not pursued here. Presented this to hfu directly (not assumed) via `AskUserQuestion`; hfu chose the third option: formally introduce a **tour** format as a real third tier, reusing D48's untracked 20-step prototype's proof that long narratives render fine in `docs/narrative.js` as-is (no schema or client change needed — a tour is just a `ferspas57-narrative/v1` document with more steps).
+
+**What was built**: `scripts/generate-tours.mjs`, a new generator in the same spirit as D48's (undocumented, one-off) index generator — reads `data/site-scores.json` directly (no new `gdallocationinfo` calls, no new verification needed, since D45's capture already has every real site's score+AEZ33 class), and mechanically produces two tour shapes:
+- **Spectrum tours** (13, one per commodity/country combo): up to 5 real sites evenly spread by rank from highest score to lowest, showing the real spread in one flight. Both known `-999` sentinel sites (`civ_cereal`#7, `civ_vegetables`#10, D10/D41/D45) are excluded from ranking before picking stops, same as D48's per-site tier.
+- **Grand tours** (2, DR Congo/Côte d'Ivoire only — Central African Republic has just one commodity, so no tour is possible there): the #1-ranked real site for every commodity that country has, back to back (7 stops for DR Congo, 5 for Côte d'Ivoire).
+
+Output: `data/narratives-tours.json`, 15 entries, every one round-trip-verified (encode→decode→deep-equal) before being written, same discipline as `scripts/encode-narrative.mjs`. Verified live against the actual deployed Cartographer, not just the generator's own round-trip check: opened a real generated tour link (`https://dwg7.github.io/ferspas57/#narrative=...`, DR Congo's 7-stop grand tour) in-browser, confirmed `getNarrativeFromUrl()` decodes it correctly, `startNarrative()` activates the narrative panel, the dot-based step indicator (D49) renders correctly at 7 steps, layer icons (D49's `iconForLayerId`) resolve correctly for the tour's `-score`/`-final` layer pairs, and stepping through all 7 stops via `narrativeNext()` produces 7 distinct, correct captions and `flyTo` calls (map tile rendering itself couldn't be visually confirmed — this session's standing sandbox limitation, D-various — but every piece of client-side state and logic was exercised directly).
+
+**Updated**: `NARRATIVES.md` (three-tier framing, new "Tours" section, explicit note that tiers 1/2 are mined out so future scaling requests should look here or at new underlying data, not re-sweep tiers 1/2), `STAFF-PROMPT.md` (Narrative Mode section now describes and gates this third tier identically to tier 2 — same capability-conditional fetch pattern, `data/narratives-tours.json` via the same raw GitHub URL pattern; version tag bumped to `2026-09-06f`).
+
+---
+
 ### D52 — A radial/compass-style MapLibre UI pattern submitted jointly to `dwg7/cafebabe`, coordinating with `height-coverage` and `vientiane-planning-map`
 **Date**: 2026-09-06
 **Status**: Done — merged upstream (`dwg7/cafebabe` commit `6d5fb96`, `patterns/style-composition.md`).

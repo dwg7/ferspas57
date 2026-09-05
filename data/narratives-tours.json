@@ -1,0 +1,1226 @@
+{
+  "_meta": {
+    "description": "Machine-generated tour narratives (DECISIONS.md D52) — the Library's third tier, alongside NARRATIVES.md's curated divergence stories and data/narratives-index.json's 355 per-site profiles. Every step's coordinates/score/AEZ class trace directly to data/site-scores.json's gdallocationinfo-verified capture; no new fact-finding, only recombination, same Anti-Fabrication standard as the per-site tier.",
+    "generated": "2026-09-05",
+    "entry_count": 15,
+    "tour_types": {
+      "spectrum_tour": "One per commodity/country combo (13 total): a fixed number of real sites (up to 5, evenly spread by rank) from that combo's highest Hand-in-Hand score down to its lowest, showing the real spread in one continuous flight.",
+      "grand_tour": "One per multi-commodity country (COD's 7 commodities, CIV's 5 — CAF has only cassava, no tour possible): the #1-ranked real site for every commodity that country has, back to back."
+    },
+    "usage": "Same as data/narratives-index.json: requires a code-execution-capable Staff (D42) to fetch and search this file directly — too large/numerous to embed in STAFF-PROMPT.md. Match on country/commodity (spectrum) or country alone (grand); a tool-less Staff should say plainly this tier is unreachable and fall back to NARRATIVES.md's curated set."
+  },
+  "entries": [
+    {
+      "tour_type": "spectrum_tour",
+      "country": "cod",
+      "commodity": "cassava",
+      "stop_count": 5,
+      "site_count": 12,
+      "title": "DR Congo: the real score range across 12 FAO-selected cassava storage sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "DR Congo: the real score range across 12 FAO-selected cassava storage sites",
+        "steps": [
+          {
+            "center": [
+              23.4449,
+              -7.0133
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cassava-score",
+              "hih-cod-cassava-final"
+            ],
+            "caption": "Rank 1 of 12 real FAO-selected cassava storage sites in DR Congo — Hand-in-Hand suitability score 45.9. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              15.3404,
+              -4.384
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cassava-score",
+              "hih-cod-cassava-final"
+            ],
+            "caption": "Rank 4 of 12 real FAO-selected cassava storage sites in DR Congo — Hand-in-Hand suitability score 44.5. GAEZ classifies this location as \"32: Dominantly urban/built-up\"."
+          },
+          {
+            "center": [
+              29.1664,
+              -5.8297
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cassava-score",
+              "hih-cod-cassava-final"
+            ],
+            "caption": "Rank 7 of 12 real FAO-selected cassava storage sites in DR Congo — Hand-in-Hand suitability score 44.1. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              23.6251,
+              -6.1011
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cassava-score",
+              "hih-cod-cassava-final"
+            ],
+            "caption": "Rank 9 of 12 real FAO-selected cassava storage sites in DR Congo — Hand-in-Hand suitability score 43.8. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              15.2925,
+              -4.3543
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cassava-score",
+              "hih-cod-cassava-final"
+            ],
+            "caption": "Rank 12 of 12 real FAO-selected cassava storage sites in DR Congo — Hand-in-Hand suitability score 42.9. GAEZ classifies this location as \"32: Dominantly urban/built-up\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREABEASgAIAwvgDmuQtLgALFNKgoIQ6VgDGubVohgFmiAai4sWaVwBM0gGIBBAPIMsKEQbgoACbSBtRYEEgQ+nDGEBb6CAFYfCBYARTJhADaoAYoYAFQRFmOAMwAdAAs1QCcvAx05QAMXKWlALr8AF64uAC2RE78QhAAnuSZWSAKEChdDLNdbSlqCGoMRoEbYREQ3kbaK2sbuFuhdrsMJAiQQiCdIKEUiPhikmYA1g7SuCQOztpdK5PN5fCh-EEQjtItFYvEcElpDdpFI5IpcNJACgE0gAEmYtjcGHiwMEsABXRIQABGCCEiVG+gOmkqNHKNXK0gA4m4AKIALRCIzsCGuKHs6gQ9iEuFCLzA0mo0gAOiBHAA2FQAGXx0gA7ok1PoUJhNFhcLT2IVYMi6X1KXKsCryiAAL68XL5QrFLis0qVJqVeqVcqlAAclQePX6g0cwzGE2K00WCzmy34q3Wm22F0i+2MonTxyz53Cueut3u-Cecren2klR+fycWh0encXh8fgCwRLu1hsHhiTFSPlqPk5gx2OJBLARJ15MpNLpcAZhnz9eDrK5vIFBiFOFF4tWUplrHwCvsKtKjhU4n6NzMwgZZKgVLM7CpFKEcAYZIoTtdd1Hk9chikcdkuDVNVAwYVlQ3AuhI16AZCCGEARnGbBExmOYUyWUojkzU5s1LPY10OQsiLOaE9nLXRK0eCBnjwAhiHeMAvjoRt-hbIF21BLtIV7GE0jhU0h3sZEx3RLFcXxBhCWnfQKTgalaXpRl12qcouA5bl+UFMIRQQYcJRPWUWIvZVVQ1aRtRJPUDSNE19HNIRLXIa15Vte0WMdEBnTdD0ClA7IynKNVHBoLh6jVHSWi4JDo1Q2N0PjLDsiTXDFjTEAMxOaiczIplCIKkjLjou4HmrFjaw46Qam45tATbEFO3BbsoSK-s4nExEpJkcclFk6cFNnJSF1UpcNPI5kKlDPSd0M4VD1UY9pGlCzz0VFUb2kAAVGwKAQAwsF4DbcF1EYHOxckqQYNQyTtQIAKC4CQqKbIfXKcCoqDEMaEqDpumQmM40wyYsvmHKCMosrhOK-NSuLGirgfKqqyYms2LrZtfh4lrgQ7MEIR7GiesHfrR0GmSp3kxT5xUtTl1XJl60cNlFoMvcjNWsyLq2+UdpAa9b3vSACiEZ9X3fT9aR-P9XvaF0gA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "cod",
+      "commodity": "cocoa",
+      "stop_count": 5,
+      "site_count": 21,
+      "title": "DR Congo: the real score range across 21 FAO-selected cocoa storage sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "DR Congo: the real score range across 21 FAO-selected cocoa storage sites",
+        "steps": [
+          {
+            "center": [
+              30.1995,
+              1.5565
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cocoa-score",
+              "hih-cod-cocoa-final"
+            ],
+            "caption": "Rank 1 of 21 real FAO-selected cocoa storage sites in DR Congo — Hand-in-Hand suitability score 65.8. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              23.6433,
+              -6.1285
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cocoa-score",
+              "hih-cod-cocoa-final"
+            ],
+            "caption": "Rank 6 of 21 real FAO-selected cocoa storage sites in DR Congo — Hand-in-Hand suitability score 58.4. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              30.8106,
+              2.9339
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cocoa-score",
+              "hih-cod-cocoa-final"
+            ],
+            "caption": "Rank 11 of 21 real FAO-selected cocoa storage sites in DR Congo — Hand-in-Hand suitability score 57.2. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              30.8015,
+              2.943
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cocoa-score",
+              "hih-cod-cocoa-final"
+            ],
+            "caption": "Rank 16 of 21 real FAO-selected cocoa storage sites in DR Congo — Hand-in-Hand suitability score 57.1. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              18.7997,
+              -4.9176
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cocoa-score",
+              "hih-cod-cocoa-final"
+            ],
+            "caption": "Rank 21 of 21 real FAO-selected cocoa storage sites in DR Congo — Hand-in-Hand suitability score 56.7. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREABEASgAIAwvgDmuQtLgALFNKgoIQ6VgDGubVohgFmiAai4sWaQCYu0gGIBBAPIMsKEQbgoACbSRkYQ+nDGEBb6CAFYfCBYARQJhADaoAYoYAFQROkAzAAMAHRcAJwVNLxcpTQ0AGw0ALr8AF64uAC2RFwO-EIQAJ7kaekgChAo7QzT7YWFiWoIagxGgeu4Yd5G2surW5uhuBAMJAiQQiBtIAYQFIj4YpJmANbSzrgkjs7auq5PN5fCh-EEQttThEojEcPFpJdpFI5IpcNJACgE0gAEmZNpcGDiwMEsABXOIQABGCCEcWG+j2mmapQAHKVpABxNwAUQAWiEhnYEBcUPZ1Ah7EJtqx8NJqNIADogQoqAAqNgoCAMWF40klAHchkSMdI1CTughAorSiAAL68LI5PIFByFUqNAAsi14DEa5QczNaHS6vUI-UGIzGBUm8zmM0WBzWGy2O0MxlE-BWidwx0hZwuVxu-HujzwBGIrzAH0a0m+vy0Oj07i8Pj8AWCJ3CyRhmjhIoRYCRMnk5jRmMJeLABNx+jJcEp1Np9LT0horPdbM5vP51BwwtFKwlUqeA7liocjRUABlp3q4mp9ChMD3cNT2HlYIiaea58esFbbfadyOuQBQlCyXDFI0vAOKUFSLBUtydD0fQDCAQyjNgUZTDMsYLEsGaHEmHa7GmCZHMmpznJcuiFncDzHi87yfF8PxOPWAJNsCrbgh20KwLCcR9oiyLDkoxrjgw+LjjO5JUjScB0qmJj0KUMEctyfIGAKu4IH2YqHvcx6yvYZ4XtI15Gre6gPk++gvkIb7kB+A5fuSv7-naDq5CBGRgcyxRcDUMEVJ6iHBih4YYeM0Y4fM8YEVmOYpgyZFEbmVEFrcxYMeWTFcNWtZsf8jZAi2oJthCYR8dEPaCfYwlDqi4m4pJk7SaSskLgpS7KXQ5Qbhp26CnuqgHrqR6lsZCogOeV43neNnkM+r7vhAn4IN+0pgH+IDWp5QHefkGRcKydBVHQ3rrhUXB0I0YXIaGqHoZGGQxbMcX4SAmbkcRSnpl9hHZhRebUdcWX0aWjGVnWhV-A2gLNiCYLtrm1UCfCDUoiOzVEq1U5Gh1c5yYuf0rr6fXqVuWk7kKun7uK42GZNp4zWZFnBFZ94+LZWD2Y5LDrZt7m7baLQ2kAA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "cod",
+      "commodity": "coffee",
+      "stop_count": 5,
+      "site_count": 12,
+      "title": "DR Congo: the real score range across 12 FAO-selected coffee storage sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "DR Congo: the real score range across 12 FAO-selected coffee storage sites",
+        "steps": [
+          {
+            "center": [
+              30.2451,
+              1.6888
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-coffee-score",
+              "hih-cod-coffee-final"
+            ],
+            "caption": "Rank 1 of 12 real FAO-selected coffee storage sites in DR Congo — Hand-in-Hand suitability score 69.2. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              30.2154,
+              1.5565
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-coffee-score",
+              "hih-cod-coffee-final"
+            ],
+            "caption": "Rank 4 of 12 real FAO-selected coffee storage sites in DR Congo — Hand-in-Hand suitability score 64.9. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              30.3135,
+              1.666
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-coffee-score",
+              "hih-cod-coffee-final"
+            ],
+            "caption": "Rank 7 of 12 real FAO-selected coffee storage sites in DR Congo — Hand-in-Hand suitability score 63.7. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              30.1447,
+              1.5839
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-coffee-score",
+              "hih-cod-coffee-final"
+            ],
+            "caption": "Rank 9 of 12 real FAO-selected coffee storage sites in DR Congo — Hand-in-Hand suitability score 63.2. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              30.318,
+              1.6614
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-coffee-score",
+              "hih-cod-coffee-final"
+            ],
+            "caption": "Rank 12 of 12 real FAO-selected coffee storage sites in DR Congo — Hand-in-Hand suitability score 63.1. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREABEASgAIAwvgDmuQtLgALFNKgoIQ6VgDGubVohgFmiAai4sWaVwBM0gGIBBAPIMsKEQbgoACbSRiRkmlhwxhAW+ggBWHwgkSgUiYQA2qAGKGABUEQZAMwADAB0jgAsNFy8XGUAbAAcLQC6-ABeuLgAtkRO-EIQAJ7k6RkgChAoHQzTHUVFSWoIagxGgeu4YSgo3kbay6tbm6HhDCQIkEIg7SAGEBSI+GKSZgDWDtLbDs7auq5PN5fCh-EEQttwvoorBYjgEtIrtIpHJFLhpIAUAmkAAkzJsrgxcWBglgAK7xCAAIwQQniw30B00DQAnBUytIAOJuACiAC0QkM7AhLih7OoEPYhLgHs8wNJqNIADogRwNFQAGTx0gA7vE1PoUJgIrgaex8rAkbSehTZVhlWUQABfXjZXL5QqlCpcGiVOplGg0Bo0O5dXr9RyDEZjQqTeZzGaLI5rDZbHZ7QzGUT8FbJ3CnSG7C5XXS3fgPJ54AjEN5gT6Vb4kX5aHR6dxeHx+ALBM67aHROHxUWIuUo+TmdFYon4sCErVkinU2lwekZkwNSplVmcnn8gyCnAisUrSXS1j4eX2ZVFFQAFRsFAQBiwvGkUu1Q2JmOkalJ1sC9qdF17jdcgPXKIouCKGg-QaWCQ26PpCAGEAhlGbAYymGZ4wWJZs2OFMe3TRkkxOVNzkua5S3uR5ZVeD5pDoBsm3+VsgQ7UEuwhNM+1hCJB3sJFRzRL8pwYAkp30ck4CpGk6QZTNpAaIoyjodkuT5AVqAPBAh3FE8ZUrC8lRAa9pDvXAHyfF83w-YIsR-P8AOdV08lAzJPS4SpKjoP0aCaIpmXgsMkIjFCo3QzJYyw+ZEzw3N8zTfZMxIgiCz2CiSzuctaOrejmSYpxmwBNtgU7cFCJ4mI+IRQSZDHJQRLxMSZwk+dpMXOTVyZZTHDUndNKFQ9VGPV9T1lIyr1ve9H2fUb3y1ezfwQf8QAdZzgNcgp3PArgmhghpPKCxDkNQ6NIsw2YYtwkAc1IwiksOOK7rSotKKymjKzo2smx+QqWMBdsQTBbs0sqgcapHOrhMnJrxLnKSZKXFdGUU5T6m3DS9y04UdKPCVRoM88FUmszpqsubbK-Bzlqc1pHSAA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "cod",
+      "commodity": "maize",
+      "stop_count": 3,
+      "site_count": 3,
+      "title": "DR Congo: the real score range across 3 FAO-selected maize storage sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "DR Congo: the real score range across 3 FAO-selected maize storage sites",
+        "steps": [
+          {
+            "center": [
+              29.5792,
+              -0.8744
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-maize-score",
+              "hih-cod-maize-final"
+            ],
+            "caption": "Rank 1 of 3 real FAO-selected maize storage sites in DR Congo — Hand-in-Hand suitability score 65.5. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              29.5655,
+              -0.8767
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-maize-score",
+              "hih-cod-maize-final"
+            ],
+            "caption": "Rank 2 of 3 real FAO-selected maize storage sites in DR Congo — Hand-in-Hand suitability score 65.3. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              29.4446,
+              0.5075
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-maize-score",
+              "hih-cod-maize-final"
+            ],
+            "caption": "Rank 3 of 3 real FAO-selected maize storage sites in DR Congo — Hand-in-Hand suitability score 55.4. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREABEASgAIAwvgDmuQtLgALFNKgoIQ6VgDGubVohgFmiAai4sWaQGZpAMQCCAeQZYUIg3BQAJtIAthAIAF6aWHDGEBb6CP5YfCDRKBTJhADaoAYoYP5QRFkATACcAHT0ZSW8DAAMFQAcdAAsrQC6-OG4uMFEXLUgQhAAnuSZWSAKECjhDLPhDg4paghqDEYBDKERKF5G2qvrm7jbu5EMJAiQQiBdIAYQFIj4YpJmANbSXNK4JI4tDo9G5PN5fP4ghcojFYPEcElpDdpFI5IpcNJACgE0gAEmZtjcGHiwEEsABXRIQABGCCEiVG+kOmgAbDQqhVpABxVwAUQAWtIDCM7Ahrih7OoEPYhLgnq8wNJqNIADogErMlQAGXx0gA7ok1PoUJgorhaexCrBkXTgpT5VhVRUQABfXi5fKFYrlKqsmh1RotZl0B49PoDIYjcbYYrTRYLObLY4bLY7MKXQzGUT8NbJs6pvZXG66e78J4vPAEYgfMDfEp-AFObS6FweLw+FB+QIhNMw2LwxLipEK1HycwY7HEglgIk68mUml0uAMjMmVkVBwc7n8wXCnBiiVraWy1j4RX2VUOFQAFRsFAQBiwvGkMt1IxJWOkajJtoCjpdbseD1yC9Sp2laZleEaGh6joGgQ16fpCEGfhIwmGMZjmeMlhWbMThTaEDkzJNTnOHtC1uEtHmeeV3i+QF-kBJsQVbcEO0hbs9n0WE4iiAd7GREd0Q-ScGEJSd9ApOBqVpelGUzaQaDZVpN15AUhWoPcEEHSUjzlCszxVNUNWkbV331dQjRNfQzSEC1yCtBUbTtCsHRAJ1nQ6Z0gA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "cod",
+      "commodity": "palmoil",
+      "stop_count": 5,
+      "site_count": 67,
+      "title": "DR Congo: the real score range across 67 FAO-selected palm oil processing sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "DR Congo: the real score range across 67 FAO-selected palm oil processing sites",
+        "steps": [
+          {
+            "center": [
+              18.9115,
+              -5.0065
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-palmoil-score",
+              "hih-cod-palmoil-final"
+            ],
+            "caption": "Rank 1 of 67 real FAO-selected palm oil processing sites in DR Congo — Hand-in-Hand suitability score 60.2. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              18.9024,
+              -5.0293
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-palmoil-score",
+              "hih-cod-palmoil-final"
+            ],
+            "caption": "Rank 18 of 67 real FAO-selected palm oil processing sites in DR Congo — Hand-in-Hand suitability score 54. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              18.8522,
+              -4.9312
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-palmoil-score",
+              "hih-cod-palmoil-final"
+            ],
+            "caption": "Rank 34 of 67 real FAO-selected palm oil processing sites in DR Congo — Hand-in-Hand suitability score 52.1. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              18.859,
+              -4.9472
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-palmoil-score",
+              "hih-cod-palmoil-final"
+            ],
+            "caption": "Rank 51 of 67 real FAO-selected palm oil processing sites in DR Congo — Hand-in-Hand suitability score 50.7. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              23.6045,
+              -6.133
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-palmoil-score",
+              "hih-cod-palmoil-final"
+            ],
+            "caption": "Rank 67 of 67 real FAO-selected palm oil processing sites in DR Congo — Hand-in-Hand suitability score 49.7. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREABEASgAIAwvgDmuQtLgALFNKgoIQ6VgDGubVohgFmiAai4sWaQDY60gGIBBAPIMsKEQbgoACbSVEIAttK4CHoUNgYodgjm+ggBWHwgWAEU6YQA2qDxYAFQRHlcABwAdACcXFw0vAw0VQAMrQ40ALr8AF64uGFEXABM-EIQAJ7kuXkgChAovQyLvQDMaxlqCGoMRoEMoWFRQt5G2ls7e7gHRycMJEm6ID0gBhAUiPhikmYA1tIuJESI5nNpdK5PN5fCh-EEQroIicQnEEjhkjg0tIktIpHJFLhpIAUAmkAAkzAckgxyWBglgAK6pCAAI2iqUm+nOmgcrSqIyq0gA4m4AKIALWkBgmiUeCVU23sQlw7y+YGk1GkAB0QCMHCoADIU6QAd1San0KEwmiwJ3YJVgOKECDCTNVWG1VRAAF9eIUUMVyGVKrVWiMACxNFqhmprV79QbDMYgCbTbBlearFZLDaXXb7Q6I+6GYyifjbPM3Avhe6PSBCF78d6fPAEYi-MAAyrA0FaHR6dxeHx+ALBI6RaIo5VopIKFJYnF4+TmQkkmmUsDUo0Mpmsp1wDnFkw0MMC4XiyXSnCy+zqBCK5WsfDq+za3UGo2m9QWq36W32iCOs6rotu6ICej6foBqU+TBhUNAjGMDAnjGoxxgMQyEKM4xTDM6YLEsWbrJsZZXPmdzRGcJa5tctyFhRtbPK8Taqj8-zSGsYbdk4vYQgO0LDvCY7IrEU6JBiqRyguMhLkoxJkhSDBUmu+iMnALJsvunIltI8FVFwp6ihKUrUFeCByre94qi2z5ajqerSIatImma37kNaf7kA6apOi6aluh63q+m8-olEG1RwTUTTIWGdAjGhCaYUmKa4fkGYEasOYkRWtHVhRh6liA5Y0VWxz0U89ZMR8LFtmxNBArgILceC-ZQkOsIjgi4TjjEqJibOmKSWqi4EnJa6KRuynbmpu7slpR68nQBnnsZMpmTeCrSEqVlPhqr72Y5wSfuaPg-ja0R2p5AHeUBfkgQFEHBVBZQjGsVQ8mGjQMA4ekbPFGFYcmOFpql+HLBlxGFaRlbkac+XUWRdGnAxFWNlVLasR2PYNT2zWQoOMJwqOiLdZO8R9XOg24tJI2rgpSlbqp6l7geXLSGGNRVItQqGReJkINe8p3ptD6qjZe3vk5R2uSYZ1CBdLCAb5j5gKB4FdF6QA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "cod",
+      "commodity": "wheat",
+      "stop_count": 5,
+      "site_count": 15,
+      "title": "DR Congo: the real score range across 15 FAO-selected wheat storage sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "DR Congo: the real score range across 15 FAO-selected wheat storage sites",
+        "steps": [
+          {
+            "center": [
+              29.041,
+              -3.4467
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-wheat-score",
+              "hih-cod-wheat-final"
+            ],
+            "caption": "Rank 1 of 15 real FAO-selected wheat storage sites in DR Congo — Hand-in-Hand suitability score 60.9. GAEZ classifies this location as \"25: Dominantly very steep terrain\"."
+          },
+          {
+            "center": [
+              29.0729,
+              -3.4513
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-wheat-score",
+              "hih-cod-wheat-final"
+            ],
+            "caption": "Rank 5 of 15 real FAO-selected wheat storage sites in DR Congo — Hand-in-Hand suitability score 50.3. GAEZ classifies this location as \"25: Dominantly very steep terrain\"."
+          },
+          {
+            "center": [
+              29.0729,
+              -3.4057
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-wheat-score",
+              "hih-cod-wheat-final"
+            ],
+            "caption": "Rank 8 of 15 real FAO-selected wheat storage sites in DR Congo — Hand-in-Hand suitability score 45. GAEZ classifies this location as \"25: Dominantly very steep terrain\"."
+          },
+          {
+            "center": [
+              23.6319,
+              -6.1421
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-wheat-score",
+              "hih-cod-wheat-final"
+            ],
+            "caption": "Rank 12 of 15 real FAO-selected wheat storage sites in DR Congo — Hand-in-Hand suitability score 43.6. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              15.2925,
+              -4.352
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-wheat-score",
+              "hih-cod-wheat-final"
+            ],
+            "caption": "Rank 15 of 15 real FAO-selected wheat storage sites in DR Congo — Hand-in-Hand suitability score 42.9. GAEZ classifies this location as \"32: Dominantly urban/built-up\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREABEASgAIAwvgDmuQtLgALFNKgoIQ6VgDGubVohgFmiAai4sWaVxrSAYgEEA8gywoRBuCgATaQB3DXh9OGMIC30Efyw+ECx-CgTCAG1QAxQwfygidIAmAE4AOgAGABYuXgYAZlLKyoA2OgBdfgAvXFwAWyIuQv4hCABPcjT0kAUIFE6GWc66usS1BDUGIwCGUJ04LyNtVfXN3G3d+AYSBEghEA6QAwgKRHwxSTMAawdpXBIHJzaXQuDxeHwoPyBEJhOARKIxHDxaQ3aRSOSKXDSQAoBNIABJmbY3Bj4sBBLAAVziEAARgghHFRvpDppmuVSmVpABxVwAUQAWtIDCM7Ahrih7OoEPYhLgnq8wNJqNIADogQo0FTiPo3MzCRmYRnJFAoCiqciwG6q0ogAC+vCyOTyBRKFToJVqDUqNC4dQe3T6AyGIBG42wBWmiwWc2Wxw2Wx2MIOxlE-DWcbOCb2Vx1dweTxeeAIxA+YG+Tj+AK0Oj0bk83l8-iCF1hyXhmkR4uRCrR8nMmJxJMJYGJBP0lLgNLpDKZyekNDZDS5vIFQuoODFErW0tlrHwivsqvVmu1kFyQn15EN-hNZpYlpA1rtDty5GdZXKbuKHsa5Xofp6-SEIMwxjBM4YzHMUZLCsqYnPGzZJkcsHpucibXLc9z8Pm8rvF80gABy-P8jhVsCtZgg2ULNnCsAInEnYoj2GLYniBIMESg5jlStL0nAhrMtIXqlEu-KCsK64IJ2krbnKhb7iqaoaqiJ66ue0gGhExqmnkFpgFatr2o8jqvhkhQNM0dRcF+DDNKUXCVIUXD-gGQFBiGYEZBGkGLDGyGnKhWaGMmsb+ZmlzobomGPM8OHFnhgxEZWQI1qC9YQo20J7DR0TtvR9iMTIvZKCxg7scOnEUtxU58TOJiVOZwncqJq4ihuqhbtIMqyXuSqHs0KgADKjsEcRqPoKCYO2uB0uwOkQCi9K9FS8pYPpT5GS++QZI4pQlOqtSVKUdQ0IUzmAcBwagWGnkQfMPkwSAaahQhQVIY9cEZghEW5lhMWFrhpaVhWJHJSCdbgpCTYwtldFIgV6J9iVbEcaOlUTjx06vZoDnso1y5iWuoqSZuUqdTu8ryaqdSFMeS2nnq0jklA1JmOw1KUkI+zkhQa1tDaQA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "cod",
+      "commodity": "livestock",
+      "stop_count": 5,
+      "site_count": 16,
+      "title": "DR Congo: the real score range across 16 FAO-selected livestock (slaughterhouse) siting sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "DR Congo: the real score range across 16 FAO-selected livestock (slaughterhouse) siting sites",
+        "steps": [
+          {
+            "center": [
+              29.4082,
+              0.4482
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-livestock-score",
+              "hih-cod-livestock-final"
+            ],
+            "caption": "Rank 1 of 16 real FAO-selected livestock (slaughterhouse) siting sites in DR Congo — Hand-in-Hand suitability score 68.3. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              29.4264,
+              0.4003
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-livestock-score",
+              "hih-cod-livestock-final"
+            ],
+            "caption": "Rank 5 of 16 real FAO-selected livestock (slaughterhouse) siting sites in DR Congo — Hand-in-Hand suitability score 61.7. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              29.3489,
+              0.5007
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-livestock-score",
+              "hih-cod-livestock-final"
+            ],
+            "caption": "Rank 9 of 16 real FAO-selected livestock (slaughterhouse) siting sites in DR Congo — Hand-in-Hand suitability score 60.9. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              29.3557,
+              0.5258
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-livestock-score",
+              "hih-cod-livestock-final"
+            ],
+            "caption": "Rank 12 of 16 real FAO-selected livestock (slaughterhouse) siting sites in DR Congo — Hand-in-Hand suitability score 60.1. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              29.2143,
+              -1.6041
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-livestock-score",
+              "hih-cod-livestock-final"
+            ],
+            "caption": "Rank 16 of 16 real FAO-selected livestock (slaughterhouse) siting sites in DR Congo — Hand-in-Hand suitability score 59.3. GAEZ classifies this location as \"6: Tropics, highland — humid\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREABEASgAIAwvgDmuQtLgALFNKgoIQ6VgDGubVohgFmiAai4sWaVwBs0gGIBBAPIMsKEQbgoACbSQmxYcLgGANbSABRYQhAArgpqAVBquEk+AJT6CIjm+QFYfCDhKBSlhADaoAYoYOlENQBMAJwAdAAsAAwAHK28vT3dgwC6-ABeuLgAtkRcQyCJAJ7k1TUgChAoUwy7UwDMR2VqCGoMRoEMoajhkVHeRtpnF1e4N3coD9EMJAhIEIQJMQAYIBREPgxJIzDEuNJcCQHM5tLpXJ5vL4UP4giEwhFonEEslUulMtkUHkcIUFMUftJAdIpHJFLhpIAUAmkAAkzDdAQxeWBglgkgUIAAjBChOCrfQvTSOfqdI6daQAcTcAFEAFrSAyJOwIAEM9QIexCSKsfDSajSAA6IFajhUABk+dIAO4FNT6FCYTRYXDS9jpWBM0JzcVQsBYR2dEAAX149UazVqHR6zu6wx6vV6R1BM3mi2Waw2LW2hwOexOb0u11uBMez2Mon45wbnyb90JTwBQJB-HBkLwBGIsLAMRoiORTi0Oj07i8Pj8AWC31+MXiiRSaXIFNyxUBdJpDKZLPk5nZXKF-LAgo9ovFUplcsMbekji4nToas1ur6oaOAmvYZoWlaMa2vYjrOm6HreuofoBvowZCKG5DhmA+JRnA1qxvGSYpmCabkC0mZHGM7S5jQ+Z0EWswLIQSz8OW2CVjsew1scpwdu8jabn2ravHxXZfM2fwDroQ5ghCMYwnC0jtLOKILuiy5YmueKCY8xK7mSB5ZEeNInvS9gXjIV5KJyPJ8gwAp3voYp4a+BTvgqX4jF0GranqBrUCBCCmucEHglBdqOkcKgACo2BQCAGFgvAhLgnqJMKNlqEkUaBIRyapk0ZEZl0Rw0PQNGtDQ-QMSWzFlhA6zsbUVZcYcdaiR84m9i2H4iSAnadT2PxCVJwKgiO8kTopSwqfOaJLpiq44uu+LdUSO6kvuGRGVSx5FGe5nYZebI2Xe9kPo5z4udKbnyp+jgjD+PmAf5RqgaoIUpWFY7QQ6IBRdIsW4PFiXJZaaUelyWU5XlxENIVUDkV0rRcN0Ry8AwP4Pd0XA1UxLErA1FbNZx+xtbx-X8d2Ol-L17aU2JQ1bv8gLSeNcljgpU6qUiqnzRiK7YriG4SduJJ7uSO3UgUpkHYyR2WSdt52Q5T7OZKN2yndJg0CV-6+UBAXGkFYGfZa302hFIAuoDcUJUl0jnKk6XBFD2UILlIAJom4yJkAA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "caf",
+      "commodity": "cassava",
+      "stop_count": 5,
+      "site_count": 27,
+      "title": "Central African Republic: the real score range across 27 FAO-selected cassava storage sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "Central African Republic: the real score range across 27 FAO-selected cassava storage sites",
+        "steps": [
+          {
+            "center": [
+              19.609,
+              6.0439
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-caf-cassava-score",
+              "hih-caf-cassava-final"
+            ],
+            "caption": "Rank 1 of 27 real FAO-selected cassava storage sites in Central African Republic — Hand-in-Hand suitability score 77.3. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              21.041,
+              4.4679
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-caf-cassava-score",
+              "hih-caf-cassava-final"
+            ],
+            "caption": "Rank 8 of 27 real FAO-selected cassava storage sites in Central African Republic — Hand-in-Hand suitability score 63.2. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              20.041,
+              5.7639
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-caf-cassava-score",
+              "hih-caf-cassava-final"
+            ],
+            "caption": "Rank 14 of 27 real FAO-selected cassava storage sites in Central African Republic — Hand-in-Hand suitability score 58.5. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              21.125,
+              6.2439
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-caf-cassava-score",
+              "hih-caf-cassava-final"
+            ],
+            "caption": "Rank 21 of 27 real FAO-selected cassava storage sites in Central African Republic — Hand-in-Hand suitability score 56.2. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              18.129,
+              3.7639
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-caf-cassava-score",
+              "hih-caf-cassava-final"
+            ],
+            "caption": "Rank 27 of 27 real FAO-selected cassava storage sites in Central African Republic — Hand-in-Hand suitability score 56. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREAGEUYOLCEACAIIkoCAMYQwcgEooKAVwBGQtYTlwAFijlQUEeVlW4b1jQHMrEVVFxYscgEx0cgBiCgDyDFgoIqpwKAAmcuq+EEgQclhwThDuGQhxWHwgmbqFhADaoKpScVBE5VwAnAB0AGwADI28rc3tACwAzI0AuvwAXri4ALZEXP78QhAAnuRl5SCuEChjDFtjAwNF5gjmDOokZ9RYqRCRjjZHJ5cXyddpDCQIkEIgoyDqFEQ+DEWg0AGs5Fw5LgSAEgjY7CFwpFoihYgkklcbhksrBcjgCnIvnJJNJZIplGoNNpdIZjKo5IAUAjkAAkNPEGF8GGywIksHp8hADAhjHAlhl7lY6HRmgNmnIAOIKACiAC0kotfAhPig-BYEH4hLh1EDNNQ5AAdED+VqmAAy7LkAHd8uYMihMFYsLgRexarBicYpoLTVgrc0QABfXhVGrker+Li9PpcXh9Zp9Vp0EbjSYzQhzBbLVb1DZ7XbbA6PU7nS4pd4OJyifjHGsQF5Y96fb6-fgA00g8FyAAc0NhgWstnkoQiURicUSr2xmWy+PyuqJmlJMkRShU6k0On0RjUTNZ7M5YG5jv5guFovFjecrTl-nlSrVGqu2oQG-1huNVh8Dkc0rRte1HRdCx3U9DIfSEP1yADTQgxDPAwDDEAI2jWNpHjCp-HaZNUxoZo6BfHMQAmaZZnmEBFhWbBS02bYK32Q4WyeWslwbSVq2eOs3lubs7F7f4IEBdDBzACEuD6Mc4UnREZxRecMR49IVzxL11z8Ylt3JPcqUPWkTwZZkeQ5LlLIyAU4CFEV8kfSU5BoYdmlIxUVXVVRNRwHU9WOACTXQkC-DA205AdXlnVdGDyC9eDEJYQMEGDezQ3DKMY3+OM6gIpM5hobpmn8QZKOo-NC3o4smIqMtWL2KtOLbDt61uJ9mxAVsBI0j4vlEv5+yk4hQRkgIoRhRSEWnZE5zRBdMXanFVx0wl9JqQzKQPGlj3pM9LMva8Ytvez7yciUm1cno3y8z9fO-AKzCCuQjRC4DQOtSLosSKC3SiWDvV9f0IFS9KgIwrKcNyvD8oady5i6OVyKGP5KtootGLWBqdiajjuq49tBJuO4m347jO2EgafiGiSB1GocJymicZqRWdUXRRdKZW7S8nWrdNt3bbqSPOlTwsi9rJvOyHIfS7nBoHo7p8vyfz-F63ohsLLS+iCYr++LnCBhCQbBtD8Ew7DhkjIA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "civ",
+      "commodity": "cereal",
+      "stop_count": 5,
+      "site_count": 22,
+      "title": "Côte d'Ivoire: the real score range across 22 FAO-selected cereal storage sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "Côte d'Ivoire: the real score range across 22 FAO-selected cereal storage sites",
+        "steps": [
+          {
+            "center": [
+              -5.4128,
+              9.5463
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-cereal-score",
+              "hih-civ-cereal-final"
+            ],
+            "caption": "Rank 1 of 22 real FAO-selected cereal storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 71.3. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -7.3883,
+              6.6201
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-cereal-score",
+              "hih-civ-cereal-final"
+            ],
+            "caption": "Rank 6 of 22 real FAO-selected cereal storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 47. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              -4.8007,
+              5.8577
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-cereal-score",
+              "hih-civ-cereal-final"
+            ],
+            "caption": "Rank 12 of 22 real FAO-selected cereal storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 45.6. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              -6.5542,
+              9.5172
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-cereal-score",
+              "hih-civ-cereal-final"
+            ],
+            "caption": "Rank 17 of 22 real FAO-selected cereal storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 45.2. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              -3.9553,
+              5.2837
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-cereal-score",
+              "hih-civ-cereal-final"
+            ],
+            "caption": "Rank 22 of 22 real FAO-selected cereal storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 41.7. GAEZ classifies this location as \"32: Dominantly urban/built-up\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREAGEAL3BQACACYByAJJJcCKCkKy4ACzmaIQ2VgDGuTbNhgA5nIimouLFlkAmN7IBiAQQDyDFgoIqYy8rKm5ChGJnAWEHYmCDJYfCBYMhSphADaoJFgMlBEOQw0AHQALFxuABy8AJzlNJUAbADMALr8AF64uAC2RDX8QhAAnuTZOSA2ECg9DPM97e1pugi6DKbI21FGgeaa65vbu5GGQgwkCJBCIN0gphAUiPhiAEoQYADWslyyXAkdyeS7efyBYIoUIocIXaLGDLxRI4FKyW6yKQyBQqNQaOSAFAJZAAJb7yBi3BiksDhLAAV2SEAARgghMlxiYjnI6Fxyu1yrIAOI+ACiAC0ImMXAgbihXHoEK4hLhnm8wLJqLIADogNzaAAqTgoCFMWF4smVAHcxjTZET6UyGLo6QMEPIdeUQABfXj5FCFcglBh0Pm1WrtXitcqtNwABi4jz6g2GblGEymJVmyyWC1WJy2OyQe0uhwson4GwL532Vxudwe-GerzwBGIX1+slagOBHisCPBASCITCERrsWRclRcvR6qxciUqnUliJ1PJlNXJgZcGZrPZnLLskqIaFoolpilOFl8o2SpVrHwGtcOrcrW0ABkybJLcldCYUJhJ3UIR2CKWAMTZV1tzVLAPW9X0nn9Iog0qcpaljWM6F4CpanoOhE36IZCBGEAxkmbBMzmBYcxWNYK1OQtiwRUtjjoqsi3hA46yMBsnheNVPm+P4am7EE+xiXxByhGE4THJFYBRZJpwxOccUXfE7RJMkKTAKlP3pRkWTZOAOTMA9KgqKMT3FSVqEvBBpwVW9VRbR9tRAdoDSNE0zQtXBrU-IlnVdd0QE9H0-QDYpcgYKMaBaVMmhoLg6DcfDkyI1MSPTcjcizKjljzViznYmtmPLEBK2KxjONubjHibfi20E-46BE3swQkyFh1hUcwTkhJJ0U1xlOkedcSXQlNJpbTdNtfTt0MvdTMsczyjcAVhWs89bJlezr0VXznIfTVn1fWQP1tb89D-ACTCAkDyDA9UIMZaDYPChDIqDfkGjiiMKjqdo8N6AiUzTMjpjyxYCtoir6OrEtlvKyqGI42tavueq+JbASO17IFRI6iEh2hEc0fHeTBrREbsQXPFlymtcdI3eadyMkyuUPXlj02s8L12hyb0O+91RO9y9VkAARQZasKIQOTpKAmW+dgmQZIQ4AYOkKHezovSAA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "civ",
+      "commodity": "fruits",
+      "stop_count": 5,
+      "site_count": 70,
+      "title": "Côte d'Ivoire: the real score range across 70 FAO-selected fruit storage sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "Côte d'Ivoire: the real score range across 70 FAO-selected fruit storage sites",
+        "steps": [
+          {
+            "center": [
+              -3.9621,
+              5.3106
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-fruits-score",
+              "hih-civ-fruits-final"
+            ],
+            "caption": "Rank 1 of 70 real FAO-selected fruit storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 58.6. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              -5.9173,
+              6.1986
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-fruits-score",
+              "hih-civ-fruits-final"
+            ],
+            "caption": "Rank 18 of 70 real FAO-selected fruit storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 47.7. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              -5.2693,
+              6.2165
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-fruits-score",
+              "hih-civ-fruits-final"
+            ],
+            "caption": "Rank 36 of 70 real FAO-selected fruit storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 47. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              -6.6394,
+              4.851
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-fruits-score",
+              "hih-civ-fruits-final"
+            ],
+            "caption": "Rank 53 of 70 real FAO-selected fruit storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 46.7. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              -3.9576,
+              5.2837
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-fruits-score",
+              "hih-civ-fruits-final"
+            ],
+            "caption": "Rank 70 of 70 real FAO-selected fruit storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 44.1. GAEZ classifies this location as \"32: Dominantly urban/built-up\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREAGEAL3BQACACYByAJJJcCKCkKy4ACzmaIQ2VgDGuTbNhgA5nIimouLFll0ADLIBiAQQDyDFgoIqYy8rIkUACuCHAmcBYQdiaxKFh8IFgyFOmEANqgpihgMlBEeQwAzAB0AJwAbABMXLw01ZVc7vUAuvwAXri4ALZEXI38QhAAnuS5eSA2ECh9DEt9lZUZugi6DKbIDJExcFiB5ppbO3sHR7GnJAiQQiC9IKYQFIj4YgBKEGAAa1kXFkuBIbk8hmMvgCQRCYQi0Vi8USyRwMlcj1kUhkChUag0ckAKASyAAS-3kDEeDHJYHCWGOEAARgghLEpiZznIaAAOar1aqyADiPgAogAtWSmSYuBAPNI6bauIS4d5fMCyaiyAA6IEa9W0ABkKbIAO6xXQmFCYORYdRCdilWBYtlDWKsfBYXXVEAAX14hWKpXKDDatS4dEqvAFXFqPJ6-UGI0IYwm01m5QWa1Wyw2l12+yQhyRJzOFlE-G2BZuJfujyML3470+eAIxD+gOBPNB4I8VhQRm8-kCwRQoRQ4VucSyqNtqUxGpxciUqnUlhJtMp1M3JkZLLZcA5ZnLsgALHRqhfhWLJdLqDh5a49AhlaqPRqtbrKtoACpOCgIKYWC8LIKqmpMdKyCSuhRG68jen6AZvEG5Ahm0+q1FGArNPUNCvAMwyjOMICTDM2CZosyw5usmyVlchbFscpzHhcdHVkWU51k8jZvB86q-P8QKVPUPYQv2g4wiO8IToixworAaLzrIWJLniq6ElBZIUlSYA0iaDLuvu7Kcie56CiKEpSjKD4IAqz6vmqraaq4X6-v+gHAaBuDgSa0GwQg8EgD6-qBiUqH5AwAr1JUtSnrwp7VDyNBcPhSZEWmZFzFmVFrHmbHXBxtZlqxIBVgVjF3Ic9bPK8zb8e2gmyDQlSiX2UJDrCo7jpOJbyUkc4Yspi7SMu+JrsSWl0jpemQQZcDMqyxksXIp4CleFm3tZcq2U+SpeY5+DOTqeoGrIxqQeaehWjaJj2o65DOhqrruuqXpBYhoXBhFNS1PQ9StNUjQ8pUdCpYRKbEaRGb5NlKy5bRpX0TWTHFRWiPsRVpYPNxtV8a2Amdn2YJie1klwmOCJTn1imDSpI1qQS66TVuuk7nNC0HkeXJnglXDmTeVn3ttdl7SqB0fi5ICVI02gACLDPWJRCByURQEy-zsEyMRCHADBRBQCG+t0vpAA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "civ",
+      "commodity": "vegetables",
+      "stop_count": 5,
+      "site_count": 66,
+      "title": "Côte d'Ivoire: the real score range across 66 FAO-selected vegetable storage sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "Côte d'Ivoire: the real score range across 66 FAO-selected vegetable storage sites",
+        "steps": [
+          {
+            "center": [
+              -5.2559,
+              9.5822
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-vegetables-score",
+              "hih-civ-vegetables-final"
+            ],
+            "caption": "Rank 1 of 66 real FAO-selected vegetable storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 62.1. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -6.5497,
+              5.4026
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-vegetables-score",
+              "hih-civ-vegetables-final"
+            ],
+            "caption": "Rank 17 of 66 real FAO-selected vegetable storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 56.3. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              -6.4151,
+              5.7994
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-vegetables-score",
+              "hih-civ-vegetables-final"
+            ],
+            "caption": "Rank 34 of 66 real FAO-selected vegetable storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 55.2. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              -6.6371,
+              4.851
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-vegetables-score",
+              "hih-civ-vegetables-final"
+            ],
+            "caption": "Rank 50 of 66 real FAO-selected vegetable storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 54.9. GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              -5.9555,
+              6.1918
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-vegetables-score",
+              "hih-civ-vegetables-final"
+            ],
+            "caption": "Rank 66 of 66 real FAO-selected vegetable storage sites in Côte d'Ivoire — Hand-in-Hand suitability score 53.7. GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREAGEAL3BQACACYByAJJJcCKCkKy4ACzmaIQ2VgDGuTbNhgA5nIimouLFlkA2N7IBiAQQDyDFgoIqYy8rKodnAQAEYiJnAWEHYmCDJYfCBYMhQZhADaoKYoYDJQRPkMNAB0AEw0NACcvI3VNAActbUAuvwAXri4ALZEXLX8QhAAnuR5+SA2ECh9DEt9AMzrmboIugymyAyRKNFxKFiB5prbu-uHx6ciFyQIkEIgvSCmEBSI+GIAJQgYAA1rIuLJcCR3J5DMZfAEgiEwhEUFFYvFskkUjh0rJXrIpDIFCo1Bo5IAUAlkAAlgfIGK8GLSwOEsABXNKxBBCNJTExXORuWrVLjVWQAcR8AFEAFqyUyTFwIF7nHQ7VxCXDfP5gWTUWQAHRAtW0ABUnBQEKYsLxZJqAO6TFmyKnsmIMXRsoYIeRG6ogAC+vCKJTKFQYbjaABZGnReDUowAGWpuT4DYajcYgSYzbAVBZrVbLTY3PYHJBHNEnDHnS4WUT8HZl+5Vx61l5vD78b6-PAEYhA0HguiQ6EeKwoIzefyBYIoUIocIPGsJbFyXGqglEuRKVTqSxU5n0xlHkwc07c3n8+uyGiR9ZiyWy+WKnAq1x6BAarWsfB61xGim2gADJ0rI9ppLoJgoJg67qEI7BlLABI8t60Q6lgfqBsGXyhuQ4aRlGXA0Fw8bVHQjSNFGaaDCMhBjBM0yzPmizLEWGxbI2tzlpW6JnBcZj1qWdwVsu-EMB2Rhdl8Pw6oCwJgusUajjCE5Tgis7IouqJ8ZiiSwDiaSbrq24knu5IujSdIMmATJgeynIxJecB8oJlgNHUj7SnKCrUG+CCqp+37an2-6GiA6xmhaVo2nauCOmBVKet6vogP6QYhqU+EFBG1RuOsdCkVG1TtCRNEZvRWY5sxBQFmxawllxzaia2NYCQKwk8WJTwSa8UmfD2ckDgpt6Jip45wtOiJzguS6tWcq4GeuRmuFu0g7qS+6UlZLI2XZzoORePIude7nFa0EreS+fnKgFH7qnFIV-vqgFuCBYEQXo0GwSY8GIeQyG6qhnIYVhGW4Vl5Q5TUjQNDQvCRlwjRcO05V0Qx2ZMXmtWsSsDWcSATYibx1biW5DaE9xLa6e2fXvANsl9vJQ7jlCqmTRpSLzii3XrvpyTLXia3EruZIHjtx62aeh1csdrkCreD50F5z6+Uq75ql+j2-rqL0RVFuCWtatoOk64RJV6Ppg90AZAA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "civ",
+      "commodity": "dairy",
+      "stop_count": 5,
+      "site_count": 12,
+      "title": "Côte d'Ivoire: the real score range across 12 FAO-selected dairy processing sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "Côte d'Ivoire: the real score range across 12 FAO-selected dairy processing sites",
+        "steps": [
+          {
+            "center": [
+              -5.3523,
+              9.5979
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-dairy-score",
+              "hih-civ-dairy-final"
+            ],
+            "caption": "Rank 1 of 12 real FAO-selected dairy processing sites in Côte d'Ivoire — Hand-in-Hand suitability score 74.8. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -5.2491,
+              9.6158
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-dairy-score",
+              "hih-civ-dairy-final"
+            ],
+            "caption": "Rank 4 of 12 real FAO-selected dairy processing sites in Côte d'Ivoire — Hand-in-Hand suitability score 74.2. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -5.2693,
+              9.6181
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-dairy-score",
+              "hih-civ-dairy-final"
+            ],
+            "caption": "Rank 7 of 12 real FAO-selected dairy processing sites in Côte d'Ivoire — Hand-in-Hand suitability score 73.7. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -5.6505,
+              9.3468
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-dairy-score",
+              "hih-civ-dairy-final"
+            ],
+            "caption": "Rank 9 of 12 real FAO-selected dairy processing sites in Côte d'Ivoire — Hand-in-Hand suitability score 73.6. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -5.6438,
+              9.3333
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-dairy-score",
+              "hih-civ-dairy-final"
+            ],
+            "caption": "Rank 12 of 12 real FAO-selected dairy processing sites in Côte d'Ivoire — Hand-in-Hand suitability score 68.6. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREAGEAL3BQACACYByAJJJcCKCkKy4ACzmaIQ2VgDGuTbNhgA5nIimouLFllcATLIBiAQQDyDFgoIqYy8goQGgCeshROpiguCLYmCDJYfCBYMhQZhADaoAlgMlBE+Qw0AHQAzDTuNbwAnFU0TXRNALr8AF64uAC2RB78QhBR5Hn5IDYQKD0Mcz01NZm6CLoMpsgM8pFQUYHmmmsbWzt70QwkyUYg3SCmEBSI+GIAShBgANZusrgkNyeQzGXwBIIhMIRaKxeKJHApHDpWTJWRSGQKFRqDRyQAoBLIABJfeQMZIMIlgcJYACuaQgACMEEI0jEzBY5HQACxVAAcVVkAHEfABRABaslMYySN0SOnWriEuCerzAsmosgAOiB3NoACpOCgIUxYXiyRUAdzGlNk+Jp9IYumpAwQ8i1VRAAF9eEUUCVyOVKlV3JymlxmlUAGxcGg8h59QbDdyjcaTcozJaLeYrU6bbZIXb7Q5sk78da5i6F663IT3fhPF54AjET4-WSc-6AjxWFBGbz+QLBFChFDhS4HWFK+HJGypZGo9FyJSqdSWfEUklk9cmWlwBlMlkmY4c7nuflCsUSqU4GWuPQIBVK1j4NWuLU62T63CG42mi1W8K2tS9qOs6rogO6Xo+n6ZQFIG7gRk0jQtFGPJcHG-RDIQIwgGMEzYGmszzJmyyrKWZx5gWVzFqIZHlvmY6HDckA1g89Yqh8Xy-HQHZAt2vZggOkIjtC45xJOSSImksrztIi5YiueKEsSpJgOSxLbnSjLMnArJHrIdA1FUdBniK4qStQ14ILKd4PsqjYvpq2p6gaRommauCWupgHAU6Lpup63qPL6pQBtUEY0AADDQ4Y1JyEaxr0GGJsmeFTOmRFLNmtHnPRlbUTmOWUQcVbMbWjzPOxzacbITQ8V2IJ9uCg7DqOhYTgkEkzki0mqgumLLjiNpKZSKlqdaNKafuOmHuy+mGRGJkXuZ0pWbe8ruXZz7qm+zlfq5v4ef+Q12g6vlgRBgXFCFsFhZyNQ8jFKw1OhCZYUmOEpvhBTpQsmWkSAZaFQxRzsgVFHA0xdysRVjYca2XYArxDUCRCQ5Qgx7VTpJc69bJ-XYquw0bqpW4TbuWkHtRsjxZGi1mVeCA3nK94bU+qrbU5H4uT+7meda3mnaB-kep0HpAA"
+    },
+    {
+      "tour_type": "spectrum_tour",
+      "country": "civ",
+      "commodity": "livestock",
+      "stop_count": 5,
+      "site_count": 12,
+      "title": "Côte d'Ivoire: the real score range across 12 FAO-selected livestock (slaughterhouse) siting sites",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "Côte d'Ivoire: the real score range across 12 FAO-selected livestock (slaughterhouse) siting sites",
+        "steps": [
+          {
+            "center": [
+              -5.276,
+              9.6114
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-livestock-score",
+              "hih-civ-livestock-final"
+            ],
+            "caption": "Rank 1 of 12 real FAO-selected livestock (slaughterhouse) siting sites in Côte d'Ivoire — Hand-in-Hand suitability score 60. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -5.4622,
+              9.5172
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-livestock-score",
+              "hih-civ-livestock-final"
+            ],
+            "caption": "Rank 4 of 12 real FAO-selected livestock (slaughterhouse) siting sites in Côte d'Ivoire — Hand-in-Hand suitability score 58.7. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -5.424,
+              9.571
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-livestock-score",
+              "hih-civ-livestock-final"
+            ],
+            "caption": "Rank 7 of 12 real FAO-selected livestock (slaughterhouse) siting sites in Côte d'Ivoire — Hand-in-Hand suitability score 57.4. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -5.433,
+              9.562
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-livestock-score",
+              "hih-civ-livestock-final"
+            ],
+            "caption": "Rank 9 of 12 real FAO-selected livestock (slaughterhouse) siting sites in Côte d'Ivoire — Hand-in-Hand suitability score 56.9. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -5.5989,
+              9.414
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-livestock-score",
+              "hih-civ-livestock-final"
+            ],
+            "caption": "Rank 12 of 12 real FAO-selected livestock (slaughterhouse) siting sites in Côte d'Ivoire — Hand-in-Hand suitability score 55.9. GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREAGEAL3BQACACYByAJJJcCKCkKy4ACzmaIQ2VgDGuTbNhgA5nIimouLFllcATLIBiAQQDyDFgoIqYy8rJCbFhwuKYA1rIAFFhCEACuNroyULq4aUEAlCYIiLbFMlh8INEoFJWEANqgpihg2UQNDDQAdO50AGy8AJzd-VxcACwAuvwAXri4ALZEHvypAJ7k9Q0gNhAoswz7swDMJ1W6CLoMpsgMkajRsXGB5poXVzd3DyhP8QwkBCQIQgGYgUwQCiIfBiABKEDACS4slwJDcnkMxl8ASCITCESiMXiSRS6Uy2Vy+RQRRwpRs5V+siBsikMgUKjUGjkgBQCWQACQR8gYQIYArA4SwaRKEAARghInB1iY3nJ+gAGbqyADiPgAogAtWSmVIuBCAxl6BCuISxVj4WTUWQAHRA7m0ABUnBQEKYsLwIrgAO6pcWyXmSmUMXRpRYIeQu7ogAC+vGarXajS63Qm-Xc7mG3RoXDo7jB8yWK3zIA2Ww6u2ORwOZw+11uSHuhOerwson4l1b307-0BwNB-AhULwBGI8MRsgmKLRHisKCM3n8gWCKFCKHCPz+CWSqQyWXIlMK5SB9NpjOZrLkSlU6ksvLFQpFb5MUrgsvlJSVZg9rINAABzdHQmo6gaRomjg5quJa1q2tCYAOq4LpurInq4N6vr+jawaCmGX6RtGsbxiAiYpmmbTkB0WYTO4EwFvQXBlgsyyEKs1YQJs2B1nsByNqc5x9p8bYdo8RIvIB7xiQO7b7tJAJAkYY7gpCKFwgiCR0Iu6Irmu2Kbniu4ElJzwkse5JnnkF60leDKuHe0gPhyz48vygrCmAopEZK0pygqAEqsBEETJBeqGsa1BwQgFqXEhEIoWhzquh6Xo+n6AaEaG4ZpKRMZxgmyapuC6Z0ZmPQTGcLG5uxFZcVWNb8Y09ZCcczbyV8ilDjJKotj1km-MpI5qWCE5aTOOmyEM+nLpi644luO57n1VlkqeOR2dSl5lDezmofe7JPlyxFvj5fmhgFP5Bf+ypATQ-TdCM2pRTBsVmvFCGJQGyVTqlGEZThWX4UGIbhPlhXkSV1HlbRUD0T0NBDCBQwFhMkwNZx3Etds7WHJ1okgP2Q1KV2sm9iT4mDhZw6qSCE2aVO2lzsuqIGYtxm4tu+Lk8SR6bRSO00iUjkHUyR2uSdnIvl54qXZ+N2-sFD2WDQPSvVB0WwV9CVWn9dqoY6QNYZleE5RDxERlGRUUVRUxJkAA"
+    },
+    {
+      "tour_type": "grand_tour",
+      "country": "cod",
+      "commodities": [
+        "cassava",
+        "cocoa",
+        "coffee",
+        "maize",
+        "palmoil",
+        "wheat",
+        "livestock"
+      ],
+      "stop_count": 7,
+      "title": "DR Congo: a tour of FAO's top-ranked Hand-in-Hand site for each commodity",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "DR Congo: a tour of FAO's top-ranked Hand-in-Hand site for each commodity",
+        "steps": [
+          {
+            "center": [
+              23.4449,
+              -7.0133
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cassava-score",
+              "hih-cod-cassava-final"
+            ],
+            "caption": "DR Congo's top-ranked cassava storage site — Hand-in-Hand score 45.9 (rank 1 of 12). GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              30.1995,
+              1.5565
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-cocoa-score",
+              "hih-cod-cocoa-final"
+            ],
+            "caption": "DR Congo's top-ranked cocoa storage site — Hand-in-Hand score 65.8 (rank 1 of 21). GAEZ classifies this location as \"3: Tropics, lowland — humid\"."
+          },
+          {
+            "center": [
+              30.2451,
+              1.6888
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-coffee-score",
+              "hih-cod-coffee-final"
+            ],
+            "caption": "DR Congo's top-ranked coffee storage site — Hand-in-Hand score 69.2 (rank 1 of 12). GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              29.5792,
+              -0.8744
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-maize-score",
+              "hih-cod-maize-final"
+            ],
+            "caption": "DR Congo's top-ranked maize storage site — Hand-in-Hand score 65.5 (rank 1 of 3). GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              18.9115,
+              -5.0065
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-palmoil-score",
+              "hih-cod-palmoil-final"
+            ],
+            "caption": "DR Congo's top-ranked palm oil processing site — Hand-in-Hand score 60.2 (rank 1 of 67). GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              29.041,
+              -3.4467
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-wheat-score",
+              "hih-cod-wheat-final"
+            ],
+            "caption": "DR Congo's top-ranked wheat storage site — Hand-in-Hand score 60.9 (rank 1 of 15). GAEZ classifies this location as \"25: Dominantly very steep terrain\"."
+          },
+          {
+            "center": [
+              29.4082,
+              0.4482
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-cod-livestock-score",
+              "hih-cod-livestock-final"
+            ],
+            "caption": "DR Congo's top-ranked livestock (slaughterhouse) siting site — Hand-in-Hand score 68.3 (rank 1 of 16). GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREABEASgAIAwvgDmuQtIjS4uAK5RpuEtIBiAQQDyAcizrcFBrDABrFABNpACQhgnDBGAbvP0jhwKNIkuDooEADGABbSUbgAtom4TghwAJ58IFjBFFhEANqgUShgwVBFAEwAzAB0ACxNAJy8DHR1AAxcNTUAuvwAXrhJRFxV-EIQGeQFhIUgChAogwzLg73ZMQgxDAleUdRYEEgQDFgJUKL827v7e0cnZyQ+EEIgAyCHFIj4YlJyRS4CxWGx2RwuQ5YY6nQIaWAKEJBEKAFAI3B4vD4-BjApcQg0aHVmtIABTg6RcXT6cYASjq0gA4kYAKIALXiU2hCBeKEscG2liEuEOvzAqksAB0QFUAGwqAAyOIA7uk4lgUJgkbgEEJ2BVYD5pEIEIl0qx8FgpXUQABfXglMoVIo1Tp1LjNZo0XhcOo0GgymifYajQjjSbTWZFRbrNYrTY3HZ7VJJhJnC7ha4gW5Jg7C3DPV7vT7fUX-GTyMBKEEaMEeCHxPNqXLhCCIwLpVHozzeXz+Fzpq7SAN1AAcpPJlL00iqXDpjJZ7KinJwPL5AqNwvNYuo0ilNRUABUoNYEFEsLwN0qpgE0TFNKanFbbfavo7yM7XVUCVxvXUZSOAKDEZEjGCYQCmGZsCjJYVljDYai2RN7gSEgyBQc48UQu5kxQtCGBeSAi34Es8AIYgAQrKs+WsWw62cBtUJQJF4VbJEO2kNE+x7bEAgHEIZWaOoqnHOsKSpCkqjnJk2Q5I5uQQXl1HXIURVI8Vd2lOVpEVAIVX5QINXILUdT1cgDTFY1TTgLdLRAa07Qdcp33mKpBPoZoJgYV0RzoJogJDMNwIjKD5mjWD1njLMkOTRIIAQQZ0L4rCcwYWL4vQgi3g+YiIB+Uiy0BStgWo2sHHotKErhFs22RDiu0xXscT4odCRoESHDEqcaikhdZK5VclIQQVN1FdSpVlBVlVVAzNUCbVdX1OKLJNM1RVs+yX1KJzKnmLgRyJLguC9BhCU6ToA38kDQzAiDI1CmDVgihCE2wrwqCEFIdQwjNkvud7PqEfDC2yr5ctLcjyyBasaPBej-t0HVpAoY9Si5St22COquKxPtcQzIdP3a+xOv0GU6B6mSlzkgb+SGjdVPwMbNMm3TpvVWasHm0yWENSzVtI9bn0cp0XMEzoGh-Bh6iaMnLtA8NILmBYHrgyLs3uJUYkiOBvquX7k017WgcIkGSL+CHCqo0FaLKlxDfgKqETYzHOIxbjceamVXWJMlRMnakaApxdl3kxTaeGhnt0laUaBUcQklecohAyaRMBT3ImIodQzKWp8HNfbbqkEhpOhHCZXSaMu5euhW7uVmMnv1rxjVQZsonsXXM3V5MW95DR2+NrLizB-KLco4rrdhlxe7b4mSSwKZNAUGIKhiLR1RpDGfAUDHO2xxreLxId9pqImSYpGUg76lcFLXOmVK3JmJu0qb9PZoy5pMxbeZW6y1rzvoNogA"
+    },
+    {
+      "tour_type": "grand_tour",
+      "country": "civ",
+      "commodities": [
+        "cereal",
+        "fruits",
+        "vegetables",
+        "dairy",
+        "livestock"
+      ],
+      "stop_count": 5,
+      "title": "Côte d'Ivoire: a tour of FAO's top-ranked Hand-in-Hand site for each commodity",
+      "narrative": {
+        "narrative_version": "ferspas57-narrative/v1",
+        "title": "Côte d'Ivoire: a tour of FAO's top-ranked Hand-in-Hand site for each commodity",
+        "steps": [
+          {
+            "center": [
+              -5.4128,
+              9.5463
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-cereal-score",
+              "hih-civ-cereal-final"
+            ],
+            "caption": "Côte d'Ivoire's top-ranked cereal storage site — Hand-in-Hand score 71.3 (rank 1 of 22). GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -3.9621,
+              5.3106
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-fruits-score",
+              "hih-civ-fruits-final"
+            ],
+            "caption": "Côte d'Ivoire's top-ranked fruit storage site — Hand-in-Hand score 58.6 (rank 1 of 70). GAEZ classifies this location as \"26: Land with severe soil/terrain limitations\"."
+          },
+          {
+            "center": [
+              -5.2559,
+              9.5822
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-vegetables-score",
+              "hih-civ-vegetables-final"
+            ],
+            "caption": "Côte d'Ivoire's top-ranked vegetable storage site — Hand-in-Hand score 62.1 (rank 1 of 66). GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -5.3523,
+              9.5979
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-dairy-score",
+              "hih-civ-dairy-final"
+            ],
+            "caption": "Côte d'Ivoire's top-ranked dairy processing site — Hand-in-Hand score 74.8 (rank 1 of 12). GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          },
+          {
+            "center": [
+              -5.276,
+              9.6114
+            ],
+            "zoom": 12,
+            "layers": [
+              "gaez-aez33",
+              "hih-civ-livestock-score",
+              "hih-civ-livestock-final"
+            ],
+            "caption": "Côte d'Ivoire's top-ranked livestock (slaughterhouse) siting site — Hand-in-Hand score 60 (rank 1 of 12). GAEZ classifies this location as \"2: Tropics, lowland — sub-humid\"."
+          }
+        ]
+      },
+      "link": "https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREAGEAL3BQACACYByAJJJcCKCkKyIsuLgCuUWbhKyAYgEEA8oqx7cFBrDABrFPNkAJCGHkMEMAYfP1kcGVkSXGMUCABjAAtZONwAW1TceQQ4AE8+ECwZCiwiAG1QOJQwGSgyhhoAOgAWLgAmAA5eAE4GmiaANgBmAF1+AC9cNKI2-iEIHPISwlKQAHMIFDGGDbHBwfyEhASGOOQT8lihBiwUzQOjk7PKzQgrkkDXkFGQOIgKRHwYikESUqnUmjsDicLncnmelzC+lgqzk4TkgBQCby+fyBYLYsK3OR0LgNQayAAUMNkXBMZlarQAlA1ZABxSwAUQAWsk5lgcO8UPY4Id7EJcL8AWAdPYADogVraAAqUEcCDiWF4sjFAHc5qFMVgDAAjBgJAypBDyOUNEAAX14FSqNTqgwaXX6rS4vEagy4AAZ+t8JlNCDMQHMFtgymsdttNnt7sdTkgGCQoAZslhroTE48U2mM3As+9IEIvvxfv88ARiMC5KC1BoUJD9NDfLDIunsojohAUWFshisX4AkEQp4btE5DR2g1+hSqTTTLI6H6mayOdy4rz+QhBXoRVrxax8NLZHLWv1tAAZfHa7JJLAoTCo9RCdg1WCBLUIC1wE9gFg1p2g6PxOuQdSNK0NA0F03S9O09JBpMqTTK0szzIs0brJsca7Ps-CHEmZyoCi-5GiIWaTnchEPMmDCkSg5GUamHxlt8laSkC0j1iojYQkKjjOO2HiyIxzGokifaooOsiYuOo54qE1FyB6DQ0pS7bUrSsj9P065slyPLULu+7CggorHpKZ4XkqKoUGqGpHrq+IGsaprmpawH2o61QQcs9SkjQrSDPBsF0F0yEhmGEZYcsMa4TsCa0cRKbyBAGg5NmU65vR6WZaxpblj8fxcbWPEKHx4LNoJbZuKJ+VQDksgUCqlR8oEqwDhE8nYop44ElOK5NA07QLlpS5mG0BmbsZHUCkKh5ihK1Y2fKdmquqmo6nqnhuSaZoWlaIA2j5YF+bUAVQXQ-Twf0XBcE0UWoaG6HhphUbxThWxJQRIBEXmDBCGwhTiq42U0f9dFnMDqCg3E4Mlp8HGldW3EglVTYtkJMKibDgr6AjFJYHMBirAkNQJIYT4Mt1nXdUOCm4gNKm6X641uNpy7TcyhlbjuCALQeFlHitp7UOe62yMqm1OTtrlhO5h1eSddrDLaQA"
+    }
+  ]
+}
