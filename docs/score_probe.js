@@ -5,23 +5,48 @@
 // relevant source's own tile independently (not the rendered screen), so the
 // comparison doesn't depend on which layer happens to be drawn on top.
 
+// Country-specific commodity layers are separate per-country PMTiles archives
+// (unlike fishfarm/access below, which are single merged archives already
+// covering every country, D28) — probing all of them regardless of where the
+// map is currently centered is deliberate and harmless: a source with no data
+// under the probe point returns null (transparent/out-of-bounds) and is
+// filtered out below, so only whichever country's layers actually have data
+// at the sampled point ever show up. The (COD)/(CAF)/(CIV) suffixes are this
+// project's own established ISO3 source_id codes, not natural-language text —
+// kept for the same language-agnostic-chrome reason narrative playback's
+// controls are emoji, not words (D40).
+// Each source's real maxzoom, checked directly against its live TileJSON, not
+// assumed uniform — a real bug found while adding CIV/CAF (below): the merged
+// fishfarm/access archives came out at maxzoom 7 (D28 flagged this at the time
+// and it was never revisited), and CAF's cassava archive is also maxzoom 7,
+// while every COD/CIV commodity layer is maxzoom 8. Probing at a fixed zoom 8
+// for a maxzoom-7 source 404s outright (confirmed directly) rather than
+// returning a lower-resolution tile — Martin does not overzoom-serve past a
+// source's real max — so this had been silently zeroing out fishfarm/access
+// from the panel for every location, not just the newly-added countries.
 const SCORE_SOURCES = [
-  { id: "hih-cod-cassava-score", label: "Cassava" },
-  { id: "hih-cod-cocoa-score", label: "Cocoa" },
-  { id: "hih-cod-coffee-score", label: "Coffee" },
-  { id: "hih-cod-maize-score", label: "Maize" },
-  { id: "hih-cod-palmoil-score", label: "Palm oil" },
-  { id: "hih-cod-wheat-score", label: "Wheat" },
-  { id: "hih-cod-livestock-score", label: "Livestock" },
-  { id: "hih-fishfarm-closed", label: "Fish (closed)" },
-  { id: "hih-fishfarm-open", label: "Fish (open)" },
-  { id: "hih-fishfarm-extensive", label: "Fish (extensive)" },
-  { id: "hih-access-urban", label: "Access: urban" },
-  { id: "hih-access-urban-weighted", label: "Access: weighted" },
-  { id: "hih-access-port", label: "Access: port" },
+  { id: "hih-cod-cassava-score", label: "Cassava (COD)", maxzoom: 8 },
+  { id: "hih-cod-cocoa-score", label: "Cocoa (COD)", maxzoom: 8 },
+  { id: "hih-cod-coffee-score", label: "Coffee (COD)", maxzoom: 8 },
+  { id: "hih-cod-maize-score", label: "Maize (COD)", maxzoom: 8 },
+  { id: "hih-cod-palmoil-score", label: "Palm oil (COD)", maxzoom: 8 },
+  { id: "hih-cod-wheat-score", label: "Wheat (COD)", maxzoom: 8 },
+  { id: "hih-cod-livestock-score", label: "Livestock (COD)", maxzoom: 8 },
+  { id: "hih-caf-cassava-score", label: "Cassava (CAF)", maxzoom: 7 },
+  { id: "hih-civ-cereal-score", label: "Cereal (CIV)", maxzoom: 8 },
+  { id: "hih-civ-fruits-score", label: "Fruits (CIV)", maxzoom: 8 },
+  { id: "hih-civ-vegetables-score", label: "Vegetables (CIV)", maxzoom: 8 },
+  { id: "hih-civ-dairy-score", label: "Dairy (CIV)", maxzoom: 8 },
+  { id: "hih-civ-livestock-score", label: "Livestock (CIV)", maxzoom: 8 },
+  { id: "hih-fishfarm-closed", label: "Fish (closed)", maxzoom: 7 },
+  { id: "hih-fishfarm-open", label: "Fish (open)", maxzoom: 7 },
+  { id: "hih-fishfarm-extensive", label: "Fish (extensive)", maxzoom: 7 },
+  { id: "hih-access-urban", label: "Access: urban", maxzoom: 7 },
+  { id: "hih-access-urban-weighted", label: "Access: weighted", maxzoom: 7 },
+  { id: "hih-access-port", label: "Access: port", maxzoom: 7 },
 ];
 
-const PROBE_ZOOM = 8; // matches these layers' own maxzoom (D10/D11) — best real resolution available
+const PROBE_ZOOM = 8; // the best resolution ANY source reaches — capped per-source below
 
 // Same 0-100 sequential ramp used to build score_ramp.clr (D10) — reproduced here
 // so the client can invert color -> approximate score without a server round trip.
@@ -86,10 +111,11 @@ function loadTileImageData(sourceId, z, tx, ty) {
 }
 
 async function probeScoresAt(lon, lat) {
-  const { tx, ty, px, py } = lonLatToTile(lon, lat, PROBE_ZOOM);
   const results = await Promise.all(
     SCORE_SOURCES.map(async (src) => {
-      const imgData = await loadTileImageData(src.id, PROBE_ZOOM, tx, ty);
+      const z = Math.min(PROBE_ZOOM, src.maxzoom);
+      const { tx, ty, px, py } = lonLatToTile(lon, lat, z);
+      const imgData = await loadTileImageData(src.id, z, tx, ty);
       if (!imgData) return { ...src, value: null };
       const idx = (py * 256 + px) * 4;
       const [r, g, b, a] = imgData.data.slice(idx, idx + 4);

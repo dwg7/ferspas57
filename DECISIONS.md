@@ -6,6 +6,20 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D43 — Panel title de-localized; a real, pre-existing multi-country/zoom bug found and fixed in the score-comparison probe
+**Date**: 2026-09-05
+**Status**: Done, verified live in-browser for both DR Congo and Côte d'Ivoire.
+
+**Panel title**: hfu asked to change the top-left panel header from "ferspas57 — DR Congo" to plain "ferspas57" — the same language/locale-agnostic-chrome principle as D40 applied one level further: baking one country's name into the UI chrome commits Cartographer to an opinion (which country is "the" one) it shouldn't hold, now that the catalog spans DR Congo/CAF/CIV. Fixed in `docs/index.html`.
+
+**A real bug found while checking hfu's report that Côte d'Ivoire's score-comparison panel (`docs/score_probe.js`) showed nothing**: `SCORE_SOURCES` was hardcoded to DR Congo's 7 commodities plus the country-agnostic fishfarm/access archives — it never included any CIV or CAF commodity layer at all, so every source returned null over Côte d'Ivoire and the panel correctly (if unhelpfully) hid itself. Fixed by adding all 6 remaining commodity sources (CAF cassava, CIV's 5) with ISO3-code-suffixed labels (`"Dairy (CIV)"`, not a translated/localized country name — same reasoning as D40's emoji-only controls: a code is not natural-language text, so it doesn't compromise Cartographer's language neutrality) — probing every country's layers unconditionally at every pan is deliberate and cheap, since a source with no data under the probe point already returns `null` and is filtered out, so only the country actually being viewed ever shows up.
+
+**A second, more consequential bug surfaced while fixing the first**: the probe's tile-fetch was hardcoded to zoom 8 (`PROBE_ZOOM`) for every source, but checking each source's real TileJSON found `hih-caf-cassava-score` and all 6 fishfarm/access archives are actually maxzoom 7 (the fishfarm/access figure matches D28's own flagged-but-never-revisited warning: "the merged archives' actual zoom range came out as 3-7... zoom-8 requests will 404"). Confirmed directly (`curl`) that Martin returns a real `404` for a zoom-8 request against a maxzoom-7 source — no overzoom fallback — meaning fishfarm/access scores had been **silently missing from this panel everywhere, including DR Congo, since D28**, not just for the newly-added countries. Fixed by giving each `SCORE_SOURCES` entry its own real `maxzoom` and computing tile coordinates per-source at `Math.min(PROBE_ZOOM, source.maxzoom)` rather than one fixed zoom for all.
+
+**Verified live** (local static server, real `stars.optgeo.org` tiles): Côte d'Ivoire (−5.47, 9.49) now shows Dairy/Cereal/Livestock/Vegetables/Fruits (CIV) alongside Fish/Access scores — previously showed nothing at all. DR Congo (23.60, −6.10) now additionally shows Access/Fish scores alongside its commodities — previously showed only the 7 COD commodities, with fishfarm/access silently absent this whole time.
+
+---
+
 ### D42 — Staff can now hand over a real `#narrative=` link for a translated/adapted narrative, when it has genuine code execution
 **Date**: 2026-09-05
 **Status**: Done. `STAFF-PROMPT.md`/`NARRATIVE-FORMAT.md` updated; the exact recipe end-to-end-tested against all 3 real narratives with a real Japanese translation.
