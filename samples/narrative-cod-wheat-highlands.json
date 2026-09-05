@@ -1,0 +1,30 @@
+{
+  "narrative_version": "ferspas57-narrative/v1",
+  "title": "DR Congo: Wheat Climbs the Mountains",
+  "steps": [
+    {
+      "center": [23.62, -6.11],
+      "zoom": 10,
+      "layers": ["gaez-aez33"],
+      "caption": "The outskirts of Mbuji-Mayi, in DR Congo's central lowlands. GAEZ classes this land “2: Tropics, lowland, sub-humid” — the same broad favorable band the country's other crop stories start from. Two of FAO's fifteen selected wheat storage sites sit here."
+    },
+    {
+      "center": [23.62, -6.11],
+      "zoom": 10,
+      "layers": ["gaez-aez33", "hih-cod-wheat-score"],
+      "caption": "But overlay the wheat storage suitability score and the favorable label buys almost nothing: these lowland sites score just 43.5 and 44.1, right at the floor of the entire fifteen-site selection."
+    },
+    {
+      "center": [29.06, -3.45],
+      "zoom": 11,
+      "layers": ["hih-cod-wheat-score", "hih-cod-wheat-final"],
+      "caption": "The strongest wheat sites are over 600 km east, in the steep highlands just west of Uvira near the northern tip of Lake Tanganyika. Several selected sites cluster here, on land GAEZ flags as “25: Dominantly very steep terrain” — and the best of them scores 60.9, nearly 17 points above the best lowland site."
+    },
+    {
+      "center": [29.06, -3.45],
+      "zoom": 11,
+      "layers": ["gaez-aez33", "hih-cod-wheat-score", "hih-cod-wheat-final"],
+      "caption": "The twist: for wheat, the “warning label” and the opportunity are the same thing. Wheat is a cool-climate crop, and in the tropics cool means altitude — the very mountains that earn GAEZ's steep-terrain flag. A classification built around tropical lowland farming reads this land as constrained; FAO's Hand-in-Hand score, driven by a multi-criteria evaluation of climate, accessibility, and poverty-reduction priority, reads it as DR Congo's best wheat country."
+    }
+  ]
+}

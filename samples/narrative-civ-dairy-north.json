@@ -1,0 +1,30 @@
+{
+  "narrative_version": "ferspas57-narrative/v1",
+  "title": "Côte d'Ivoire: Dairy Follows the Cattle, Not the Rain",
+  "steps": [
+    {
+      "center": [-5.9, 6.3],
+      "zoom": 8,
+      "layers": ["gaez-aez33"],
+      "caption": "Southern Côte d'Ivoire, in the middle of the forest belt. GAEZ classifies this as zone “3: Tropics, lowland, humid” — the wettest, lushest agro-ecological band the country has."
+    },
+    {
+      "center": [-5.9, 6.3],
+      "zoom": 8,
+      "layers": ["gaez-aez33", "hih-civ-dairy-score"],
+      "caption": "Overlay FAO's dairy-processing suitability score, and the lush south turns out mediocre: about 51 right here, with the whole humid forest belt hovering in the 40s and low 50s."
+    },
+    {
+      "center": [-5.47, 9.49],
+      "zoom": 9,
+      "layers": ["hih-civ-dairy-score", "hih-civ-dairy-final"],
+      "caption": "All 12 sites FAO actually selected sit about 350 km north of there, clustered around Korhogo in the drier savanna — GAEZ zone “2: Tropics, lowland, sub-humid.” Their scores run from 68.6 to 74.8, the highest measured for any of Côte d'Ivoire's five Hand-in-Hand commodities."
+    },
+    {
+      "center": [-5.47, 9.49],
+      "zoom": 9,
+      "layers": ["gaez-aez33", "hih-civ-dairy-score", "hih-civ-dairy-final"],
+      "caption": "Why does the drier savanna beat the rainforest? Because dairy follows cattle, not rainfall. In FAO's own catalog, this score's companion final-location layer is literally named CATTLE, and every one of its selected sites lands in this same northern belt. The Hand-in-Hand score is a GIS multi-criteria evaluation — climate plus accessibility plus poverty-reduction priority — so dairy processing is sited where the livestock economy and the people who depend on it actually are, not where the map looks greenest."
+    }
+  ]
+}

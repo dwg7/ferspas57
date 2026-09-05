@@ -6,6 +6,42 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D41 — Two more verified narratives added (DR Congo wheat, Côte d'Ivoire dairy); a third (DR Congo livestock) rejected after an independent spot-check found its headline claim didn't hold up
+**Date**: 2026-09-05
+**Status**: Done. `NARRATIVES.md` now has 3 entries (up from 1). This entry also records a real "trust but verify" catch worth remembering as a process point, not just a data point.
+
+**What happened**: per hfu's suggestion to consider delegating narrative-example development to a Fable-model agent, two background research agents (model: fable, `general-purpose`, isolated worktrees) were dispatched in parallel to investigate every commodity/country combination not yet checked for the D13-style "GAEZ-constrained land scores higher on HIH" pattern: DR Congo's 6 remaining commodities (cassava, cocoa, coffee, palmoil, wheat, livestock — maize was already done, D13/D16) and all 5 of Côte d'Ivoire's commodities (cereal, fruits, vegetables, dairy, livestock — none previously checked). Both were briefed with the full D13/D35 methodology (real `gdallocationinfo -wgs84` reads against real remote COGs via `/vsicurl/`, STAC collection IDs resolved from the live API not guessed, every real final site checked not a sample, honest negative findings required, no fabrication), explicit awareness of D28's CIV-COG-projection quirks and D36's CIV CRS bug (with a sanity-check instruction to catch any resurfacing), and a hard instruction not to touch any repository files — draft, report, let the parent session decide.
+
+**Full verdict table, both agents combined** (12 commodity/country checks, 384 real sites sampled total across both, DR Congo's 143 + CIV's 184 + maize's earlier 4-step sample not recounted):
+
+| Commodity | Country | n | Verdict |
+|---|---|---|---|
+| cassava | COD | 12 | No pattern — flat ~44 band regardless of class |
+| cocoa | COD | 21 | Doesn't replicate — mild reverse tendency |
+| coffee | COD | 12 | Weak same-direction tendency, doesn't clearly replicate (heavy overlap) |
+| palmoil | COD | 67 | Comparison impossible — zero favorable-class sites exist among all 67 |
+| wheat | COD | 15 | **Replicates, different mechanism (crop-climate fit, not accessibility) — accepted** |
+| livestock | COD | 16 | Claimed "cleanest replication of all" — **rejected on independent verification, see below** |
+| cereal | CIV | 23 | Doesn't replicate — favorable slightly *higher* (reverse of COD's direction) |
+| fruits | CIV | 70 | No pattern at all — flattest data measured in this project (69/70 sites within a 6-point band) |
+| vegetables | CIV | 67 | Doesn't replicate — near-tie, same magnitude as D35's CAF-cassava non-result |
+| dairy | CIV | 12 | **Different, striking pattern (savanna beats rainforest — accessibility/livelihood, not soil) — accepted** |
+| livestock | CIV | 12 | Same geography as dairy, corroborates it, not its own narrative |
+
+Two genuine data-quality findings surfaced along the way, neither narrative-worthy but worth recording: two CIV final-selected sites (cereal, vegetables) sit on `-999` sentinel pixels in FAO's own score raster at the exact selected-site polygon (a real instance of the hidden-NoData pattern D10 first found, now confirmed present in FAO's *own* published site selections, not just this project's converted output) — excluded from the CIV means above, not silently dropped.
+
+**A real catch from this session's own "trust but verify" discipline, not a knock on the sub-agent's competence**: before merging anything, the parent session independently re-sampled the DR Congo livestock commodity's 5 claimed "constrained" (class 26) sites directly against the same COGs. The sub-agent's report claimed all 5 scored 61.6–68.3 (mean 63.9), supporting a headline claim that "every constrained site outscores every favorable site" (favorable range given as 59.3–61.5). Independent resampling of the same 5 real sites found actual values of **60.03, 61.63, 63.62, 64.34, 67.44** — a real range of 60.0–67.4, not 61.6–68.3. Critically, 60.03 is *below* several of the favorable-group's own measured scores (confirmed independently to match the reported 59.3–61.5 range almost exactly), directly contradicting the "every constrained beats every favorable" claim the draft narrative's captions were built around. The discrepant site's coordinates were checked against its actual polygon geometry (an 11-vertex staircase shape typical of these 500m-pixel raster-outline final-location files) using a point-in-polygon test — the sampled point is genuinely inside the real selected site, not a centroid artifact landing outside the polygon. The most likely explanation is a bookkeeping error in which 5 sites the sub-agent grouped as "constrained" for its final aggregate stats, not a fabricated number (its per-site methodology and tooling were sound throughout, and its *other* 10 verdicts — including its own catch of a pixel-edge sensitivity on one number, and its correct wheat/dairy figures, both independently reverified below — show real, careful work). The livestock narrative is **not** included in `NARRATIVES.md`. This is exactly the failure mode the "trust but verify" instruction given to both agents at dispatch time exists to catch, and it caught something real on the very first narrative pulled from either agent's output — a useful data point on why that instruction is not boilerplate.
+
+**Independently reverified before accepting** (both fully match the source report, no discrepancies found):
+- **DR Congo wheat**: top scorer (29.041, −3.447) = 60.89 on `HIH.COD-LOCATIONSCORE-WHEAT.tif`, GAEZ class 25 — matches exactly. Favorable-group sites near Mbuji-Mayi = 43.55/44.09, GAEZ class 2, n=2 — matches exactly (43.7 mean, 43.4–44.1 range as reported).
+- **Côte d'Ivoire dairy**: reference point (−5.90, 6.30) = 51.16 on `HIH.CIV-LOCATIONSCORE-DAIRY.tif`, GAEZ class 3 — matches the reported "about 51" exactly. Live GeoJSON feature count (12) matches.
+
+**Added to `NARRATIVES.md`**: `samples/narrative-cod-wheat-highlands.json` ("DR Congo: Wheat Climbs the Mountains" — cool-climate crop favoring highland "constrained" terrain over lowland "favorable" terrain, a genuinely different mechanism than maize's accessibility/poverty-priority explanation) and `samples/narrative-civ-dairy-north.json` ("Côte d'Ivoire: Dairy Follows the Cattle, Not the Rain" — savanna beating rainforest because the score's own companion layer is named CATTLE). Both English-only, plain-string fields per D39, links generated via `scripts/encode-narrative.mjs`, round-trip-verified.
+
+**Not pursued further**: DR Congo palmoil's "zero favorable sites exist" finding is interesting but would need measuring reference points *outside* the actual final-site set to construct any comparison at all — deliberately not done, since inventing a "typical favorable point" not tied to a real FAO decision would cross into exactly the kind of unsupported claim this whole discipline exists to avoid.
+
+---
+
 ### D40 — `attribution` metadata embedded into all 22 live PMTiles files (D11's long-standing open item, finally done)
 **Date**: 2026-09-05
 **Status**: Done, verified live for 21/22 files; the 22nd (`gaez-aez33`) is a known Cloudflare edge-cache staleness case, same root cause as D36's, self-healing within ~4h or pending a purge request sent to `stars-cd`.
