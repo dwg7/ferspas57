@@ -6,6 +6,32 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D34 — Session end: this conversation hit a persistent, unresolvable `/compact` failure; clean handoff to a new session
+**Date**: 2026-09-04
+**Status**: This specific conversation cannot continue normally. Confirmed non-transient: `/compact` failed three times with the identical error (`API Error: Sonnet 5 can't help with this... Start a new session to continue`, AUP reference, detail `[bio]`), including after hfu fully restarted the Claude.app client — ruling out a client-side glitch. Per the error's own explicit instruction, work continues in a fresh session, not this one. No investigation into the specific cause was attempted (out of scope for this session to diagnose, and not productive to guess at).
+
+**Nothing is lost.** Every substantive piece of work through this point is already committed and pushed to `dwg7/ferspas57`'s `main` branch, and where applicable, merged upstream (`hfu/stars#11`, `UNopenGIS/staccato-spec#6`). This entry exists so the next session can resume precisely, not to re-derive state from scratch.
+
+**What's actually done as of this entry** (see D27-D33 above for full detail — this is a pointer, not a re-summary):
+- Horizontal expansion to Côte d'Ivoire and Central African Republic: 6 new crop-storage layers live in production (D27, D30), shared fishfarm/access archives rebuilt across all 5 non-Bhutan HIH countries and live (D28, D30). `docs/index.html` wired accordingly.
+- `BACKGROUND.md` and `CONCEPT.md` written (sourced research, not invented).
+- `UNopenGIS/staccato-spec` ADR 0009 proposed, reviewed, and merged (D29/D31) — Map Intent is the required baseline vocabulary, not the exclusive one.
+- **Staff is built** — not as a backend service (that was this project's own earlier wrong mental model, corrected by hfu), but as `STAFF-PROMPT.md` v0.2 (D33): a system prompt meant to be loaded into any general-purpose AI chat agent. Its hand-off mechanism, `#q=` (D32), is a plain hand-typeable URL shorthand — built and directly informed by consulting `dwg7/chukei`'s real, working implementation of the identical pattern. `docs/map_intent.js` now correctly parses and applies `#q=`, `#intent=`, and `#story=`, all verified in-browser (D32/D33). Narrative Mode's missing paste-box path was also fixed (D33).
+
+**What's genuinely still open, in priority order**:
+
+1. **Live-agent test — the plan's actual completion criterion, never done.** Test `STAFF-PROMPT.md` against a real, genuinely tool-less chat agent (not a Claude Code session, which can "cheat" by executing any encoding itself) with real held-out questions, and log verbatim transcripts here. hfu asked for a minimal version of this (one held-out question, hand-simulated) which *was* done (D33's Côte d'Ivoire dairy example) — but that was still hand-simulated by this session, not run against an independent, real model reading only the prompt text. That remains undone.
+
+2. **A scoping simplification hfu gave, not yet acted on**: rather than building Staff to *dynamically* discover data-driven narratives live during a chat (which would require Staff to have real Library data access — architecturally a much bigger lift, since a prompt-only Staff has no live data access at all, confirmed in the conversation immediately before this compaction failure), the practical, chukei-aligned approach is: **hfu and this project pre-author a small library of verified, data-grounded narrative scenarios** (like `docs/story.js`'s existing `SAMPLE_STORY`), and `STAFF-PROMPT.md`'s Narrative Mode section should be updated to describe this library and instruct Staff to *select* the closest-matching pre-built narrative for a user's theme, rather than attempting to generate one from scratch. hfu's exact words: "Chukeiと同様の設定だと、データドリブンなシナリオをあらかじめ私たちで作ってプロンプトに埋め込み、プロンプトはそこから適宜選ぶという構成になるよ。それであってもいいんだ。"
+
+3. **A concrete investigation was in progress and interrupted mid-way, worth finishing first**: does the DR Congo maize pattern (a GAEZ-unfavorable site scoring *higher* in HIH than a GAEZ-favorable one, because HIH's scoring is multi-criteria — climate + accessibility + poverty-reduction priority, not pure agronomy — see `BACKGROUND.md` §4) **replicate independently for Central African Republic's cassava data** (the newly-converted D27 layers)? This would be real, independent evidence for whether the multi-criteria explanation generalizes or was DR-Congo-specific. Progress so far: pulled all 27 CAF cassava final-site centroids from `hih-caf-cassava-final.geojson` (local copy at this session's scratchpad, `expand/out/`) — e.g. site 1 at approx (16.5592, 7.599), site 2 at (15.5188, 7.4631), etc. **Not yet done**: checking the actual GAEZ33/57 classification and CAF cassava Score value at each of these real sites, to see if the same "constrained land, higher score" divergence shows up. If it does, per item 2 above, build it as a second pre-authored narrative (extending `docs/story.js`'s story library) rather than trying to make Staff discover it live. If it *doesn't* replicate, that's an equally honest and worthwhile finding to record — don't force a result.
+
+4. Owed elsewhere (per `CLAUDE.md`'s knowledge-flow convention, flagged in D32, still not done): the "diversity of Staff personas/hand-off styles, unified by shared Staccato integrity" framing (chukei's terse field-staff style vs. ferspas57's technical-audience style) belongs in `dwg7/staccato-ecosystem`.
+
+**For whoever picks this up next**: read this entry and `HANDOVER.md` first, in a fresh session. Item 3 is the most concrete, immediately-actionable starting point — the data needed is already identified and half-pulled.
+
+---
+
 ### D30 — First real upload to production: 6 new CIV/CAF crop-storage layers live at the GeoJSON level, PMTiles pending Martin restart
 **Date**: 2026-09-04
 **Status**: In progress, with hfu's explicit per-action confirmation at each production-touching step (not just the general "進めよう" go-ahead) — the safety layer around direct writes to `spacex.optgeo.org` (a personal host, distinct in kind from pushing to this repo's own GitHub) asked for that separately, and hfu gave it.
