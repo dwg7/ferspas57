@@ -5,14 +5,27 @@ as a link — see `NARRATIVE-FORMAT.md` for the document schema and the
 Staff/Cartographer responsibility split this library exists to enable (`DECISIONS.md`
 D34 item 2, D37).
 
-Staff's job for a narrative-shaped question is to **pick the closest match below and
+Staff's job for a narrative-shaped question is to **pick the closest match and
 hand over its link as-is** — not generate a new narrative JSON from scratch. If
-nothing here fits, say so (same Anti-Fabrication discipline as `STAFF-PROMPT.md`'s
+nothing fits, say so (same Anti-Fabrication discipline as `STAFF-PROMPT.md`'s
 `source_id` rule) rather than improvising one.
 
-Each entry's link is generated from its `samples/narrative-*.json` file via
-`scripts/encode-narrative.mjs` — regenerate it with that script if the source file
-ever changes; do not hand-edit a link.
+**This library now has two tiers** (`DECISIONS.md` D45/D48), because a single flat
+list stopped scaling once real production started:
+
+1. **Curated "why was this site chosen" stories** (below, in this file) — a small,
+   hand-picked set where a real, verified, genuinely surprising divergence exists
+   (D13/D41's "GAEZ-constrained land scores higher" pattern and its variants).
+   Each entry's link is generated from its `samples/narrative-*.json` file via
+   `scripts/encode-narrative.mjs` — regenerate it with that script if the source
+   file ever changes; do not hand-edit a link. Small enough to read directly, so
+   this stays the tier a genuinely tool-less Staff relies on.
+2. **`data/narratives-index.json`** — an honest, single-site profile for every
+   one of the 355 real FAO-selected sites currently in the catalog (every
+   commodity/country combination, no cherry-picking, no surprise required — see
+   "Per-site profiles" below). Too large to embed in `STAFF-PROMPT.md` itself;
+   a Staff with real code execution (D42) fetches and searches it directly,
+   matching that same capability-conditional design.
 
 ---
 
@@ -89,6 +102,37 @@ hold up, and it was dropped rather than published with a claim that couldn't be
 verified. See `DECISIONS.md` D41 for the full account, including that rejection —
 worth reading before trusting any future automated narrative sweep's output at
 face value.
+
+---
+
+## Per-site profiles (`data/narratives-index.json`)
+
+355 honest, two-step profiles — one per real FAO-selected site, across all 13
+commodity/country combinations currently in the catalog (DR Congo's 7, Central
+African Republic's 1, Côte d'Ivoire's 5). No "surprising divergence" is required
+or claimed: each profile states the site's real coordinates, its real GAEZ AEZ33
+classification, and its real Hand-in-Hand score, plus where that score ranks
+among that commodity/country's other real sites. Mechanically generated from
+`data/site-scores.json`'s `gdallocationinfo`-verified data (`DECISIONS.md` D48) —
+no per-entry discovery cost, which is what makes 355 of them practical where the
+curated tier above tops out at a handful.
+
+Two sites (`civ_cereal` index 7, `civ_vegetables` index 10) are excluded — both
+sit on FAO's own hidden `-999` NoData sentinel (D10/D41) at their exact score
+pixel, so there is no real score to report for them.
+
+**How to use it**: each entry has `country`, `commodity`, `rank` (1 = highest
+score for that commodity/country), `score`, `aez33_class`, coordinates, a ready
+`link`, and the full plain `narrative` document (useful if you need to translate
+or adapt it, D39, without decoding the link first). Find the entry matching the
+question's country/commodity — narrow by `rank` if the question implies "the
+best/worst site" — and hand over its `link` directly, same as any other entry in
+this library.
+
+**This is the tier that needs a code-execution-capable Staff** (D42) — the file
+is too large to pre-load into every `STAFF-PROMPT.md` context. A genuinely
+tool-less Staff should rely on the curated stories above instead, and say so
+plainly if a user's question can only be answered from this larger index.
 
 ---
 
