@@ -214,40 +214,78 @@ function initScoreProbe(map) {
   let lastValid = null; // cached, so a window resize can re-lay-out without re-probing tiles
 
   function render(valid) {
-    // Narrative Mode already tells its own story with its own curated numbers
-    // in prose (D39) — showing every raw score at the same time is redundant
-    // clutter exactly when the caption is what the user should be reading, so
-    // this widget (like the AEZ tooltip) stays hidden for the duration.
-    const narrativeShowing = document.getElementById("narrative")?.classList.contains("active");
-    if (!valid || valid.length === 0 || narrativeShowing) {
+    // Unlike the AEZ tooltip (which restates the same classification a
+    // narrative's own caption already gives, and stays hidden during
+    // playback), this widget shows every OTHER commodity/theme's score at
+    // the same point — content a narrative's caption never covers, since a
+    // narrative only ever talks about the one theme it's built around
+    // (hfu's correction, D49 follow-up). So it stays visible through
+    // narrative playback too, not just free exploration.
+    if (!valid || valid.length === 0) {
       radial.style.display = "none";
       return;
     }
     const { radius, sizeScale } = radialGeometry();
     const n = valid.length;
-    radial.innerHTML = valid.map((r, i) => {
-      const angle = (-90 + (360 / n) * i) * (Math.PI / 180);
-      const x = Math.round(Math.cos(angle) * radius);
-      const y = Math.round(Math.sin(angle) * radius);
-      const size = Math.round((22 + (r.value / 100) * 26) * sizeScale);
+
+    // Size encodes RELATIVE standing among what's actually on screen right
+    // now, not an absolute 0-100 position (hfu's catch: real scores cluster
+    // in a narrow band, e.g. 40-70, so mapping that band onto the full 0-100
+    // range made every bubble look almost the same size). Matches this
+    // widget's own founding point (top of file): the interesting thing is the
+    // relative difference AT ONE PLACE, so the sizing should be relative too.
+    const values = valid.map((r) => r.value);
+    const vMin = Math.min(...values), vMax = Math.max(...values);
+    const sizeFor = (v) => vMax === vMin ? 34 : 22 + ((v - vMin) / (vMax - vMin)) * 30;
+
+    // If a narrative is currently showing, find whichever bubble corresponds
+    // to the theme it's actually about (its current step's own "-score"
+    // layer) and glow it — hfu's suggestion, once the widget started staying
+    // visible through playback (above): with every OTHER theme's score now
+    // on screen too, the one the story is actually about should stand out.
+    // Reuses the exact same gold pulse (.final-glow-ring/-core, D23) this
+    // Cartographer already uses to mark a real FAO-selected site, rather than
+    // inventing a second "this one matters" visual language.
+    let focusedId = null;
+    if (typeof currentNarrative !== "undefined" && currentNarrative && document.getElementById("narrative")?.classList.contains("active")) {
+      const step = currentNarrative.steps[currentStep];
+      focusedId = step?.layers.find((id) => SCORE_SOURCES.some((s) => s.id === id)) || null;
+    }
+
+    // Spread across the top arc only (roughly a semicircle), not the full
+    // 360° — the bottom of the screen is where the narrative panel (and, in
+    // free exploration, the collapsed layer panel) lives, so a full-circle
+    // layout was hiding lower-ranked bubbles behind it (caught by hfu from an
+    // actual screenshot). n=1 centers at straight up.
+    const ARC_START = -175, ARC_END = -5;
+    const positioned = valid.map((r, i) => {
+      const angle = (n === 1 ? -90 : ARC_START + (ARC_END - ARC_START) * (i / (n - 1))) * (Math.PI / 180);
+      return {
+        r,
+        x: Math.round(Math.cos(angle) * radius),
+        y: Math.round(Math.sin(angle) * radius),
+        size: Math.round(sizeFor(r.value) * sizeScale),
+      };
+    });
+
+    // Two passes — every bubble first, then every number label — rather than
+    // interleaved per-item: with sizing now relative (above) some bubbles are
+    // much larger than others, and at a busy point (up to 13 sources) a big
+    // neighbor can geometrically overlap an adjacent small bubble's label.
+    // Painting all labels after all bubbles guarantees a number is never
+    // covered by ANY bubble, regardless of size or draw order (hfu's catch,
+    // from the same screenshot review as the top-arc fix above).
+    const bubbles = positioned.map(({ r, x, y, size }) => {
       const [cr, cg, cb] = scoreRampColor(r.value);
       const borderW = Math.max(2, Math.round((2 + (r.value / 100) * 4) * sizeScale));
       const flagBadge = r.flag
         ? `<span style="position:absolute;right:-4px;bottom:-4px;font-size:${Math.round(size * 0.42)}px;line-height:1;">${r.flag}</span>`
         : "";
-      // The exact number, shown lightly (small, low-contrast gray) rather than
-      // as the widget's main signal — hfu's request. Color/size/position above
-      // already carry the comparison at a glance; this is just for whoever
-      // wants the precise value without having to hover (title= alone isn't
-      // reachable on touch), so it stays visually secondary on purpose.
-      const numberLabel = `
-        <div style="
-          position:absolute; left:calc(50% + ${x}px); top:calc(50% + ${y + size / 2 + 2}px);
-          transform:translate(-50%, 0); font-size:${Math.max(10, Math.round(11 * sizeScale))}px;
-          color:#888; line-height:1; font-weight:400; pointer-events:none;
-        ">${r.value}</div>
-      `;
+      const glow = r.id === focusedId
+        ? `<span class="final-glow-ring" style="width:${size}px;height:${size}px;margin:${-size/2}px 0 0 ${-size/2}px;"></span>`
+        : "";
       return `
+        ${glow}
         <div title="${r.label}: ${r.value}" style="
           position:absolute; left:calc(50% + ${x}px); top:calc(50% + ${y}px);
           width:${size}px; height:${size}px; transform:translate(-50%,-50%);
@@ -257,9 +295,24 @@ function initScoreProbe(map) {
           display:flex; align-items:center; justify-content:center;
           font-size:${Math.round(size * 0.56)}px; line-height:1;
         ">${r.icon}${flagBadge}</div>
-        ${numberLabel}
       `;
     }).join("");
+
+    // The exact number: still visually secondary to color/size/position
+    // (hfu's original "show it lightly" request), but a white halo
+    // (text-shadow, several directions so it works on any map color
+    // underneath) keeps it legible — plain gray alone disappeared against
+    // busy tiles (hfu's follow-up correction).
+    const numberLabels = positioned.map(({ r, x, y, size }) => `
+      <div style="
+        position:absolute; left:calc(50% + ${x}px); top:calc(50% + ${y + size / 2 + 2}px);
+        transform:translate(-50%, 0); font-size:${Math.max(11, Math.round(13 * sizeScale))}px;
+        color:#444; font-weight:600; line-height:1; pointer-events:none;
+        text-shadow: 0 0 3px white, 0 0 3px white, 0 0 3px white, 0 0 5px white;
+      ">${r.value}</div>
+    `).join("");
+
+    radial.innerHTML = bubbles + numberLabels;
     radial.style.display = "block";
   }
 
