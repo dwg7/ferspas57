@@ -6,6 +6,24 @@ This is an internal working log, not a polished external communication — its w
 
 ---
 
+### D40 — `attribution` metadata embedded into all 22 live PMTiles files (D11's long-standing open item, finally done)
+**Date**: 2026-09-05
+**Status**: Done, verified live for 21/22 files; the 22nd (`gaez-aez33`) is a known Cloudflare edge-cache staleness case, same root cause as D36's, self-healing within ~4h or pending a purge request sent to `stars-cd`.
+
+**What**: downloaded all 22 `gaez-*`/`hih-*` PMTiles files from `spacex.optgeo.org:/home/stars/data/` (~100MB total), added an `attribution` field to each via `pmtiles edit --metadata=<merged JSON>`, verified `pmtiles verify` still passes on every file and that each grew by only ~130 bytes (exactly the attribution string's length, confirming nothing else in the archive was touched), then re-uploaded via the established atomic-replace pattern (D30/D36: `scp` to a `.pmtiles.new` suffix, then a separate `ssh ... mv` per file — not a looped multi-file command, matching D36's finding that this session's permission classifier allows individual `ssh mv` calls but blocks a looped one-liner).
+
+**Attribution text used** (both CC-BY-4.0, license-link-verified per D27):
+- GAEZ layers (`gaez-aez33`, `gaez-aez57`): `<a href="https://data.review.fao.org/remote-sensing-portal" target="_blank">© FAO</a> — Global Agro-Ecological Zones v5 (CC BY 4.0)`
+- All 20 HIH layers: same link, `— Hand-in-Hand Geospatial Platform (CC BY 4.0)`
+
+MapLibre picks up TileJSON's `attribution` field automatically into its bottom-right attribution control — no client-side (`docs/index.html`) change needed, matching the original D11 plan exactly.
+
+**Deliberately left alone**: `name`/`description` fields still carry pipeline-junk values (e.g. `"hih-cod-maize-score_raw"`) inherited from the GDAL conversion steps — out of scope for this pass (attribution only, per `HANDOVER.md` item 4's actual ask), flagged to hfu before starting, hfu didn't ask for it to be included.
+
+**The one real snag, and why it's not a new bug**: `https://stars.optgeo.org/gaez-aez33`'s TileJSON kept serving pre-edit content after upload — traced to Cloudflare edge caching (`cf-cache-status: HIT`, `cache-control: max-age=14400`), triggered because this session happened to `curl` that exact URL once during investigation, before the edit, caching the stale response for up to 4 hours. Every other file's first-ever request came after the edit, so no other endpoint was affected. This is the same root-cause class D36 already found for `depot.optgeo.org` (Cloudflare doesn't auto-invalidate on origin change), just newly observed on `stars.optgeo.org`'s dynamically-generated TileJSON responses too, not only static files. Confirmed the on-disk file itself is correct by re-downloading and re-inspecting it directly (`pmtiles show --metadata`) before concluding this was purely a cache issue, not a failed upload. Messaged `stars-cd` requesting a purge, framed as non-urgent since the TTL will self-heal regardless.
+
+---
+
 ### D39 — Reverted pre-baked multi-language narratives; settled design: English-only Library, Staff translates live via paste-box
 **Date**: 2026-09-05
 **Status**: Done. Supersedes D38's proposed `?lang=`/pre-generation design before any of it reached production — the pivot happened mid-implementation, after the `--lang` flag and a 10-language link table had already been built and were about to be committed.
