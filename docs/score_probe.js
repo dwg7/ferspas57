@@ -197,7 +197,8 @@ function initScoreProbe(map) {
   radial.id = "score-radial";
   Object.assign(radial.style, {
     position: "absolute", left: "50%", top: "50%", zIndex: 10,
-    width: "0", height: "0", display: "none"
+    width: "0", height: "0", display: "none",
+    opacity: "1", transition: "opacity 250ms ease"
   });
   map.getContainer().appendChild(radial);
 
@@ -314,6 +315,7 @@ function initScoreProbe(map) {
 
     radial.innerHTML = bubbles + numberLabels;
     radial.style.display = "block";
+    radial.style.opacity = "1"; // fresh data just painted — see sampleCenter's dim-while-fetching
   }
 
   function sampleCenter() {
@@ -322,6 +324,15 @@ function initScoreProbe(map) {
     probeRing.style.display = "block";
     if (scheduled) return;
     scheduled = true;
+
+    // hfu's request: the bubbles currently on screen describe the PREVIOUS
+    // probe point, not wherever the map just settled at — dim them the
+    // instant a new fetch starts (rather than leaving stale numbers looking
+    // just as authoritative as fresh ones) and let render() snap opacity
+    // back to 1 once real data actually arrives. The transition (above) is
+    // what turns "fetch latency" into a legible visual cue instead of an
+    // invisible delay.
+    if (radial.style.display !== "none") radial.style.opacity = "0.35";
 
     const { lng, lat } = map.getCenter();
     probeScoresAt(lng, lat).then((results) => {
