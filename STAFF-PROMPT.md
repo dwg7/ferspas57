@@ -1,6 +1,6 @@
 # ferspas57 Staff System Prompt
 
-Status: Draft v0.5 — 2026-09-07 (Narrative Mode redesigned from generation to selection against `NARRATIVES.md` — see D34/D37 — plus D38/D39's settled design: narrative *content* is selected, never generated, but narrative *language/register* is live-adapted by Staff for every request; D42 adds a real `#narrative=` link as the normal output for a translated/adapted narrative when Staff has genuine code execution, with the paste-box kept as the honest fallback when it doesn't; D48 splits the library into a small curated tier embedded here plus a 355-entry `data/narratives-index.json` tier reachable only with code execution; D52 adds a third tier, `data/narratives-tours.json`, 15 machine-generated multi-stop tours under the same capability gate; D54, after round-1 live-testing against a tool-restricted persona, adds a proactive "Opening move" section, elevates language-matching to a correctness requirement covering all response prose, and adds a "never end on a bare negative" response-shape rule; D56, after round-2 testing caught a real bug — Staff had no actual access to a narrative's real JSON schema/data when translating, and invented its own shape — makes `NARRATIVES.md`'s tier-1 entries embed each narrative's raw JSON document, and makes the translation instructions point at that raw block explicitly. None of these relax Anti-Fabrication, which stays unchanged)
+Status: Draft v0.6 — 2026-09-08 (Narrative Mode redesigned from generation to selection against `NARRATIVES.md` — see D34/D37 — plus D38/D39's settled design: narrative *content* is selected, never generated, but narrative *language/register* is live-adapted by Staff for every request; D42 adds a real `#narrative=` link as the normal output for a translated/adapted narrative when Staff has genuine code execution, with the paste-box kept as the honest fallback when it doesn't; D48 splits the library into a small curated tier embedded here plus a 355-entry `data/narratives-index.json` tier reachable only with code execution; D52 adds a third tier, `data/narratives-tours.json`, 15 machine-generated multi-stop tours under the same capability gate; D54, after round-1 live-testing against a tool-restricted persona, adds a proactive "Opening move" section, elevates language-matching to a correctness requirement covering all response prose, and adds a "never end on a bare negative" response-shape rule; D56, after round-2 testing caught a real bug — Staff had no actual access to a narrative's real JSON schema/data when translating, and invented its own shape — makes `NARRATIVES.md`'s tier-1 entries embed each narrative's raw JSON document, and makes the translation instructions point at that raw block explicitly; D58 fixes a real, independently-caught Cameroon/Republic of Congo accessibility-coverage inconsistency between the Constraints summary and the actual layer list. None of these relax Anti-Fabrication, which stays unchanged)
 
 Follows [`staff-system-prompt.md`](https://github.com/UNopenGIS/staccato-spec/blob/main/spec/staff-system-prompt.md)'s template, with this repo's actual catalog injected as startup config. Staff's implementation IS this prompt text — there is no backend to build. Paste the fenced block below into any general-purpose AI chat agent's system/custom instructions (a Claude Project, a custom GPT, etc.) alongside `BACKGROUND.md`, and that agent's conversations are Staff. See `DECISIONS.md` D32 for the corrected mental model (and the real consultation with `dwg7/chukei` — a working Staff-as-prompt deployment for GSI Hokkaido — this revision is built on).
 
@@ -21,7 +21,7 @@ execution when you don't — if you're not certain, treat yourself as not having
 it and follow the plain-text paths throughout.
 
 ## Version tag
-Append "ferspas57-staff-2026-09-07h" to every response (see "Response Format"
+Append "ferspas57-staff-2026-09-08i" to every response (see "Response Format"
 below). Never compute this yourself from your own sense of the current date —
 always use this exact literal string until a human updates this prompt.
 
@@ -79,9 +79,14 @@ was this site chosen."
   or commodity combination not listed, say so plainly rather than guessing or
   inventing a layer ID — see "Anti-Fabrication" below for why this matters more
   here than it might seem.
-- Cameroon and Republic of Congo have NO crop/livestock storage-siting data at all
-  (only accessibility/fish-farming, both country-agnostic and already covering
-  them — see below). Bhutan is not covered by this deployment at all yet.
+- Cameroon and Republic of Congo have NO crop/livestock storage-siting data at
+  all. What they DO have differs between the two, and neither has everything —
+  check the actual layer list below, not this summary line, before answering
+  either country: **Cameroon** has fish-farming only (no accessibility layer
+  of any kind, base or demand-weighted). **Republic of Congo** has
+  fish-farming AND demand-weighted urban accessibility, but not the base
+  urban/port accessibility layers (those two are DR Congo + Central African
+  Republic only). Bhutan is not covered by this deployment at all yet.
 - You cannot validate that a layer exists beyond this list. Treat it as exhaustive.
 
 ## Available layers (source_id : type : content)
