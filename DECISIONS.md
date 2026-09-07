@@ -4,6 +4,19 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D59 — Retroactive log entry: Scores radial fades while a fetch is in flight, narrative panel is full-width (commit `99b0fa0`, done 2026-09-06, not logged at the time)
+**Date**: 2026-09-06 (implemented), logged 2026-09-08 while writing everything out ahead of a `/compact`.
+**Status**: Done, verified in-browser at the time, live on `main`.
+
+Two small UI requests from hfu, implemented and pushed between D53 (tours) and D54 (round-1 testing) but never given their own `DECISIONS.md` entry — caught only now, while doing a final consistency pass before compacting this session. Recorded here so the log doesn't have a silent gap against `git log`.
+
+1. **Scores radial (`docs/score_probe.js`) now dims to 0.35 opacity the instant a new probe fetch starts**, and snaps back to 1 once `render()` paints real results — the bubbles on screen describe the *previous* probe point until fresh data actually arrives, and hfu wanted that latency visible rather than stale numbers looking just as authoritative as fresh ones. A `transition: opacity 250ms ease` on the radial element turns this into a smooth fade rather than a hard cut.
+2. **The narrative caption panel (`#narrative` in `docs/index.html`) is now full-width** (`left/right: 12px`, no `transform`/fixed `width`) instead of a fixed `min(680px, 90vw)` floating bar — hfu's reasoning: less dead space either side of the caption, on both desktop and mobile. Verified in-browser at both a desktop width and an emulated 375px mobile viewport before this was originally pushed.
+
+No code changed by writing this entry — it is a documentation-only catch-up.
+
+---
+
 ### D58 — Round 2's remaining three tests completed (Anti-Fabrication/hospitality pivot, `#q=` comma-in-label handling, out-of-scope-country + language-switch); found and fixed a second real bug, a Cameroon/Republic of Congo accessibility-coverage inconsistency
 **Date**: 2026-09-08
 **Status**: Done. STAFF-PROMPT.md bumped to v0.6, version tag `2026-09-07h` → `2026-09-08i`.
