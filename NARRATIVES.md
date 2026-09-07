@@ -56,6 +56,21 @@ not pure agronomy). Verified finding, `DECISIONS.md` D13/D16.
 
 [Open this narrative](https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREABEASgAIAwvgDmuQtICC0gMoBbCEKHSAsgE8scckekIwhiAgBeKTXFywFo-qZQUsRANqgAYxQwMyg-ACYATgA6ABZY3gAGaJoAXX47XFwtIgAOfiEII3IfQl8QBQgUOwYquwBmepB0kACICkR8MUkEBQALOGl8aTg+xxQARwBXeBdeS2swF1GUalDrKTlFXGjpABU+hCxpaFXpEl0hY6mwABNyaQBxVQBRAC1pTLBHQBwCepU9lBcBQEAEsPMhLgAO6FO7zPpTLQIW6AXAJpIAUAhGKAAHnAAEZZADW5wgSBcEDxImkAXwtwQnTAxxILmkCiBUKsCmkOnsKGiIAAvrxAsFQhEYvEkikWplskQuIkCkUSn4KnVatVGnwQIc+gwabcGDyHAwsDSoKIWm0OngCMQAPKYQpGTnSABiqntAHJjsbHKZyW5pFgpvSKQghPSLGaXCh5qMjsGKLhBjGLcd6HEMdJ7kEQvM8VNBktBrgi6YIHdOfyhSKQuRxSk6LwGMlcnQZVkcoQuFwlcVsKrdfrcIa-abze4dQg9QajbYTSQrLpmvxrQyxABNFCDFbB+mOD32k4BOAzPTRlAiU8oW7SAAUe4td+TQiMSjAAEppJGUMcKWWgxcDQiSEloIy4CMYzBoBfS7AAknAxzPO8nz4I4iY-OEABsKgADKVneHKjMGKCYP6uARuwoSwFYP4IEicCsPgWBopiIYUMmWC3m+0g3BcZKwJSjiYoWgz0sGk7HNhNApPMECnuevGHP0DyjJWUH+geEGadISxQKMNbCq0ooNmUURNi2bYdhkXbyn2IDOiqZRqtUGoNE0-DDnO45plO3mjvOvIMEukBCKurTtBuxAAOp9BYUJlkId57j8NKMnAtHfKiP6EZJsbSCpYxQAA-O6no+tIAAShEMFYDA1Xc+XpicFonmelwWBATzwRoDB4tQt7clMQiIPqUAHhN3VkboMwMtS2R4lYroBJGOiIAEwahkxS2RnACX0n0J5BFgOC7VGJxNcmmD7Qwz5TKetrSBQE0uFGuyPGw1h7vBYD0ggrCoJVFq6NyRw4MMmLBHSYBctd5D7Zdd4IrDDz3ho4iPFw7AY484TfpiEk6ISf6kYyjjqYM3UUIUQTSFChwBEdDEvbgqDHBQKDAiIlWRuzC0jXeeKOEzuDcdYZHBJYJCWOJWBgF6VNsvg2Sgp1lj3LoNapAKQA)
 
+**Raw document** (this is what "structural fields must stay byte-identical" in `NARRATIVE-FORMAT.md`/`STAFF-PROMPT.md` refers to — a Staff without file/network access to `samples/*.json` has no other way to see this, so it's reproduced here in full):
+
+```json
+{
+  "narrative_version": "ferspas57-narrative/v1",
+  "title": "DR Congo: A Small Mystery in Maize Storage",
+  "steps": [
+    { "center": [29.44, 0.5], "zoom": 8, "layers": ["gaez-aez33"], "caption": "Right on the equator, in northeastern DR Congo. This area falls under GAEZ zone “3: Tropics, lowland, humid” — textbook favorable conditions for growing maize." },
+    { "center": [29.44, 0.5], "zoom": 10, "layers": ["gaez-aez33", "hih-cod-maize-score"], "caption": "Overlaying FAO's maize storage suitability score, this spot scores 57.4 — decent, but not outstanding." },
+    { "center": [29.57, -0.87], "zoom": 11, "layers": ["hih-cod-maize-score", "hih-cod-maize-final"], "caption": "Yet the site FAO actually selected (the red polygon) lies about 150km to the south. Its GAEZ zone is “26: Land with severe soil/terrain limitations” — supposedly unfavorable — but it scores 65.5, actually higher than the site to the north." },
+    { "center": [29.57, -0.87], "zoom": 11, "layers": ["gaez-aez33", "hih-cod-maize-score", "hih-cod-maize-final"], "caption": "Why would the “constrained” land score higher? FAO's Hand-in-Hand scores are actually a GIS-based multi-criteria evaluation combining climatic suitability with accessibility and poverty-reduction priority. Given the Initiative's real mission — ending poverty and hunger (SDG1/SDG2) — it makes sense that a place which improves people's lives could be chosen even if it isn't agronomically ideal." }
+  ]
+}
+```
+
 Authored in English only, matching the source FAO data/documentation this
 narrative is built from — see `NARRATIVE-FORMAT.md`’s “Whose job is the
 language?” for why this Library deliberately does not pre-translate: content
@@ -83,6 +98,21 @@ against all 15 real final sites (`DECISIONS.md` D41).
 
 [Open this narrative](https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREABEASgAIAwvgDmuQtIDqACxTw5QhAFsARlmlxN0gLK4ArmDgQEYLHxBY4KCk8IBtUAGMUtuREXgBMAMwAdABsIbwMURFcXAC6-ABeuLh6RFwADPxCEACe5J5eIAoQKGkMVWlhYSCpIL4QFIj4YgAqZtZwWADWCFD90rgkFgZWAFYIDObFCLzSDtJScoq4AOTG-rawQtJCuADuhWAAJlgR0gDiAIIAogBa0r6FWFgoxqYIxucXaSAHAIQioulBcBQEL4sMtjmcIJdllgrAYGOorHoEBdALgE0kAKAQmMxYCB6FDSAwQiCAkgQJC4WAGEQUxGA0zk3zWfZFHZjdlQN4QijSVwMhDfEV2EbSEgQvQ3LonXBjCYAMXuAHleSQECQ3AERSgRL43ICTpptKLYApyTg3MY7dJNFAUBEQABfXh+AJuKDBcLRWLxRIpdKZbKEPIFYqlYIVOq1aoNZzqBDqBici4Mc1aOAMLCcl1Nfitdp4AjEABCVjgY0whSKRPJOctcAZEBtIqsCDsBgQujgjYLDPJrKbMrp7aZ5MKBiNFKsRWMECEelwrmkYFwvzAChU7K+R1OAJFPYlw5d0mmVg3ABZIjRpGPb7fEssoAgFOpa9p2TLjgyKrjj6wzkjqeooAE+ZnoaxodGAbqet6gR+t4IQAJwRLkURxJEt40M0GRZDkXDRiU2Bxqm6aZtmFp5heoj8FRGa4FmLZ5jqkBCMWLRtPB3TEnAEK7t8tbsae9pPpeuCYNIUS5Lk0gDHo0haK4yyrH+riQcKqZfgCxjXhuJyiUBACqSDDBAm5aAKf5biMzpgCYCDCuM0gADIQAM5JdIilRgEUCADBANwAMooJgK6wSgJooICdoSu8N6+k65AoMs+BHGODwvP+HbLsYII0Co4hZA4iLCI2mBDvqwq+rADh4oSY5-nOG7ueyKkMcY8kROhyxgLZQiNlwdDSBQuAOKMEAGDJ5JtaZ8InoliFei0PpBGhmHYbhET4YR4YkWRsbePG1SJvUjRMWmLFsXR+aFoxIDMTR7EMJxK48aW-HED0C0nH8cAqCQgHscsf5Aic0BgA4CjZXOQh4q1vQUJNIw2D2jbQAtxKkrjcM3BouYrMubyZEIGa6Ho8AckKyxjppZhCZC0K7BT0hkoiy5CIIVgXOShJ-jVnNcnYDg-Oo2i2c5uXPLy2nuAwDX2M5JCFAoNz3G8Hw4DqrTwQu-Y-hCNhskK0LRctY60lAWK7tILrUpLfzZZcT7s44Qmq-FADc0jqlqxgABKsgwDgMKH7sMcsFwfqgzkGNjnNWLzcy+B+voINZkUrlYrBZe57z6LTDO+P4nwIH2A5FAz7uTZgg4MC6FxWCa5YTR+YqDu+WhXCsP7GOs8i7tsxjtWJdHkzYQlFIhyTukAA)
 
+**Raw document**:
+
+```json
+{
+  "narrative_version": "ferspas57-narrative/v1",
+  "title": "DR Congo: Wheat Climbs the Mountains",
+  "steps": [
+    { "center": [23.62, -6.11], "zoom": 10, "layers": ["gaez-aez33"], "caption": "The outskirts of Mbuji-Mayi, in DR Congo's central lowlands. GAEZ classes this land “2: Tropics, lowland, sub-humid” — the same broad favorable band the country's other crop stories start from. Two of FAO's fifteen selected wheat storage sites sit here." },
+    { "center": [23.62, -6.11], "zoom": 10, "layers": ["gaez-aez33", "hih-cod-wheat-score"], "caption": "But overlay the wheat storage suitability score and the favorable label buys almost nothing: these lowland sites score just 43.5 and 44.1, right at the floor of the entire fifteen-site selection." },
+    { "center": [29.06, -3.45], "zoom": 11, "layers": ["hih-cod-wheat-score", "hih-cod-wheat-final"], "caption": "The strongest wheat sites are over 600 km east, in the steep highlands just west of Uvira near the northern tip of Lake Tanganyika. Several selected sites cluster here, on land GAEZ flags as “25: Dominantly very steep terrain” — and the best of them scores 60.9, nearly 17 points above the best lowland site." },
+    { "center": [29.06, -3.45], "zoom": 11, "layers": ["gaez-aez33", "hih-cod-wheat-score", "hih-cod-wheat-final"], "caption": "The twist: for wheat, the “warning label” and the opportunity are the same thing. Wheat is a cool-climate crop, and in the tropics cool means altitude — the very mountains that earn GAEZ's steep-terrain flag. A classification built around tropical lowland farming reads this land as constrained; FAO's Hand-in-Hand score, driven by a multi-criteria evaluation of climate, accessibility, and poverty-reduction priority, reads it as DR Congo's best wheat country." }
+  ]
+}
+```
+
 ---
 
 ## 3. Côte d'Ivoire: why does dairy processing favor the savanna over the rainforest?
@@ -102,6 +132,21 @@ real final sites (`DECISIONS.md` D41).
 **Source**: [`samples/narrative-civ-dairy-north.json`](samples/narrative-civ-dairy-north.json) (4 steps, English)
 
 [Open this narrative](https://dwg7.github.io/ferspas57/#narrative=N4IgdghgTlEC4EsBuBTA+qqBnBB7MIAXCAGYrYAOEWArAOwC0kM8yKA9EgIwgA0IiOABsUREAGEAL3BQACACYByAJJJcCKCkKyAIhA0BPWQDFcQobgDuWWXAAWc8fGEpesgHK44th7IBK+gT8WDIUWEQA2qAAxihgMlCRDDQAdACcvABsKQDMALr8AF64uAC2RAAc-EIQBuThhBEgAOYQKIUMbYU5OSAFINEQFIj4YgDKuACu9uRgslIyCipqGq6yCHMzsqUI8vIisrgkPnIkuJohsgBGKEJwKbIA4gCCAKIAWrLRNVg4JAgoGz2BA2aiyYpgOSAHAIctoACpQXAUBDRLBuCyWGpgeRuOyTHbyQC4BLJACgEJ1klhQcBkIXRkywDkuEGaiIYKGiZlwzRRECE1wg2PJHMm8SgRjs1BSIAAvrwYnEEklUhlsvkiiVyoQqiAanVsJEWl1Ou0enwQHYEHYGNFkAx5PoxQwsBzNH1+INhngCMQAPKYXUmZ4+xQ2e2GBgURGxX4bZqyLCTBBwCBXBBCJNGZ3nNYC+TkoT0uzxqb2WyTKBgGwl7YoeR4aKabQp6s0LiyKAIZp2bwOTRuSxJotbSx2MxyPEE2RnC7eG53WSjzCx9abXwAFgADKDBRjZDQt1LZfL4uQlSk13ReGlz2l+sUykQMjravUDRarTakHaHQYnS7RPw77WraYaOv8kBCG6AxDCM3ogM85iyFwABM8ZJoCgY+rIEDRHAky8kIma3OyMh5jg3jNtMsg5PusgANalLIYDnKWRwnH2XwFiE5C1thiIinmADS5yjs0uAruS8gduQ8YQEgAqQKSTxvJ8ELQsh8KIsiqLolYWI4vGkxXAwE67CkxJwg4Gjxv+NhQCKU6IoxmQVCkmS2OJdBrikVTkhaXaAt4pQoNQ5a8dO2FgEYbELHISiqOomghlObCyAAErmDAbAwGWChypSlLgdaIICh5ygMCqno0yTnpe15rre6oPoQT66q+jSGu0xrdL0gGWsBX6gb+Waun1H4gT+DDgbyUEerBYgAOp2EY8i4BhWxSQCUCyfJYCKTc8DkrAGzToFAD8sgAELshA9JxT+U5mBiNiDNSIhuMx3jHWAJAEQ8yhzMYQbJVYcyvbyXJuMCNgjSgyX5VQYBeilEEMBYr3I2120grI6YJARRiQMFebiM8cJwgAMq8bi5rIKCYNFkKHMcSYw8RuG8eRGH6TYGw+DjWAQMFTEsb2cxzvcsiWXIuXyFlYA5bTsPrKCTzKGM2yTHcCDWh2CQIBAdPyQWrD4Ep3wIKU8ByBQXHYdE0Y4KmeNGLb9KyBQuCYHAv6aPIky4cjkZ4HrRhklg4lDR7UaAjgYBxgL6F5iOPH5mwIS4NEdF0xyzGlEYtNbBQKBIgcI6RygxeCmbSb23hBN8Wsn0Ur2chbFbFC4yUdE2CyKBxIFh55NKQA)
+
+**Raw document**:
+
+```json
+{
+  "narrative_version": "ferspas57-narrative/v1",
+  "title": "Côte d'Ivoire: Dairy Follows the Cattle, Not the Rain",
+  "steps": [
+    { "center": [-5.9, 6.3], "zoom": 8, "layers": ["gaez-aez33"], "caption": "Southern Côte d'Ivoire, in the middle of the forest belt. GAEZ classifies this as zone “3: Tropics, lowland, humid” — the wettest, lushest agro-ecological band the country has." },
+    { "center": [-5.9, 6.3], "zoom": 8, "layers": ["gaez-aez33", "hih-civ-dairy-score"], "caption": "Overlay FAO's dairy-processing suitability score, and the lush south turns out mediocre: about 51 right here, with the whole humid forest belt hovering in the 40s and low 50s." },
+    { "center": [-5.47, 9.49], "zoom": 9, "layers": ["hih-civ-dairy-score", "hih-civ-dairy-final"], "caption": "All 12 sites FAO actually selected sit about 350 km north of there, clustered around Korhogo in the drier savanna — GAEZ zone “2: Tropics, lowland, sub-humid.” Their scores run from 68.6 to 74.8, the highest measured for any of Côte d'Ivoire's five Hand-in-Hand commodities." },
+    { "center": [-5.47, 9.49], "zoom": 9, "layers": ["gaez-aez33", "hih-civ-dairy-score", "hih-civ-dairy-final"], "caption": "Why does the drier savanna beat the rainforest? Because dairy follows cattle, not rainfall. In FAO's own catalog, this score's companion final-location layer is literally named CATTLE, and every one of its selected sites lands in this same northern belt. The Hand-in-Hand score is a GIS multi-criteria evaluation — climate plus accessibility plus poverty-reduction priority — so dairy processing is sited where the livestock economy and the people who depend on it actually are, not where the map looks greenest." }
+  ]
+}
+```
 
 **A note on how these narratives were found**: candidates 2 and 3 (and D35's negative
 result for CAF cassava) came from a systematic sweep of DR Congo's and Côte

@@ -1,6 +1,6 @@
 # ferspas57 Staff System Prompt
 
-Status: Draft v0.4 — 2026-09-06 (Narrative Mode redesigned from generation to selection against `NARRATIVES.md` — see D34/D37 — plus D38/D39's settled design: narrative *content* is selected, never generated, but narrative *language/register* is live-adapted by Staff for every request; D42 adds a real `#narrative=` link as the normal output for a translated/adapted narrative when Staff has genuine code execution, with the paste-box kept as the honest fallback when it doesn't; D48 splits the library into a small curated tier embedded here plus a 355-entry `data/narratives-index.json` tier reachable only with code execution; D52 adds a third tier, `data/narratives-tours.json`, 15 machine-generated multi-stop tours under the same capability gate; D54, after round-1 live-testing against a tool-restricted persona (D54 also records that test), adds a proactive "Opening move" section, elevates language-matching to a correctness requirement covering all response prose (not just Narrative Mode), and adds a "never end on a bare negative" response-shape rule — none of these relax Anti-Fabrication, which stays unchanged)
+Status: Draft v0.5 — 2026-09-07 (Narrative Mode redesigned from generation to selection against `NARRATIVES.md` — see D34/D37 — plus D38/D39's settled design: narrative *content* is selected, never generated, but narrative *language/register* is live-adapted by Staff for every request; D42 adds a real `#narrative=` link as the normal output for a translated/adapted narrative when Staff has genuine code execution, with the paste-box kept as the honest fallback when it doesn't; D48 splits the library into a small curated tier embedded here plus a 355-entry `data/narratives-index.json` tier reachable only with code execution; D52 adds a third tier, `data/narratives-tours.json`, 15 machine-generated multi-stop tours under the same capability gate; D54, after round-1 live-testing against a tool-restricted persona, adds a proactive "Opening move" section, elevates language-matching to a correctness requirement covering all response prose, and adds a "never end on a bare negative" response-shape rule; D56, after round-2 testing caught a real bug — Staff had no actual access to a narrative's real JSON schema/data when translating, and invented its own shape — makes `NARRATIVES.md`'s tier-1 entries embed each narrative's raw JSON document, and makes the translation instructions point at that raw block explicitly. None of these relax Anti-Fabrication, which stays unchanged)
 
 Follows [`staff-system-prompt.md`](https://github.com/UNopenGIS/staccato-spec/blob/main/spec/staff-system-prompt.md)'s template, with this repo's actual catalog injected as startup config. Staff's implementation IS this prompt text — there is no backend to build. Paste the fenced block below into any general-purpose AI chat agent's system/custom instructions (a Claude Project, a custom GPT, etc.) alongside `BACKGROUND.md`, and that agent's conversations are Staff. See `DECISIONS.md` D32 for the corrected mental model (and the real consultation with `dwg7/chukei` — a working Staff-as-prompt deployment for GSI Hokkaido — this revision is built on).
 
@@ -21,7 +21,7 @@ execution when you don't — if you're not certain, treat yourself as not having
 it and follow the plain-text paths throughout.
 
 ## Version tag
-Append "ferspas57-staff-2026-09-06g" to every response (see "Response Format"
+Append "ferspas57-staff-2026-09-07h" to every response (see "Response Format"
 below). Never compute this yourself from your own sense of the current date —
 always use this exact literal string until a human updates this prompt.
 
@@ -279,12 +279,22 @@ rule above.
   still the simple, no-generation case.
 - If they asked for another language, or for a different register (e.g.
   "explain it simply," "I'm not technical," a request implying a younger or
-  non-expert audience) — translate/adapt the narrative yourself, live, using the
-  English `samples/*.json` content as your only source of facts. Every
-  structural field (`steps[].center`/`zoom`/`layers`) and every substantive
-  claim inside each caption (a score, a classification, a finding) must stay
-  exactly as in the English original — only the language and phrasing of the
-  prose may change.
+  non-expert audience) — translate/adapt the narrative yourself, live, using
+  the matching entry's **raw document** (each NARRATIVES.md tier-1 entry
+  includes one, a fenced JSON block — that block, not the prose "What it
+  shows" summary above it, is your source of facts; you have no file/network
+  access to `samples/*.json` itself, so the raw block is the only faithful
+  copy you actually have). Your output must be a JSON object in the exact
+  same shape — `{"narrative_version": "...", "title": "...", "steps": [{"center": [lng, lat], "zoom": <number>, "layers": [...], "caption": "..."}, ...]}`
+  — same number of steps, same `center`/`zoom`/`layers` per step, only
+  `title` and each step's `caption` translated/adapted. Every structural
+  field and every substantive claim inside each caption (a score, a
+  classification, a finding) must stay exactly as in the English original —
+  only the language and phrasing of the prose may change. Do not invent a
+  different shape (no renamed or restructured fields, no flattening the
+  `steps` array away) — a document in any other shape will not be recognized
+  by the Cartographer's paste-box, which checks specifically for a `.steps`
+  array.
 - This is real generation of text, but of *expression*, not of *fact* — it does
   not reopen the "do NOT invent new narrative content" rule above, because the
   underlying claims never change, only how they're said.
@@ -401,17 +411,28 @@ demanding reference for correct syntax, not just one more example.
   (bounded, easy to score), and does a translated/adapted copy it produces keep
   every structural field and claim intact (needs an actual diff-style check,
   not just "does it look plausible").
-- **No actual model has been live-tested against this prompt yet, in either
-  mode.** Before trusting it, run the live-verification protocol in
-  `.claude/plans/` (or `DECISIONS.md`'s eventual record of having done so)
-  against a genuinely tool-less chat agent for the plain-text paths — not a
-  Claude Code session, which would silently "cheat" by executing any encoding
-  it's asked to produce rather than proving a tool-less agent can hand-type this
-  format reliably. Separately, the code-execution path (D42) needs its own
-  test against a real tool-equipped agent: does it actually run the embedded
-  LZString code rather than hallucinate plausible-looking output, and does its
-  round-trip check genuinely catch a broken link before presenting one.
+- **Two rounds of partial live-testing have happened (`DECISIONS.md` D54, D56),
+  both against a tool-restricted Claude Code subagent, not a genuinely
+  independent tool-less chat product** — a real, acknowledged limitation, not
+  a substitute for the real thing. Round 2 (D56) found and fixed a genuine
+  bug this way: Staff, asked to translate a curated narrative, invented its
+  own JSON shape (`{title, question, whatItShows}`) instead of the real
+  `{narrative_version, title, steps: [...]}` schema, because nothing it was
+  given actually contained that schema or the narrative's real per-step data
+  — `NARRATIVES.md`'s tier-1 entries now embed each narrative's raw JSON
+  document for exactly this reason (see below). The code-execution path (D42)
+  still needs its own test against a real tool-equipped agent: does it
+  actually run the embedded LZString code rather than hallucinate
+  plausible-looking output, and does its round-trip check genuinely catch a
+  broken link before presenting one — not done yet.
 - `BACKGROUND.md` (repo root) is this prompt's companion reference document — see the "Background Knowledge" section above. Keep it in sync as the catalog/countries expand; don't duplicate its content into this prompt.
+- **`NARRATIVES.md` (repo root) must ALSO be included alongside `BACKGROUND.md`
+  — this was missing from this list until D56 found the resulting failure
+  mode.** Narrative Mode's tier-1 selection and translation both assume Staff
+  can actually read the curated stories (including each one's raw JSON
+  document, not just its prose summary) — without `NARRATIVES.md` actually in
+  context, tier 1 is exactly as unreachable as tiers 2/3, silently, with no
+  signal that anything is wrong.
 - `NARRATIVE-FORMAT.md` (repo root) documents the narrative document schema and the
   Staff/Cartographer/maintainer responsibility split — read it before adding a new
   entry to `NARRATIVES.md`. The Cartographer's narrative paste-box (referenced in
