@@ -6,7 +6,7 @@
 
 - **所要時間**: 20〜30分
 - **必要なもの**: ブラウザ、チャット製品のアカウント1つ(Claude / ChatGPT / Gemini のいずれか)
-- **記録先**: [dwg7/ferspas57 の実機検証 issue](https://github.com/dwg7/ferspas57/issues)(このファイルを参照している issue にコメントで結果を貼る)
+- **記録先**: [dwg7/ferspas57#1](https://github.com/dwg7/ferspas57/issues/1) — 終わったら、この issue にコメントで結果を貼ってください(貼る形は最後の「記録テンプレート」にあります)
 
 ---
 
