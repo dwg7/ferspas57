@@ -4,6 +4,33 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D62 — Measured the ADR 0010 migration cost this repo itself flagged: ~2.2x compressed, and it is affordable
+**Date**: 2026-09-11
+**Status**: Measured. No migration performed — this entry supplies the number the decision was waiting on.
+
+D55 raised a concrete migration cost during the convergence that produced [ADR 0010](https://github.com/UNopenGIS/staccato-spec/blob/main/spec/adr/0010-narrative-sequencing.md), and the published ADR carries it verbatim in its Operational Implications as something it deliberately does not resolve: giving every narrative step a complete Map Intent (with `catalog_context` and `provenance` duplicated per step, §4's accepted trade-off) would inflate this repo's LZString-compressed `#narrative=` URLs, "especially for its longer (7–20 step) tours." That has sat unmeasured since 2026-09-07, blocking a migrate/don't-migrate decision on an intuition rather than a number.
+
+**Built**: `scripts/measure-adr0010-urls.mjs` — reads all 373 production narratives across the three tiers, constructs what each would look like under ADR 0010's recommended wrapper, and compares full compressed URL lengths. It changes nothing. Two things it deliberately does rather than approximating: it fetches the exact lz-string build `docs/index.html` loads (same as `scripts/encode-narrative.mjs`, so measurements can't drift from what the real decoder accepts), and it reads `required_layers` labels out of `docs/index.html`'s own layer table rather than inventing plausible ones.
+
+**Result** (full URL = 37-char base + `#narrative=` + payload):
+
+| tier | count | steps | now (median / max) | ADR 0010 (median / max) | ratio |
+|---|---|---|---|---|---|
+| 1 curated | 3 | 4 | 1,499 / 1,522 | 2,985 / 3,008 | 1.99x |
+| 2 per-site | 355 | 2 | 676 / 733 | 1,506 / 1,584 | 2.23x |
+| 3 tours | 15 | 3–7 | 1,318 / 1,602 | 3,239 / 4,148 | 2.46x |
+| **all** | **373** | **2–7** | **677 / 1,602** | **1,507 / 4,148** | **2.23x** |
+
+Projected past the corpus, by cycling the largest real tour's own steps to answer the ADR's "7–20 step" phrasing directly (the longest narrative actually in production is 7 steps, so that end of the range is otherwise unmeasured): 10 steps → 5,298; 20 steps → 8,530; 30 → 11,278; 50 → 15,834. The ratio converges to about 2.8x rather than compounding.
+
+**Reading**: the cost is real but small, and the interesting reason is that §4's accepted duplication is nearly free *after* compression — repeating `catalog_context`/`provenance` verbatim is exactly the input LZ77-family compression handles best, which is why a 7x increase in raw JSON shows up as roughly 2.2x on the wire. Nothing currently in production would cross 4.2 KB. Chrome's address bar truncates display around 32 KB and every other modern browser is higher; MapLibre's globe projection already requires a modern browser, so the legacy ~2 KB IE limit is not a constraint this deployment lives under. Practical friction sits elsewhere — some chat clients wrap or truncate very long URLs, and a 4 KB URL is past comfortable QR-code density — so the honest summary is "affordable, with a real ceiling somewhere past 20-step tours," not "free."
+
+**Not migrated, deliberately.** ADR 0010 is SHOULD-level, the current shape works, and migration would touch `NARRATIVE-FORMAT.md`, `docs/narrative.js`, both generators, and all 373 entries. What was blocking the decision was the missing number, and that is now supplied. Worth noting for whoever picks this up: `#q=`, the hand-typeable shorthand a tool-less Staff actually uses, is unaffected either way — it is not a narrative document.
+
+**Owed upstream, not yet sent**: this answers a question ADR 0010 explicitly left open and names this repo as the source of. `staccato-spec` should get these numbers, since the ADR's Operational Implications currently reads as an open risk when it is in fact a measured, bounded one. Tracked in `HANDOVER.md`.
+
+---
+
 ### D61 — One-paste Staff bundle, so the never-met "test against a real chat product" criterion becomes a ten-minute task
 **Date**: 2026-09-11
 **Status**: Done — artifact built and committed. The test itself is hfu's to run; it has not happened yet.
