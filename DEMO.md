@@ -41,7 +41,7 @@ All three findings were verified against every real selected site for that commo
 
 ## The conversational layer
 
-[`STAFF-PROMPT.md`](STAFF-PROMPT.md) is a system prompt, not a service. Paste its fenced block into any general-purpose chat agent — a Claude Project, a custom GPT, a Gemini Gem — together with [`BACKGROUND.md`](BACKGROUND.md) and [`NARRATIVES.md`](NARRATIVES.md), and that agent becomes Staff: it turns a plain-language question into a link this Cartographer opens.
+[`STAFF-PROMPT.md`](STAFF-PROMPT.md) is a system prompt, not a service. Open a fresh conversation in any general-purpose chat agent — a Claude Project, a custom GPT, a Gemini Gem — paste [`dist/staff-bundle.md`](dist/staff-bundle.md) as the first message, and that agent becomes Staff: it turns a plain-language question into a link this Cartographer opens. (The bundle is the prompt plus [`BACKGROUND.md`](BACKGROUND.md) plus [`NARRATIVES.md`](NARRATIVES.md), pre-assembled in the right order by `scripts/build-staff-bundle.mjs` — about 70 KB, one paste.)
 
 There is no backend to deploy and no API key to manage. That is the point: Staccato's Staff role is an interpretation contract, and any capable chat agent can hold up its end.
 

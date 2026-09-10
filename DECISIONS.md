@@ -4,6 +4,25 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D61 — One-paste Staff bundle, so the never-met "test against a real chat product" criterion becomes a ten-minute task
+**Date**: 2026-09-11
+**Status**: Done — artifact built and committed. The test itself is hfu's to run; it has not happened yet.
+
+`STAFF-PROMPT.md` has carried the same unmet completion criterion since D33: it has never been validated against a genuinely independent, tool-less chat product. Two rounds happened (D54/D56/D58) and found two real bugs, but both ran against a Claude Code subagent instructed not to use tools. The gap has stayed open across every session in this project's history, and reviewing why, the honest answer is friction rather than disagreement: closing it requires assembling three documents — the prompt's fenced block, `BACKGROUND.md`, and `NARRATIVES.md` (that third one only since D56 found what happens when it's omitted) — in the right order, minus each file's own meta-commentary, and then pasting the result somewhere. That is precisely the kind of manual step that gets done slightly wrong once and then silently distorts every result afterwards.
+
+**Built**: `scripts/build-staff-bundle.mjs` → `dist/staff-bundle.md` (69,579 bytes, ~17k tokens, 986 lines). It extracts the prompt from between `STAFF-PROMPT.md`'s `````` fences (asserting there are exactly two), appends the two companion documents verbatim, and labels the three parts explicitly so the receiving agent knows which part is instructions, which is facts, and which is a library to select from. The generated file is committed, not just generatable, so it can be opened on GitHub and copied without cloning anything.
+
+**The script asserts rather than assumes**, and each assertion has a real failure behind it: the prompt must contain a `ferspas57-staff-*` version tag (the bundle reports which one it carries, so a test result can name the version it tested); `NARRATIVES.md` must contain all three `**Raw document**` blocks and the `ferspas57-narrative/v1` literal — a bundle missing those would reproduce D56's exact bug while looking complete; and no `dwg7.github.io` URL may survive anywhere in the sources, which would mean D60's migration had regressed.
+
+**Also written**: `STAFF-TESTING.md` — what is actually being tested (in descending order of what we don't already know: does a produced link actually open the right map; does a translated narrative keep its structure; does Staff stay inside the data that exists), setup notes per product, and a six-question script in Japanese with explicit pass/fail criteria per question. Two things worth flagging in it:
+
+- **Question 3 is the one no previous round ever reached** — a human pasting the produced link into a browser and confirming the narrative plays. Every test so far has ended at "the response looks right," which is a strictly weaker claim than the one this project makes.
+- **A custom GPT's Instructions field caps at 8,000 characters**, which the prompt alone exceeds — so on that platform the bundle has to be uploaded as a Knowledge file rather than pasted into Instructions. Noted rather than solved; condensing the prompt to fit would be a real design change, not a formatting fix.
+
+Nothing in `STAFF-PROMPT.md` itself changed here, so the version tag stays `ferspas57-staff-2026-09-08i`.
+
+---
+
 ### D60 — Public-facing realignment ahead of the FAO meeting: canonical URL migrated to `dwg7.unopengis.org`, and README's dead "orthophoto" premise removed
 **Date**: 2026-09-11
 **Status**: Done. Three problems found by review, all fixed.
