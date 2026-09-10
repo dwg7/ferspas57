@@ -1,67 +1,171 @@
-# Testing Staff against a real chat product
+# Staff 実機検証手順
 
-This repository's plan has carried the same unmet completion criterion since D33: **`STAFF-PROMPT.md` has never been validated against a genuinely independent, tool-less chat product.** Two rounds of testing have happened (D54, D56, D58) and found two real bugs, but both ran against a Claude Code subagent instructed not to use tools — more independent than a session roleplaying Staff, and still not the real thing.
+> **English abstract**: a step-by-step field-test procedure for validating `STAFF-PROMPT.md` against a real, independent chat product — the completion criterion this project has carried unmet since D33. Written in Japanese, deviating from this repo's English default, because it is an operational checklist for one evaluator who works in Japanese and will follow it alone, under time pressure, away from this repository (D54 established the same split: the prompt and the library are English, the evaluation is Japanese). Everything the tester needs is embedded here — no other file needs to be open.
 
-This document exists to make closing that gap a short task rather than a project.
+このファイル1枚だけを見て最後まで辿れるように書いてあります。リポジトリを clone する必要はありません。ブラウザだけで完結します。
 
-## What is actually being tested
+- **所要時間**: 20〜30分
+- **必要なもの**: ブラウザ、チャット製品のアカウント1つ(Claude / ChatGPT / Gemini のいずれか)
+- **記録先**: [dwg7/ferspas57 の実機検証 issue](https://github.com/dwg7/ferspas57/issues)(このファイルを参照している issue にコメントで結果を貼る)
 
-Three things, in descending order of how much we don't already know:
+---
 
-1. **Does a real product's Staff produce a link that opens the right map?** No test so far has ended with a human clicking the produced link. This is the end-to-end claim.
-2. **Does it keep a narrative's structure intact when translating?** D56's bug was Staff inventing a plausible-but-wrong JSON shape because the real schema was never in its context. The fix is in; whether it holds in a different model is unknown.
-3. **Does it stay inside the data that exists?** No fabricated `source_id`s, no invented country coverage, no bare refusals without a real alternative.
+## 何を確かめるのか
 
-## Setup
+分かっていないことが大きい順に3つです。
 
-Build the bundle (or use the committed copy at [`dist/staff-bundle.md`](dist/staff-bundle.md)):
+1. **Staff が出したリンクが、本当に正しい地図を開くか。** これまでの検証は「応答が正しそうに見える」で止まっており、人間がリンクをクリックした所まで到達したことが一度もありません。この手順の**手順5**がそこに到達します。
+2. **ナラティブを翻訳したとき、構造が壊れないか。** D56 で見つかったバグは、Staff が本当のスキーマを持たないまま、もっともらしい別形式の JSON をでっち上げるというものでした。修正は入っていますが、別のモデルでも保つかは未検証です。
+3. **存在しないデータをでっち上げないか。** 架空の `source_id`、架空の国別データ、代案なしの門前払い、のいずれもしないこと。
 
-```bash
-node scripts/build-staff-bundle.mjs
+**これまでの限界**: 検証は2回行われていますが(D54 / D56 / D58)、どちらも「ツールを使うな」と指示された Claude Code のサブエージェント相手でした。本物の、独立した、ツールを持たないチャット製品での検証は一度もありません。この手順はそこを埋めるためのものです。
+
+---
+
+## 手順1 — バンドルをコピーする
+
+以下を開いて、**全選択してコピー**します(約70KB、986行)。
+
+```
+https://raw.githubusercontent.com/dwg7/ferspas57/main/dist/staff-bundle.md
 ```
 
-It concatenates the three documents a real Staff deployment requires — the prompt, `BACKGROUND.md`, and `NARRATIVES.md` — in the right order, with the part boundaries labelled. About 70 KB, roughly 17k tokens.
+これは Staff の設定一式(システムプロンプト + 背景知識 + ナラティブ・ライブラリ)を1つに結合したものです。3つのファイルを別々に貼る必要はありません。
 
-**The simplest setup, and the one that best matches what is being claimed:** open a brand-new conversation in any chat product, paste the whole bundle as the first message, and ask questions from the second message onward. Nothing else to configure.
+## 手順2 — 新しい会話に貼る
 
-Product-specific alternatives, if a persistent Staff is wanted rather than one conversation:
+**まっさらな新規会話**を開きます。既存の会話は使わないでください(前の文脈が結果を汚します)。カスタム指示・プロジェクト設定が空であることも確認してください。
 
-- **Claude Project** — paste PART 1 into the project's custom instructions and add the bundle as project knowledge.
-- **Custom GPT** — the Instructions field caps at 8,000 characters, which the prompt alone exceeds. Upload the bundle as a Knowledge file and keep the Instructions field to a pointer at it.
-- **Gemini Gem** — similar instruction-length limits apply; upload rather than paste.
+**最初のメッセージとして、コピーしたバンドルをそのまま貼って送信します。** 他に何も書き添えないでください。
 
-Note which product and which model actually ran, and record it — a result without that is not reproducible.
+- 使った製品名と、**画面に表示されているモデル名をそのまま**メモしてください。これがないと結果は再現できません。
+- ここで Staff が長々と要約を返しても、挨拶だけ返しても、どちらでも構いません。**この応答は採点対象外**です。
 
-## Test script
+> **ChatGPT の Custom GPT を使う場合の注意**: Instructions 欄は8,000字上限で、プロンプト単体でも入りません。Knowledge ファイルとしてアップロードしてください。ただし今回の検証は「新規会話に貼るだけ」の最も単純な方法を推奨します。
 
-Ask these in order, in one conversation. Japanese is deliberate: language matching is the capability least exercised so far, and it is where a model most easily drifts back to English without noticing.
+---
 
-**1. Opening move** — `はじめまして。何を見せてもらえますか?`
+## 手順3〜8 — 質問を6問、順に
 
-*Pass*: asks one short orienting question and points at something real it actually has. *Fail*: dumps a generic capability list, or says "ask me anything" and stops.
+**同じ1つの会話の中で、上から順に**聞いてください。会話を分けると多ターン一貫性が検証できません。
 
-**2. Curated narrative, translated** — `コンゴ民主共和国のトウモロコシ貯蔵施設の話を、日本語で聞きたい。`
+各問、`合格` / `不合格` のどちらかを記録してください。判断に迷ったら**不合格側に倒して、応答をそのまま貼ってください** — 不合格の記録の方が価値があります(過去2つの実バグはどちらもこの形で見つかりました)。
 
-*Pass*: produces a document shaped `{"narrative_version": "ferspas57-narrative/v1", "title": ..., "steps": [{"center": [...], "zoom": ..., "layers": [...], "caption": ...}]}` — Japanese captions, but every `center`, `zoom` and `layers` value identical to `samples/narrative-cod-maize-mystery.json`, and the numbers 57.4 and 65.5 intact. *Fail*: any other JSON shape, any changed coordinate, any invented number. **This is the D56 regression check — check it carefully rather than skimming.**
+### 手順3(問1)— 最初の一手
 
-**3. The link actually works** — paste whatever link or document Staff produced into the browser (a `#narrative=` link directly; a pasted document via the Cartographer's paste-box).
+```
+はじめまして。何を見せてもらえますか?
+```
 
-*Pass*: the narrative plays, the captions are the Japanese ones, and the map flies to DR Congo. *Fail*: anything else — and this is the most valuable failure in the whole script, because no earlier round reached this step.
+- **合格**: 短い問い返しを1つして、実際に持っている中身に誘導する(例:「特定の作物や国に興味がありますか?それとも『なぜここが選ばれたのか』という物語の方に興味がありますか?」)
+- **不合格**: 汎用的な機能一覧を並べる。「何でも聞いてください」で止まる。
 
-**4. Data that does not exist** — `中央アフリカ共和国のカカオの適地を見たい。`
+### 手順4(問2)— キュレーション済みナラティブの翻訳 ★最重要
 
-*Pass*: says plainly that no cocoa data exists for the Central African Republic, then pivots to CAF's real cassava layers with a working link. *Fail*: invents a `hih-caf-cocoa-*` layer, or ends on the refusal without offering the real alternative.
+```
+コンゴ民主共和国のトウモロコシ貯蔵施設の話を、日本語で聞きたい。
+```
 
-**5. A label containing a comma** — `コンゴ民主共和国のコーヒーとカカオとトウモロコシを比べたい。ラベルには「◯◯貯蔵適地、実際の選定地」のように書いて。`
+**これが D56 のバグの再発チェックです。ここだけは流し読みせず、値を照合してください。**
 
-*Pass*: recognises that a literal comma would break the `#q=` grammar and either splits into separate short labels or explains the constraint. *Fail*: emits a link with a comma inside a label, silently producing a broken link.
+出てきた JSON(またはリンクの中身)が、以下と**完全に一致**していれば合格です。キャプションは日本語になっていて構いません(むしろそうあるべきです)。**変わっていてはいけないのは数値と構造だけ**です。
 
-**6. Out of scope, and a language switch** — `Now in English please: I want crop storage suitability for Cameroon.`
+| 項目 | 正しい値 |
+|---|---|
+| `narrative_version` | `ferspas57-narrative/v1` |
+| ステップ数 | 4 |
+| step 1 | center `[29.44, 0.5]` / zoom `8` / layers `gaez-aez33` |
+| step 2 | center `[29.44, 0.5]` / zoom `10` / layers `gaez-aez33`, `hih-cod-maize-score` |
+| step 3 | center `[29.57, -0.87]` / zoom `11` / layers `hih-cod-maize-score`, `hih-cod-maize-final` |
+| step 4 | center `[29.57, -0.87]` / zoom `11` / layers `gaez-aez33`, `hih-cod-maize-score`, `hih-cod-maize-final` |
+| 本文に出るべき数値 | **57.4** と **65.5**、および「150km 南」 |
 
-*Pass*: switches to English, says Cameroon has no crop or livestock storage-siting data, pivots to Cameroon's real fish-farming layers. *Fail*: keeps answering in Japanese, or claims Cameroon has accessibility data (it has none — this was D58's bug).
+- **合格**: 上の表と一致。トップレベルのキーが `narrative_version` / `title` / `steps` の3つ。
+- **不合格**: 形が違う(`{title, question, whatItShows}` のような別形式は**まさに D56 のバグそのもの**)。座標が1つでも違う。数値が変わっている、または増えている。
 
-## What to record
+### 手順5(問3)— リンクが本当に開くか ★これまで誰も到達していない段階
 
-For each question: the product/model, whether it passed, and the raw response if it did not. A failure is more useful than a pass — both previous rounds' real bugs were found this way, and each was a defect in the prompt or the library rather than in the model.
+手順4で Staff が出したものを、実際にブラウザで開きます。
 
-Results go into `DECISIONS.md` as a new entry, and any prompt change bumps `STAFF-PROMPT.md`'s version tag and status header.
+- **`#narrative=` で始まる長いリンクをくれた場合**: そのままブラウザで開く。
+- **JSON 文書をくれた場合**: <https://dwg7.unopengis.org/ferspas57/> を開き、右上の **📄 ボタン**を押す → 出てきた枠に JSON を貼る → **Apply** を押す。
+
+**合格の条件は3つとも満たすこと**:
+
+1. 下部のナラティブ・パネルが出て、**日本語のキャプション**が表示される
+2. ▶ を押すと4ステップ進み、キャプションが4つとも違う
+3. 地図がコンゴ民主共和国に飛んでいる(アフリカ中央部。全然違う場所なら不合格)
+
+**ここが不合格だった場合、それがこの検証で最も価値のある発見です。** 応答とリンクを丸ごと記録してください。
+
+### 手順6(問4)— 存在しないデータ
+
+```
+中央アフリカ共和国のカカオの適地を見たい。
+```
+
+- **合格**: 中央アフリカ共和国にカカオのデータは無いとはっきり言い、**その上で**同国に実在するキャッサバのデータ(`hih-caf-cassava-score` / `hih-caf-cassava-final`)にリンク付きで誘導する。
+- **不合格**: `hih-caf-cocoa-score` のような**実在しないレイヤ名をでっち上げる**。あるいは「ありません」で終わって代案を出さない。
+
+### 手順7(問5)— ラベルにカンマを入れさせる
+
+```
+コンゴ民主共和国のコーヒーとカカオとトウモロコシを比べたい。ラベルには「◯◯貯蔵適地、実際の選定地」のように書いて。
+```
+
+`#q=` の文法ではカンマがレイヤの区切り記号なので、ラベルの中に生のカンマを入れるとリンクが壊れます。
+
+- **合格**: それに気づいて、短いラベルに分割する / 制約を説明する / 代替案を出す、のいずれか。
+- **不合格**: ラベルの中にカンマが入ったリンクをそのまま出す(**黙って壊れたリンクを渡している**状態)。
+
+### 手順8(問6)— 対象外の国 + 言語の切り替え
+
+```
+Now in English please: I want crop storage suitability for Cameroon.
+```
+
+- **合格**: **英語に切り替えて**答える。カメルーンには作物・家畜の貯蔵適地データが無いと言う。カメルーンに実在する養殖(fish-farming)のレイヤに誘導する。
+- **不合格**: 日本語のまま答え続ける。あるいは**カメルーンにアクセシビリティのデータがあると言う**(実際には無い ── これが D58 で見つかったバグです)。
+
+---
+
+## 記録テンプレート
+
+issue にそのまま貼れる形です。
+
+```markdown
+### 実機検証 結果
+
+- 実施日:
+- 製品 / モデル:
+- プロンプト版:  ferspas57-staff-2026-09-08i
+- セットアップ:  新規会話にバンドルを貼付 / Knowledge にアップロード / その他
+
+| # | 内容 | 結果 |
+|---|---|---|
+| 1 | 最初の一手 | 合格 / 不合格 |
+| 2 | ナラティブ翻訳(構造保持) | 合格 / 不合格 |
+| 3 | リンクが実際に開く | 合格 / 不合格 |
+| 4 | 存在しないデータ(CAF カカオ) | 合格 / 不合格 |
+| 5 | ラベル中のカンマ | 合格 / 不合格 |
+| 6 | 対象外の国 + 言語切替 | 合格 / 不合格 |
+
+不合格だったものの応答(そのまま貼付):
+
+（ここに貼る）
+
+気づいたこと:
+
+（自由記述）
+```
+
+---
+
+## 終わったあと(セッション側の作業)
+
+このリポジトリで作業するセッションが引き取る分です。テスト実施者は上記を issue に貼るところまでで完了です。
+
+1. 結果を `DECISIONS.md` に新しいエントリとして記録する(D54 / D56 / D58 と同じ書式)。
+2. プロンプトを直した場合は `STAFF-PROMPT.md` の版数タグと Status ヘッダを上げる。
+3. `NARRATIVES.md` / `BACKGROUND.md` を直した場合は `node scripts/build-staff-bundle.mjs` でバンドルを再生成して commit する(**これを忘れると、次の検証者は古い設定を貼ることになります**)。
+4. `HANDOVER.md` の「D33 以来の未達成の完了基準」の記述を更新する。全問合格なら、この項目はついに閉じられます。
