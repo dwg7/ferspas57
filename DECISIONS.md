@@ -4,6 +4,36 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D63 — D2's CORS finding was right about one bucket and wrong as a generalisation: GAEZ v5's COGs *are* browser-readable, HIH's are not
+**Date**: 2026-09-11
+**Status**: Measured end-to-end from a real browser. Three public documents corrected. Feedback draft rewritten around the sharper finding.
+
+Started drafting the long-owed FERSPAS CORS feedback to FAO CSI (`HANDOVER.md` item 6) and, before writing a word of it, re-verified D2's central claim rather than quoting a 2026-09-03 observation as current. It did not survive contact.
+
+**D2 tested exactly one bucket** — `fao-gismgr-esa-data`, ESA WorldCover — found no `Access-Control-Allow-Origin`, and recorded that "the bucket has no CORS configuration." That sentence was accurate. What happened afterwards was not D2's fault but is worth naming: it got generalised, by this session on 2026-09-10, into "FERSPAS's COG assets sit behind a no-CORS bucket" and written into `README.md`, `DEMO.md` and `CLAUDE.md` as part of the "why the scope moved" reasoning — i.e. into the FAO-facing surface, as a claim about FAO's infrastructure, based on a single-bucket sample.
+
+**What is actually true**, measured 2026-09-11 against the `data` asset URLs published in FERSPAS's own live STAC items:
+
+| bucket | dataset | browser range-read | size |
+|---|---|---|---|
+| `fao-gismgr-gaez-v5-data` | GAEZ v5 AEZ33 | **works** | 33 MB |
+| `fao-gismgr-hih-data` | HIH CAF cassava score | blocked | 8.9 MB |
+| `fao-gismgr-esa-data` | ESA WorldCover 2020 | blocked | 182 GB |
+
+**The decisive test was a real browser, not header inspection.** An ordinary `fetch(url, {headers: {Range: "bytes=0-1023"}})` run from a page at the real origin `https://dwg7.unopengis.org` returned, for GAEZ, HTTP 206 with 1024 bytes whose first two bytes are `II` — a valid little-endian TIFF header. FAO's GAEZ COG is genuinely readable directly from a browser today. HIH and ESA both failed with `TypeError: Failed to fetch`. Header evidence matches: GAEZ carries `access-control-allow-origin: *` and `access-control-expose-headers`, the other two carry no `access-control-*` header at all. All three serve range requests correctly at the transport level (`206`, `Accept-Ranges: bytes`), so the CORS response header is the only difference.
+
+**A methodological trap worth recording, because it nearly produced a second wrong conclusion**: a `curl -X OPTIONS` preflight returns a bare `200` with no CORS headers on *all three* buckets, including the one that demonstrably works. Reading that as "preflight fails everywhere, so nothing is browser-readable" would have been wrong — a simple `Range: bytes=x-y` is CORS-safelisted and does not trigger a preflight at all. Only a real `fetch()` from a real origin shows the actual behaviour. This is the second time in two days that checking with the browser rather than with `curl` changed the answer.
+
+**Corrected**: `README.md`, `DEMO.md` and `CLAUDE.md` no longer say FERSPAS COGs are unreadable from a browser. The architectural justification survives the correction and is now stated accurately and more narrowly — this project's narratives put an HIH score on top of a GAEZ classification, so with HIH blocked and GAEZ readable, direct COG access was not available *across the layers this project needs*, and a TileJSON pointing at them would have rendered only half. That is still a sufficient reason for the conversion approach; it is simply the true one.
+
+**The feedback draft got better as a result** (`drafts/fao-csi-cors-feedback.md`, not sent, hfu's to review): the message is no longer "FERSPAS COGs are not browser-readable, please fix" but "one of your buckets is already configured exactly right and the others are not, which looks like an oversight rather than a decision." Far easier to act on, far harder to dismiss, and it lets us name the obvious counter-argument ourselves — 182 GB of ESA WorldCover is a genuinely different proposition from 9 MB of HIH, and saying so first is the difference between a question and a demand.
+
+**Also verified, and unchanged from D2**: the WMTS wrapper returns `cf-cache-status: DYNAMIC` on every response including immediate repeats, alongside `Cache-Control: public, max-age=3600`. **Not claimed, because it could not be isolated**: `GetTile` returned HTTP 500 for both a GAEZ and an ESA layer, and `GetCapabilities` did not respond within 60 s, while `GetPreview` returned 200 `image/png`. Malformed parameters on our side could not be ruled out, so it stays out of the message.
+
+**The general lesson, worth carrying**: a finding measured against one sample should be recorded with its sample size attached. D2 did that correctly and the generalisation happened later, downstream, in a document written for an external audience. The check that caught it — re-verify before quoting, especially before quoting to the party the claim is about — is cheap and should be the default for anything in this repo's FAO-facing surface.
+
+---
+
 ### D62 — Measured the ADR 0010 migration cost this repo itself flagged: ~2.2x compressed, and it is affordable
 **Date**: 2026-09-11
 **Status**: Measured. No migration performed — this entry supplies the number the decision was waiting on.

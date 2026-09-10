@@ -65,7 +65,7 @@ Worth stating up front, so nobody has to discover it by being disappointed:
 - **It does not mirror or re-host FERSPAS.** Everything served here is a one-time conversion of specific, license-checked collections, with attribution embedded in the tiles themselves. It is a demonstration of reachability, not a copy of FAO's catalog.
 - **It has no sub-national resolution beyond what HIH itself publishes.** There is no city-level or district-level data anywhere in this deployment. Staff is instructed to say so rather than approximate.
 - **It covers three countries with commodity data**, not the full Hand-in-Hand country set: DR Congo (7 commodities), Côte d'Ivoire (5), Central African Republic (1), plus country-agnostic accessibility and fish-farming layers. Cameroon, Republic of Congo, and Bhutan are deliberately out of scope for now.
-- **It is not a STAC client.** FERSPAS's COG assets sit behind an FAO WMTS wrapper on a bucket with no CORS headers, so a browser-side map cannot read them directly. That constraint shaped this project's architecture and is worth discussing on its merits — see [`README.md`](README.md)'s "The technical question".
+- **It is not a STAC client.** Browser access to FERSPAS's COG assets is inconsistent between datasets: GAEZ v5's storage bucket sends `Access-Control-Allow-Origin: *` and can be read directly from a browser, Hand-in-Hand's does not. Since this project's maps put the two together, direct COG access was not available across the layers it needed. That constraint shaped the architecture and is worth discussing on its merits — see [`README.md`](README.md)'s "The technical question".
 
 ---
 
