@@ -30,11 +30,12 @@ and provenance carried through rather than dropped.
 
 ## What actually exists today
 
-A live, public demonstration — [dwg7.github.io/ferspas57](https://dwg7.github.io/ferspas57/)
+A live, public demonstration — [dwg7.unopengis.org/ferspas57](https://dwg7.unopengis.org/ferspas57/)
 — serving two real FAO datasets through this pipeline: GAEZ v5's global
-Agro-Ecological Zone classifications, and Hand-in-Hand Initiative data for
-the Democratic Republic of the Congo (with three more countries currently
-being added). The site is an interactive globe-projected map, not a static
+Agro-Ecological Zone classifications, and Hand-in-Hand Initiative data
+covering 355 real FAO-selected sites across the Democratic Republic of the
+Congo, Côte d'Ivoire and the Central African Republic, plus country-agnostic
+accessibility and fish-farming layers. The site is an interactive globe-projected map, not a static
 screenshot: layers can be freely combined, a built-in comparison tool lets a
 viewer probe Hand-in-Hand's suitability scores at any point, and a short
 guided narrative — built from a real finding in the data — walks a viewer
@@ -45,10 +46,14 @@ that Hand-in-Hand's siting scores are a multi-criteria evaluation weighing
 accessibility and poverty-reduction priority alongside pure agronomic
 suitability — a nuance worth surfacing, not just displaying a number.)
 
-The next phase in progress is a conversational layer — an AI "Staff" that
-turns a plain-language question into exactly the kind of map view this
-system already knows how to render, so a user never needs to know the
-underlying catalog mechanics at all.
+On top of that sits a conversational layer — an AI "Staff" that turns a
+plain-language question into exactly the kind of map view this system
+already knows how to render, so a user never needs to know the underlying
+catalog mechanics at all. It is a system prompt rather than a service: no
+backend to deploy, no API key to manage, and it works in any general-purpose
+chat agent. It draws on a library of 373 pre-authored, data-verified
+narratives, and answers in whatever language it was asked in. This is the
+newest and least-hardened part of the system, and we say so plainly.
 
 ## Why this matters beyond the two of us
 

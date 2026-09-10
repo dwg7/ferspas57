@@ -16,7 +16,7 @@
 // the moment it's actually asked for. samples/*.json stays English-only.
 //
 // Usage: node scripts/encode-narrative.mjs samples/narrative-<slug>.json
-//        [--base https://dwg7.github.io/ferspas57/]
+//        [--base https://dwg7.unopengis.org/ferspas57/]
 
 const LZSTRING_URL = "https://unpkg.com/lz-string@1.5.0/libs/lz-string.min.js";
 
@@ -30,7 +30,7 @@ async function loadLZString() {
 async function main() {
   const args = process.argv.slice(2);
   const baseIdx = args.indexOf("--base");
-  const base = baseIdx !== -1 ? args[baseIdx + 1] : "https://dwg7.github.io/ferspas57/";
+  const base = baseIdx !== -1 ? args[baseIdx + 1] : "https://dwg7.unopengis.org/ferspas57/";
   const filePath = args.filter((a, i) => a !== "--base" && args[i - 1] !== "--base")[0];
   if (!filePath) {
     console.error("usage: node scripts/encode-narrative.mjs <narrative.json> [--base <url>]");

@@ -70,7 +70,7 @@ was this site chosen."
 
 ## Constraints & Preconditions
 - Available catalog (fixed, do not invent others) — every source_id below is served
-  through this one Cartographer at https://dwg7.github.io/ferspas57/, backed by
+  through this one Cartographer at https://dwg7.unopengis.org/ferspas57/, backed by
   https://stars.optgeo.org (martin, tiles) and https://depot.optgeo.org (plain
   GeoJSON files for *-final layers, not tiles).
 - HIH crop/livestock storage-siting data (the "-score"/"-final" pairs) exists ONLY
@@ -135,7 +135,7 @@ format never asks you to — you assemble it as ordinary text, character by
 character, the same way you'd write any other sentence.
 
 Template:
-  https://dwg7.github.io/ferspas57/#q=req=<id1[|label1],id2[|label2],...>&lat=<deg>&lng=<deg>&zoom=<n>&goal=<text>&name=<text>
+  https://dwg7.unopengis.org/ferspas57/#q=req=<id1[|label1],id2[|label2],...>&lat=<deg>&lng=<deg>&zoom=<n>&goal=<text>&name=<text>
 
 Field notes:
 - req= is required; everything else is optional.
@@ -338,7 +338,7 @@ Then, having defined `narrativeDoc` as your translated/adapted JSON object:
 
 ```js
 const encoded = LZString.compressToEncodedURIComponent(JSON.stringify(narrativeDoc));
-const link = "https://dwg7.github.io/ferspas57/#narrative=" + encoded;
+const link = "https://dwg7.unopengis.org/ferspas57/#narrative=" + encoded;
 
 // MANDATORY before presenting the link — this project's standing discipline
 // (never trust a pipeline's output without checking it against itself):
@@ -368,20 +368,20 @@ demanding reference for correct syntax, not just one more example.
 
 1. Single-layer interpretation question ("what does DR Congo's finer agro-ecological
    zoning look like?"):
-   https://dwg7.github.io/ferspas57/#q=req=gaez-aez57&lat=-3&lng=23.5&zoom=5&goal=DR Congo's finer-grained agro-ecological classification&name=DR Congo
+   https://dwg7.unopengis.org/ferspas57/#q=req=gaez-aez57&lat=-3&lng=23.5&zoom=5&goal=DR Congo's finer-grained agro-ecological classification&name=DR Congo
 
 2. Multi-layer comparison question ("where does FAO's cassava-storage suitability
    score compare to where they actually built?"):
-   https://dwg7.github.io/ferspas57/#q=req=hih-cod-cassava-score|Cassava suitability score,hih-cod-cassava-final|FAO-selected site&lat=-1&lng=29.2&zoom=8&goal=Compare cassava suitability against FAO's actual site choice
+   https://dwg7.unopengis.org/ferspas57/#q=req=hih-cod-cassava-score|Cassava suitability score,hih-cod-cassava-final|FAO-selected site&lat=-1&lng=29.2&zoom=8&goal=Compare cassava suitability against FAO's actual site choice
 
 3. A different country, same pattern ("what does Côte d'Ivoire's cereal-storage
    picture look like?"):
-   https://dwg7.github.io/ferspas57/#q=req=hih-civ-cereal-score|Cereal storage score,hih-civ-cereal-final|FAO-selected site&lat=7.5&lng=-5.5&zoom=6&goal=Cote d'Ivoire cereal storage suitability and FAO's chosen site
+   https://dwg7.unopengis.org/ferspas57/#q=req=hih-civ-cereal-score|Cereal storage score,hih-civ-cereal-final|FAO-selected site&lat=7.5&lng=-5.5&zoom=6&goal=Cote d'Ivoire cereal storage suitability and FAO's chosen site
 
 4. Two layers with multi-word labels, tested end-to-end against the live
    Cartographer ("where's suitable for dairy processing in Côte d'Ivoire, and
    where did FAO actually build?"):
-   https://dwg7.github.io/ferspas57/#q=req=hih-civ-dairy-score|Dairy processing score,hih-civ-dairy-final|FAO-selected site&lat=7.5&lng=-5.5&zoom=6&goal=Cote d'Ivoire dairy processing suitability and FAO's chosen site
+   https://dwg7.unopengis.org/ferspas57/#q=req=hih-civ-dairy-score|Dairy processing score,hih-civ-dairy-final|FAO-selected site&lat=7.5&lng=-5.5&zoom=6&goal=Cote d'Ivoire dairy processing suitability and FAO's chosen site
 ````
 
 ## Notes for whoever wires this to an actual LLM call

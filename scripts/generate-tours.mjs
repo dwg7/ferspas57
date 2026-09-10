@@ -25,7 +25,7 @@
 import fs from "node:fs/promises";
 
 const LZSTRING_URL = "https://unpkg.com/lz-string@1.5.0/libs/lz-string.min.js";
-const BASE = "https://dwg7.github.io/ferspas57/";
+const BASE = "https://dwg7.unopengis.org/ferspas57/";
 
 // Verified against the primary FAO GAEZ v4 User's Guide PDF (DECISIONS.md
 // D13) — copied from docs/aez_legend.js's AEZ33_CLASS_NAMES so this script

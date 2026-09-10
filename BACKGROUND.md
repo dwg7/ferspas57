@@ -215,7 +215,7 @@ a real, prior architectural commitment; this project is its first real-world
 test).
 
 **What actually exists as of this writing**: a live client
-([dwg7.github.io/ferspas57](https://dwg7.github.io/ferspas57/)) built with
+([dwg7.unopengis.org/ferspas57](https://dwg7.unopengis.org/ferspas57/)) built with
 MapLibre GL JS, serving real converted data — GAEZ AEZ33/AEZ57
 classifications (global) and Hand-in-Hand data for DR Congo, with expansion
 to Côte d'Ivoire, Central African Republic, Cameroon, and Republic of Congo
