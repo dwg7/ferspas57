@@ -4,6 +4,26 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D64 — `STAFF-TESTING.md` rewritten as a standalone field-test procedure, and the test opened as `#1` — the repo's first issue
+**Date**: 2026-09-11 (implemented), logged 2026-09-12 while writing out ahead of a `/compact`.
+**Status**: Done, pushed (commits `c2cc7fb`, `1d39300`). The test itself has not been run — `#1` is open with zero comments as of 2026-09-12.
+
+Two real decisions that went in after D61 without their own log entry, caught the same way D59 was: by diffing `git log` against `DECISIONS.md` before compacting.
+
+**1. The document changed purpose.** D61 wrote `STAFF-TESTING.md` as a rationale document — what is being tested and why, with the six questions as supporting material. hfu corrected the target: what was wanted is a **procedure** (「実機検証『手順』」), followable alone, at work, with only that one file open. The distinction matters more than it sounds. A rationale document is read once by someone deciding whether to test; a procedure is executed step by step by someone who has already decided and is now under time pressure, and every cross-reference in it is a place to lose the thread.
+
+Rewritten accordingly: numbered steps, the raw bundle URL as the first action, the six questions as copy-paste blocks, per-question pass/fail criteria stated so they can be judged without interpretation, and a results template that pastes straight into an issue. Three specifics earned by thinking about the execution rather than the explanation:
+
+- **The maize narrative's reference `center`/`zoom`/`layers` values for all four steps are embedded inline as a table.** Step 4 is the D56 regression check, and checking it previously required opening `samples/narrative-cod-maize-mystery.json`. Embedding the values is what makes "this file alone is enough" literally true rather than nearly true.
+- **The exact paste-box UI path is spelled out** (📄 button top-right → paste → Apply), read out of `docs/map_intent.js` rather than described from memory, because step 5 depends on it and a wrong UI instruction stops the run.
+- **Step 5's pass condition is split into three checks**, not one judgement: the panel appears with Japanese captions, ▶ advances through four distinct captions, and the map is over DR Congo.
+
+**2. It is written in Japanese, deliberately deviating from `CLAUDE.md`'s English-default rule.** That rule's own stated justification is that this repo's point is international/FAO-facing collaboration. This document has a different audience: one evaluator, working in their strongest language, following it alone away from the repository — the same split D54 established, where the prompt and library are English and the evaluation is Japanese. An English abstract sits at the top stating what the file is and why it is in Japanese, so the deviation is visible to anyone else who opens it rather than looking like drift. Noting it here because a future session should treat the English rule as still in force for everything else, not as weakened by this one case.
+
+**3. Opened as [`dwg7/ferspas57#1`](https://github.com/dwg7/ferspas57/issues/1)** — the repository's first issue, which made it worth writing carefully, since it sets the convention. English, matching `README.md`/`DEMO.md`, with the Japanese procedure linked and the language choice explained. It states why the item has stayed open since D33, what is being tested in descending order of what is genuinely unknown, and a Definition of Done that includes one operational trap worth repeating here: **editing `NARRATIVES.md` or `BACKGROUND.md` without re-running `scripts/build-staff-bundle.mjs` means the next tester pastes a stale configuration.** That failure would be silent and would invalidate a test run without anyone noticing.
+
+---
+
 ### D63 — D2's CORS finding was right about one bucket and wrong as a generalisation: GAEZ v5's COGs *are* browser-readable, HIH's are not
 **Date**: 2026-09-11
 **Status**: Measured end-to-end from a real browser. Three public documents corrected. Feedback draft rewritten around the sharper finding.
