@@ -4,6 +4,20 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D65 — D62's ADR 0010 migration-cost measurement reported upstream to `staccato-spec`
+**Date**: 2026-09-12
+**Status**: Filed. [`UNopenGIS/staccato-spec#7`](https://github.com/UNopenGIS/staccato-spec/issues/7), open, hfu's to follow.
+
+D62 measured what ADR 0010's Operational Implications had left as an open question since 2026-09-07: migrating this repo's 373 narratives to ADR 0010's per-step Map Intent shape costs ~2.2x compressed URL length (median 677→1,507 chars, max 1,602→4,148 across the full corpus), bounded because §4's accepted `catalog_context`/`provenance` duplication compresses almost for free under LZ77. That answer had been sitting in this repo's own `DECISIONS.md` for a day, unread by the spec it was measured for.
+
+Checked before drafting: ADR 0010 (`f3afb29`, 2026-09-07) was committed straight to `main` with no PR, and no existing `staccato-spec` issue or PR mentions `ferspas57` — so there was no thread to reply into, and this went in as a new issue rather than a comment.
+
+The issue reproduces D62's table, the >20-step projection (10→5,298 / 20→8,530 / 30→11,278 / 50→15,834 chars), the "why it's this cheap" compression explanation, and the explicit non-claim (real ceiling somewhere past 20-step tours, not literally free — some chat clients wrap/truncate long URLs, and 4 KB is past comfortable QR-code density). It offers to follow up with a wording-fix PR against ADR 0010's own text, which currently still reads as if the cost were unmeasured. Drafted as a scratch file, shown to hfu, posted only after explicit approval — this is a public post to a repo `ferspas57` doesn't own.
+
+This closes the "owed upstream" line item that D62, item 1(d), and item 6 of `HANDOVER.md` had all been carrying.
+
+---
+
 ### D64 — `STAFF-TESTING.md` rewritten as a standalone field-test procedure, and the test opened as `#1` — the repo's first issue
 **Date**: 2026-09-11 (implemented), logged 2026-09-12 while writing out ahead of a `/compact`.
 **Status**: Done, pushed (commits `c2cc7fb`, `1d39300`). The test itself has not been run — `#1` is open with zero comments as of 2026-09-12.
