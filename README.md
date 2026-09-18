@@ -1,5 +1,7 @@
 # ferspas57
 
+> **Status: paused (2026-09-18).** After reviewing FERSPAS's own published user stories ([`un-fao/FERSPAS_demo`](https://github.com/un-fao/FERSPAS_demo)), hfu concluded this repo had been fitting Staccato's architecture onto FERSPAS rather than starting from how FERSPAS is actually used. The line of work continues as [`dwg7/ferspas-html-demo`](https://github.com/dwg7/ferspas-html-demo) — turning those Notebook-based workflows into transparent, browser-based tools directly, without the Staccato Staff/Cartographer/Library framing. See [`UNopenGIS/7#997`](https://github.com/UNopenGIS/7/issues/997) (closed) and [`UNopenGIS/7#1011`](https://github.com/UNopenGIS/7/issues/1011) for the decision. Everything below is accurate as of the pause and stays here as a working, citable record — the live demo and data pipeline are not being torn down, just not actively developed further.
+
 **FERSPAS × Staccato** — a technical collaboration exploring how [Staccato](https://github.com/UNopenGIS/staccato-spec)'s geospatial architecture can connect to [FERSPAS](https://data.review.fao.org/remote-sensing-portal), FAO's Essential Remote Sensing data Product portal for Agrifood Systems.
 
 This repository sits at the intersection of two UN Open GIS Initiative working groups:

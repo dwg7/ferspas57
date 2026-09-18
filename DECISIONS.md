@@ -4,6 +4,26 @@ ADR-lite log for this project. English. Append new decisions at the top, oldest 
 
 This is an internal working log, not a polished external communication — its wording is not necessarily vetted for wide sharing. It records findings about FERSPAS (including gaps or quirks in FAO's own data and infrastructure) in the same direct, working-notes register as everything else here. Before quoting or sharing any of it with FAO or another outside audience, rephrase with the same care this repo's README and CLAUDE.md already show, rather than passing this log along verbatim.
 
+### D66 — Project paused: the Staccato framing was fitted onto FERSPAS rather than starting from FERSPAS's actual users, work continues as `dwg7/ferspas-html-demo`
+**Date**: 2026-09-18 (hfu's decision on `UNopenGIS/7#997`), recorded 2026-09-19.
+**Status**: Repo paused, not deleted. Founding issue closed. `dwg7/ferspas57#1` closed unresolved. Repo to be archived on GitHub.
+
+hfu's own diagnosis, from `#997`: "Staccatoを当てはめようと思いすぎた結果、Userの問いを取り逃してしまっているようです" — too much energy went into fitting Staccato's Staff/Cartographer/Library architecture onto FERSPAS, and not enough into what FERSPAS's actual users actually do with it. The concrete evidence: `PengyuHao-FAO/RSP_demo`'s `Case1-ASIS-latest-Italy.ipynb` and [`un-fao/FERSPAS_demo`](https://github.com/un-fao/FERSPAS_demo) show FERSPAS is used, in practice, as a Python/Jupyter Notebook analysis library — a materially different starting point than "STAC catalog to convert into a `martin catalog`-shaped tile interface," which was this repo's premise from D1 onward.
+
+This is not a reversal of anything measured here — D62's ADR 0010 numbers, D63's CORS correction, ADR 0009/0010 upstream in `staccato-spec`, the 22 PMTiles + 13 GeoJSON pipeline, all stand as real, accurate work. It's a redirect at the framing level: the Staccato-shaped question ("can a Staff/Cartographer/Library stack consume FERSPAS") got substituted for the actually-useful one ("what do FERSPAS's own users need that a browser could give them"), and hfu caught the substitution by going back to FERSPAS's own reference material (`un-fao/FERSPAS_demo`) rather than continuing to iterate on this repo's own architecture.
+
+**Successor**: [`dwg7/ferspas-html-demo`](https://github.com/dwg7/ferspas-html-demo), opened as [`UNopenGIS/7#1011`](https://github.com/UNopenGIS/7/issues/1011). Its stated method: read the user stories FERSPAS_demo's Notebooks establish, and move the stable, reproducible ones into transparent web apps a non-programmer can run and observe — not a rebuild of this repo's Staff/Cartographer/Library stack. `#997` was closed as "Superseded by #1011" on 2026-09-18.
+
+**What happened to this repo's own loose ends**:
+- [`dwg7/ferspas57#1`](https://github.com/dwg7/ferspas57/issues/1) (the Staff field test, this project's oldest unmet completion criterion since D33) — closed as part of the pause, not completed. See its closing comment for why finishing it stopped being the right thing to spend time on.
+- The live demo, `stars.optgeo.org`/`depot.optgeo.org` data, and `DECISIONS.md`/`HANDOVER.md` are left running and in place, not torn down — this is a pause of active development, not a retraction of the work.
+- `UNopenGIS/staccato-spec#7` (D65, filed 2026-09-12) stays open and valid regardless — its measurement doesn't depend on this repo continuing.
+- `README.md` and `HANDOVER.md` got a pause notice pointing here and to the successor repo, placed above their existing content rather than rewriting it — the pre-pause material is accurate history, not something to retcon.
+
+**Repo set to archived on GitHub** following this entry, to make the pause visible at the platform level to anyone (especially FAO-facing readers) landing here via a link rather than this file.
+
+---
+
 ### D65 — D62's ADR 0010 migration-cost measurement reported upstream to `staccato-spec`
 **Date**: 2026-09-12
 **Status**: Filed. [`UNopenGIS/staccato-spec#7`](https://github.com/UNopenGIS/staccato-spec/issues/7), open, hfu's to follow.

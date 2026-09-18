@@ -2,7 +2,15 @@
 
 Read this first in any new session on this repo.
 
-## Current state (2026-09-12)
+## Paused (2026-09-18) — read this before anything else below
+
+hfu closed [`UNopenGIS/7#997`](https://github.com/UNopenGIS/7/issues/997), this repo's founding issue, superseded by [`UNopenGIS/7#1011`](https://github.com/UNopenGIS/7/issues/1011). The reason, in hfu's own words there: work here had drifted into fitting Staccato's architecture onto FERSPAS, at the cost of losing track of FERSPAS's actual users' actual questions. `PengyuHao-FAO/RSP_demo` and [`un-fao/FERSPAS_demo`](https://github.com/un-fao/FERSPAS_demo) show FERSPAS is, in practice, a library meant to be opened from a Jupyter Notebook — a different starting point than "convert STAC into a `martin catalog`-shaped tile interface."
+
+The successor is [`dwg7/ferspas-html-demo`](https://github.com/dwg7/ferspas-html-demo): read FERSPAS_demo's Notebook-established user stories and move the *stable, reproducible* ones into transparent web apps a non-programmer can run and observe — not a Staccato Staff/Cartographer/Library deployment. If you've been pointed at this repo expecting active development, you likely want that one instead.
+
+**This repo itself is not being torn down.** The live demo (`dwg7.unopengis.org/ferspas57`), the PMTiles/GeoJSON data on `stars.optgeo.org`/`depot.optgeo.org`, and everything in `DECISIONS.md`/`HANDOVER.md` below remain as a working record — of a real cross-DWG technical integration, of the ADR 0009/0010 contributions to `staccato-spec` (still valid, not reverted), and of what the "STAC as ingestion-time source, not primary discovery model" approach costs and buys. Nothing below this notice was rewritten to fit the pause; it's left as the accurate history of what was actually built and learned before the redirect. [`dwg7/ferspas57#1`](https://github.com/dwg7/ferspas57/issues/1) (the Staff field test) was closed as part of this pause, not completed — see its closing comment for why finishing it stopped being the right use of anyone's time.
+
+## Current state (2026-09-12) — pre-pause snapshot, not current, kept for history
 
 **The nearest deadline is not the one this document used to track.** [`UNopenGIS/7#997`](https://github.com/UNopenGIS/7/issues/997) records hfu proposing a meeting with FAO's contact on **2026-09-15, 17 or 18** — as of 2026-09-11 still unconfirmed, but earlier than the 2026-09-28 talk ([`#994`](https://github.com/UNopenGIS/7/issues/994), priority escalated to MUST). Check that issue for the confirmed date before planning anything long.
 
